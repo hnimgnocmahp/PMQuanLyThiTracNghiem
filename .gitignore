@@ -10,7 +10,7 @@ buildNumber.properties
 
 # Maven Wrapper
 .mvn/timing.properties
-.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.jar  
 
 # Eclipse
 .project
@@ -35,3 +35,13 @@ build/
 
 # MacOS
 .DS_Store
+
+# Thêm một số file tạm thời khác
+*.log            # Các file log
+*.swp            # Các file swap của vim
+*.swo            # Các file swap của vim
+
+# Thêm các file khác của hệ thống:
+Thumbs.db        # Windows thumbnail cache
+ehthumbs.db      # Windows thumbnail cache
+desktop.ini      # Windows desktop configuration file
