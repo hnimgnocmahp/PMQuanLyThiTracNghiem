@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <!-- Kết nối đến cơ sở dữ liệu -->
+    <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/tracnghiem</property>
+    <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.connection.password"></property>
+
+    <!-- Dialect Hibernate -->
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+
+    <!-- Thuộc tính Hibernate -->
+    <property name="hibernate.show_sql">true</property> <!-- Hiển thị câu lệnh SQL trong console -->
+    <property name="hibernate.format_sql">true</property> <!-- Định dạng SQL dễ đọc hơn -->
+    <property name="hibernate.use_sql_comments">true</property> <!-- Thêm chú thích SQL -->
+    <property name="hibernate.hbm2ddl.auto">update</property> <!-- Tự động cập nhật bảng (create, update, validate, none) -->
+
+    <!-- Mapping -->
+
+    <mapping class="DTO.UserDTO"/>
+    <mapping class="DTO.TopicDTO"/>
+    <mapping class="DTO.TestDTO"/>
+    <mapping class="DTO.TestCodeDTO"/>
+    <mapping class="DTO.ResultDTO"/>
+    <mapping class="DTO.QuestionDTO"/>
+    <mapping class="DTO.LogDTO"/>
+    <mapping class="DTO.AnswerDTO"/>
+  </session-factory>
+</hibernate-configuration>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="sidebar" alignment="TOP_CENTER" prefHeight="580.0" prefWidth="250.0" styleClass="sidebar" stylesheets="@../../../CssStyle/AdminStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.SidebarController">
+   <children>
+      <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" smooth="false">
+         <image>
+            <Image url="@../../../Image/SGU-LOGO-400x400.png" />
+         </image>
+         <VBox.margin>
+            <Insets top="15.0" />
+         </VBox.margin>
+      </ImageView>
+      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-btn">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+         <children>
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" smooth="false" styleClass="sidebar-btn-icom">
+               <image>
+                  <Image url="@../../../Image/question-mark.png" />
+               </image></ImageView>
+            <Label text="QUESTION" textFill="#b8b1b1">
+               <font>
+                  <Font name="Consolas Bold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-btn">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+         <children>
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" smooth="false" styleClass="sidebar-btn-icom">
+               <image>
+                  <Image url="@../../../Image/question-mark.png" />
+               </image>
+            </ImageView>
+            <Label text="TEST" textFill="#b8b1b1">
+               <font>
+                  <Font name="Consolas Bold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-btn">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+         <children>
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" smooth="false" styleClass="sidebar-btn-icom">
+               <image>
+                  <Image url="@../../../Image/question-mark.png" />
+               </image>
+            </ImageView>
+            <Label text="USER" textFill="#b8b1b1">
+               <font>
+                  <Font name="Consolas Bold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-btn">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+         <children>
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" smooth="false" styleClass="sidebar-btn-icom">
+               <image>
+                  <Image url="@../../../Image/question-mark.png" />
+               </image>
+            </ImageView>
+            <Label text="STATISTICS" textFill="#b8b1b1">
+               <font>
+                  <Font name="Consolas Bold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+   </children>
+</VBox>
