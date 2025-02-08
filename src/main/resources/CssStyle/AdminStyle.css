@@ -5,13 +5,34 @@
 .sidebar-btn {
    -fx-background-color: transparent;
    -fx-background-radius: 0px;
-   -fx-text-fill: #b8b1b1;
+   -fx-text-fill: #FBBC05;
 }
 
 .sidebar-btn:hover {
    -fx-background-color: transparent;
    -fx-background-radius: 0px;
-   -fx-text-fill: #b8b1b1;
+   -fx-text-fill: #FBBC05;
    -fx-border-color: rgb(22, 169, 250);
    -fx-border-width: 0px 0px 0px 3px;
 }
+
+.btn {
+   -fx-border-radius: 3px;
+   -fx-background-color: rgb(58, 79, 111);
+}
+
+.btn {
+   -fx-border-radius: 3px;
+   -fx-background-color: rgb(58, 79, 111);
+   -fx-padding: 8px 16px;
+   -fx-border-color: transparent;
+   -fx-transition: all 0.3s ease-in-out;
+}
+
+.btn:hover {
+   -fx-background-color: rgb(78, 99, 140); /* Màu sáng hơn một chút */
+   -fx-border-color: rgb(200, 200, 200);   /* Thêm viền nhẹ */
+   -fx-text-fill: white;
+}
+
+
