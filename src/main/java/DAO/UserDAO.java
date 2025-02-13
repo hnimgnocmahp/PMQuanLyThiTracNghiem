@@ -55,4 +55,29 @@ public class UserDAO {
             return null;
         }
     }
+
+    public UserDTO getUserByEmail(String email) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM UserDTO u WHERE u.email = :email";
+            return session.createQuery(hql, UserDTO.class)
+                    .setParameter("email", email)
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean isUsernameExists(String email) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "SELECT COUNT(u) FROM UserDTO u WHERE u.email = :email";
+            Long count = (Long) session.createQuery(hql)
+                    .setParameter("email", email)
+                    .uniqueResult();
+            return count != null && count > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; // Mặc định là không tồn tại nếu có lỗi
+        }
+    }
 }

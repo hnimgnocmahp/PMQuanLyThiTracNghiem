@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+
+<AnchorPane prefHeight="580.0" prefWidth="744.0" style="-fx-background-color: #D8E3F8;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.TestController">
+   <children>
+      <Pane layoutX="17.0" layoutY="69.0" prefHeight="226.0" prefWidth="708.0" style="-fx-background-color: #fff;" styleClass="boder" stylesheets="@../../../CssStyle/AdminStyle.css">
+         <children>
+            <Line endX="607.0" endY="-7.62939453125E-6" layoutX="101.0" startX="-100.0" />
+            <Label layoutX="329.0" layoutY="4.0" text="TEST INFORMATION" />
+            <Line endX="0.29289817810058594" endY="0.7070999145507812" startX="0.49999046325683594" startY="225.5404052734375" />
+            <Line endX="503.6666259765625" endY="15.0404052734375" layoutX="202.0" layoutY="211.0" startX="-201.0" startY="15.0404052734375" />
+            <Line endX="167.0" endY="-31.00000762939453" layoutX="541.0" layoutY="31.0" startX="167.0" startY="195.0" />
+            <Label layoutX="43.0" layoutY="33.0" text="Name" />
+            <TextField layoutX="113.0" layoutY="29.0" prefHeight="25.0" prefWidth="233.0" />
+            <Label layoutX="42.0" layoutY="74.0" text="Topic" />
+            <Label layoutX="15.0" layoutY="115.0" prefHeight="17.0" prefWidth="92.0" text="Opening Time" />
+            <Label layoutX="9.0" layoutY="154.0" text="Number Of Times" />
+            <DatePicker layoutX="113.0" layoutY="111.0" prefHeight="25.0" prefWidth="233.0" />
+            <TextField layoutX="113.0" layoutY="150.0" prefHeight="25.0" prefWidth="233.0" />
+            <ComboBox layoutX="113.0" layoutY="70.0" prefHeight="25.0" prefWidth="233.0" />
+            <Button layoutX="125.0" layoutY="182.0" mnemonicParsing="false">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../Image/plus.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button layoutX="183.0" layoutY="182.0" mnemonicParsing="false">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../Image/refresh.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button layoutX="238.0" layoutY="182.0" mnemonicParsing="false">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../Image/delete.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button layoutX="299.0" layoutY="181.0" mnemonicParsing="false">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../Image/close.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </Pane>
+      <TextField layoutX="166.0" layoutY="24.0" prefHeight="33.0" prefWidth="448.0" />
+      <ImageView fitHeight="25.0" fitWidth="24.0" layoutX="127.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../Image/search-interface-symbol.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="426.0" layoutY="104.0" text="Easy" />
+      <Label layoutX="416.0" layoutY="142.0" text="Medium" />
+      <Label layoutX="422.0" layoutY="181.0" text="Hard" />
+      <TextField layoutX="474.0" layoutY="100.0" prefHeight="25.0" prefWidth="233.0" />
+      <TextField layoutX="474.0" layoutY="138.0" prefHeight="25.0" prefWidth="233.0" />
+      <TextField layoutX="474.0" layoutY="177.0" prefHeight="25.0" prefWidth="233.0" />
+      <TextField layoutX="474.0" layoutY="219.0" prefHeight="25.0" prefWidth="233.0" />
+      <Label layoutX="413.0" layoutY="223.0" text="Duration" />
+      <TableView layoutX="17.0" layoutY="305.0" prefHeight="265.0" prefWidth="706.0">
+        <columns>
+          <TableColumn prefWidth="75.0" text="C1" />
+          <TableColumn prefWidth="75.0" text="C2" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

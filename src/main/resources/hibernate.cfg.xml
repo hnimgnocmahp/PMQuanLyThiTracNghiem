@@ -1,7 +1,7 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC
-    "-//Hibernate/Hibernate Configuration DTD//EN"
-    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
     <!-- Kết nối đến cơ sở dữ liệu -->
@@ -10,17 +10,24 @@
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password"></property>
 
-    <!-- Dialect Hibernate -->
-    <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+    <!-- Sử dụng HikariCP (tăng tốc kết nối) -->
+    <property name="hibernate.hikari.minimumIdle">5</property>
+    <property name="hibernate.hikari.maximumPoolSize">20</property>
+    <property name="hibernate.hikari.idleTimeout">30000</property>
+    <property name="hibernate.hikari.connectionTimeout">30000</property>
+    <property name="hibernate.hikari.maxLifetime">1800000</property>
 
-    <!-- Thuộc tính Hibernate -->
-    <property name="hibernate.show_sql">true</property> <!-- Hiển thị câu lệnh SQL trong console -->
-    <property name="hibernate.format_sql">true</property> <!-- Định dạng SQL dễ đọc hơn -->
-    <property name="hibernate.use_sql_comments">true</property> <!-- Thêm chú thích SQL -->
-    <property name="hibernate.hbm2ddl.auto">update</property> <!-- Tự động cập nhật bảng (create, update, validate, none) -->
+    <!-- Dialect Hibernate -->
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+    <!-- Chế độ cập nhật database -->
+    <property name="hibernate.hbm2ddl.auto">update</property>
+
+    <!-- Giảm log Hibernate -->
+    <property name="hibernate.show_sql">false</property>
+    <property name="hibernate.format_sql">false</property>
 
     <!-- Mapping -->
-
     <mapping class="DTO.UserDTO"/>
     <mapping class="DTO.TopicDTO"/>
     <mapping class="DTO.TestDTO"/>

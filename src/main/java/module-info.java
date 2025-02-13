@@ -8,6 +8,8 @@ module org.example.phanmemthitracnghiem {
     requires org.hibernate.orm.core;
     requires java.sql;
     requires java.naming;
+    requires java.desktop;
+    requires jdk.jfr;
 
     opens org.example.phanmemthitracnghiem to javafx.fxml;
     opens DTO to org.hibernate.orm.core;
