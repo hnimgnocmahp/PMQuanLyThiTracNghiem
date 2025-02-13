@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane fx:id="borderpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.GuestController">
+
+
+    <!-- Sidebar bên trái -->
+    <left>
+        <fx:include source="Sidebar_Guest.fxml" />
+    </left>
+
+    <!-- Khu vực nội dung chính -->
+    <center>
+        <fx:include source="Test_Guest.fxml" />
+    </center>
+
+</BorderPane>

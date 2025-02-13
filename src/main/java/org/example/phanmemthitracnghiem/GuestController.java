@@ -7,7 +7,7 @@ import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 
-public class AdminController {
+public class GuestController {
 
     @FXML
     private BorderPane borderpane;
@@ -25,12 +25,12 @@ public class AdminController {
     @FXML
     public void initialize() {
         try {
-            FXMLLoader sidebarLoader = new FXMLLoader(getClass().getResource("Sidebar_Admin.fxml"));
+            FXMLLoader sidebarLoader = new FXMLLoader(getClass().getResource("Sidebar_Guest.fxml"));
             Node sidebar = sidebarLoader.load();
-            Sidebar_Admin_Controller sidebarAdminController = sidebarLoader.getController();
+            Sidebar_Guest_Controller sidebarGuestController = sidebarLoader.getController();
 
-            // Truyền AdminController vào SidebarController
-            sidebarAdminController.setAdminController(this);
+            // Truyền sidebarGuestController vào SidebarController
+            sidebarGuestController.setGuestController(this);
 
             borderpane.setLeft(sidebar);
         } catch (IOException e) {

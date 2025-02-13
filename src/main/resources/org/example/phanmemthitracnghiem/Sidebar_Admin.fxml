@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="sidebar" alignment="TOP_CENTER" prefHeight="580.0" prefWidth="200.0" styleClass="sidebar" stylesheets="@../../../CssStyle/AdminStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.SidebarController">
+<VBox fx:id="sidebar" alignment="TOP_CENTER" prefHeight="580.0" prefWidth="200.0" styleClass="sidebar" stylesheets="@../../../CssStyle/AdminStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Sidebar_Admin_Controller">
    <children>
       <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" smooth="false">
          <image>
@@ -19,7 +19,7 @@
             <Insets top="15.0" />
          </VBox.margin>
       </ImageView>
-      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-btn">
+      <HBox fx:id="questionButton" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-btn">
          <padding>
             <Insets left="20.0" />
          </padding>
@@ -41,7 +41,7 @@
             <Insets />
          </VBox.margin>
       </HBox>
-      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-btn">
+      <HBox fx:id="testButton" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-btn">
          <padding>
             <Insets left="20.0" />
          </padding>
@@ -61,7 +61,27 @@
             </Label>
          </children>
       </HBox>
-      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-btn">
+      <HBox fx:id="topicButton" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-btn">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+         <children>
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" smooth="false" styleClass="sidebar-btn-icom">
+               <image>
+                  <Image url="@../../../Image/book.png" />
+               </image>
+            </ImageView>
+            <Label text="TOPIC" textFill="#b8b1b1">
+               <font>
+                  <Font name="Consolas Bold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox fx:id="userButton" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-btn">
          <padding>
             <Insets left="20.0" />
          </padding>
@@ -81,7 +101,7 @@
             </Label>
          </children>
       </HBox>
-      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-btn">
+      <HBox fx:id="statisticsButton" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-btn">
          <padding>
             <Insets left="20.0" />
          </padding>
