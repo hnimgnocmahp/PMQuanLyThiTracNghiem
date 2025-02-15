@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -106,7 +108,6 @@ public class UserDAO {
 
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
             preparedStatement.setString(1, email);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -167,5 +168,29 @@ public class UserDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public List<UserDTO> getAllUsers() {
+        List<UserDTO> users = new ArrayList<UserDTO>();
+        String sql = "SELECT * FROM users WHERE isAdmin = 1";
+        try (Connection connection = JDBCUtil.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                UserDTO user = new UserDTO();
+                user.setUserID(resultSet.getInt("userID"));
+                user.setUserName(resultSet.getString("userName"));
+                user.setUserEmail(resultSet.getString("userEmail"));
+                user.setUserPassword(resultSet.getString("userPassword"));
+                user.setUserFullName(resultSet.getString("userFullName"));
+                user.setIsAdmin(resultSet.getInt("isAdmin"));
+
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+         return users;
     }
 }

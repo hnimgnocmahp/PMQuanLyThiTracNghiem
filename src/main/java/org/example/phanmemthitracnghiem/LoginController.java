@@ -129,9 +129,9 @@ public class LoginController {
             String password = password_login.getText();
             UserDTO userDTO = UserBUS.getInstance().findUserByUserName(email);
 
-            if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(password) &&userDTO.getIsAdmin()==0) {
+            if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) &&userDTO.getIsAdmin()==0) {
                 switchToAdmin(event); // Truyền event vào switchToAdmin
-            }else if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(password) &&userDTO.getIsAdmin()==1) {
+            }else if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) &&userDTO.getIsAdmin()==1) {
                 switchToGuest(event);
             } else {
                 showAlert("Lỗi", "Email hoặc mật khẩu không đúng!");
@@ -146,9 +146,9 @@ public class LoginController {
         String password = password_login.getText();
         UserDTO userDTO = UserBUS.getInstance().findUserByUserName(email);
 
-        if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(password) &&userDTO.getIsAdmin()==0) {
+        if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) &&userDTO.getIsAdmin()==0) {
             switchToAdmin(event); // Truyền event vào switchToAdmin
-        }else if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(password) &&userDTO.getIsAdmin()==1) {
+        }else if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) &&userDTO.getIsAdmin()==1) {
             switchToGuest(event);
         } else {
             showAlert("Lỗi", "Tài khoản hoặc mật khẩu không đúng!");
@@ -159,16 +159,18 @@ public class LoginController {
     @FXML
     void register(MouseEvent event) {
         String fn = fullName.getText();
+        String un = userName_register.getText();
         String email = email_register.getText();
         String password = password_register.getText();
         String confirmPassword = confirmPassword_register.getText();
 
         if (password.equals(confirmPassword)) {
-            UserDTO userDTO = new UserDTO(fn, email, password, fn, 1);
+            UserDTO userDTO = new UserDTO(un, email, password, fn, 1);
             int i = UserBUS.getInstance().addUser(userDTO);
             if (i > 0) {
                 toLogPagePublic();
                 fullName.setText(null);
+                userName_register.setText(null);
                 email_register.setText(null);
                 password_register.setText(null);
                 confirmPassword_register.setText(null);
