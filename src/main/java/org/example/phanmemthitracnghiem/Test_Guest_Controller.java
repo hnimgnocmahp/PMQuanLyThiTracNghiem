@@ -24,6 +24,8 @@ public class Test_Guest_Controller implements Initializable{
     public void initialize(URL url, ResourceBundle resourceBundle) {
         List<String> testNames = List.of(
                 "Đề Toán 1", "Đề Lý 1", "Đề Hóa 1", "Đề Anh 1",
+                "Đề Sinh 1", "Đề Sử 1", "Đề Địa 1", "Đề Tin 1",
+                "Đề Toán 1", "Đề Lý 1", "Đề Hóa 1", "Đề Anh 1",
                 "Đề Sinh 1", "Đề Sử 1", "Đề Địa 1", "Đề Tin 1"
         );
 

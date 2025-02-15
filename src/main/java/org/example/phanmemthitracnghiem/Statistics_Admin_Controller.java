@@ -1,6 +1,6 @@
 package org.example.phanmemthitracnghiem;
 
 
-public class StatisticsController {
+public class Statistics_Admin_Controller {
 
 }

@@ -1,46 +1,34 @@
 package DTO;
 
-import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "Test")
-@Access(AccessType.FIELD)
 public class TestDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int testID;
-
-    private String name;
-    private int ease;
-    private int medium;
-    private int hard;
-    private int time;
-
-    @Column(nullable = false)
-    private int numberOfTimes;
-
-    private LocalDateTime date;
-    private int status;
-
-    @ManyToOne
-    @JoinColumn(name = "topicID")
-    private TopicDTO topic;
+    private String testCode;
+    private String testTitle;
+    private int testTime;
+    private int num_ease;
+    private int num_medium;
+    private int num_diff;
+    private int testLimit;
+    private int testDate;
+    private int testStatus;
 
     public TestDTO() {
     }
 
-    public TestDTO(int testID, String name, int ease, int medium, int hard, int time, int numberOfTimes, LocalDateTime date, int status) {
+    public TestDTO(int testID, String testCode, String testTitle, int testTime, int num_ease, int num_medium, int num_diff, int testLimit, int testDate, int testStatus) {
         this.testID = testID;
-        this.name = name;
-        this.ease = ease;
-        this.medium = medium;
-        this.hard = hard;
-        this.time = time;
-        this.numberOfTimes = numberOfTimes;
-        this.date = date;
-        this.status = status;
+        this.testCode = testCode;
+        this.testTitle = testTitle;
+        this.testTime = testTime;
+        this.num_ease = num_ease;
+        this.num_medium = num_medium;
+        this.num_diff = num_diff;
+        this.testLimit = testLimit;
+        this.testDate = testDate;
+        this.testStatus = testStatus;
     }
 
     public int getTestID() {
@@ -51,75 +39,75 @@ public class TestDTO {
         this.testID = testID;
     }
 
-    public String getName() {
-        return name;
+    public String getTestCode() {
+        return testCode;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTestCode(String testCode) {
+        this.testCode = testCode;
     }
 
-    public int getEase() {
-        return ease;
+    public String getTestTitle() {
+        return testTitle;
     }
 
-    public void setEase(int ease) {
-        this.ease = ease;
+    public void setTestTitle(String testTitle) {
+        this.testTitle = testTitle;
     }
 
-    public int getMedium() {
-        return medium;
+    public int getTestTime() {
+        return testTime;
     }
 
-    public void setMedium(int medium) {
-        this.medium = medium;
+    public void setTestTime(int testTime) {
+        this.testTime = testTime;
     }
 
-    public int getHard() {
-        return hard;
+    public int getNum_ease() {
+        return num_ease;
     }
 
-    public void setHard(int hard) {
-        this.hard = hard;
+    public void setNum_ease(int num_ease) {
+        this.num_ease = num_ease;
     }
 
-    public int getTime() {
-        return time;
+    public int getNum_medium() {
+        return num_medium;
     }
 
-    public void setTime(int time) {
-        this.time = time;
+    public void setNum_medium(int num_medium) {
+        this.num_medium = num_medium;
     }
 
-    public int getNumberOfTimes() {
-        return numberOfTimes;
+    public int getNum_diff() {
+        return num_diff;
     }
 
-    public void setNumberOfTimes(int numberOfTimes) {
-        this.numberOfTimes = numberOfTimes;
+    public void setNum_diff(int num_diff) {
+        this.num_diff = num_diff;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public int getTestLimit() {
+        return testLimit;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setTestLimit(int testLimit) {
+        this.testLimit = testLimit;
     }
 
-    public int getStatus() {
-        return status;
+    public int getTestDate() {
+        return testDate;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setTestDate(int testDate) {
+        this.testDate = testDate;
     }
 
-    public TopicDTO getTopic() {
-        return topic;
+    public int getTestStatus() {
+        return testStatus;
     }
 
-    public void setTopic(TopicDTO topic) {
-        this.topic = topic;
+    public void setTestStatus(int testStatus) {
+        this.testStatus = testStatus;
     }
 }

@@ -65,11 +65,11 @@ public class Sidebar_Admin_Controller {
     @FXML
     public void initialize() {
         // Thêm sự kiện nhấn vào từng HBox
-        questionButton.setOnMouseClicked(event -> adminController.setCenterContent("Question.fxml"));
-        testButton.setOnMouseClicked(event -> adminController.setCenterContent("Test.fxml"));
-        userButton.setOnMouseClicked(event -> adminController.setCenterContent("User.fxml"));
-        statisticsButton.setOnMouseClicked(event -> adminController.setCenterContent("Statistics.fxml"));
-        topicButton.setOnMouseClicked(event -> adminController.setCenterContent("Topic.fxml"));
+        questionButton.setOnMouseClicked(event -> adminController.setCenterContent("Question_Admin.fxml"));
+        testButton.setOnMouseClicked(event -> adminController.setCenterContent("Test_Admin.fxml"));
+        userButton.setOnMouseClicked(event -> adminController.setCenterContent("User_Admin.fxml"));
+        statisticsButton.setOnMouseClicked(event -> adminController.setCenterContent("Statistics_Admin.fxml"));
+        topicButton.setOnMouseClicked(event -> adminController.setCenterContent("Topic_Admin.fxml"));
     }
 
 }

@@ -1,27 +1,19 @@
 package DTO;
 
-import jakarta.persistence.*;
 
-@Entity
-@Table(name = "Topic")
 public class TopicDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int topicID;
-
-    @Column(name = "topicName")
-    private String topicName;
-
-    @Column(name = "status")
-    private int status;
+    private String topicTitle;
+    private int topicParent;
+    private int topicStatus;
 
     public TopicDTO() {
     }
 
-    public TopicDTO(int topicID, String topicName, int status) {
-        this.topicID = topicID;
-        this.topicName = topicName;
-        this.status = status;
+    public TopicDTO(String topicTitle, int topicParent, int topicStatus) {
+        this.topicTitle = topicTitle;
+        this.topicParent = topicParent;
+        this.topicStatus = topicStatus;
     }
 
     public int getTopicID() {
@@ -32,19 +24,27 @@ public class TopicDTO {
         this.topicID = topicID;
     }
 
-    public String getTopicName() {
-        return topicName;
+    public String getTopicTitle() {
+        return topicTitle;
     }
 
-    public void setTopicName(String topicName) {
-        this.topicName = topicName;
+    public void setTopicTitle(String topicTitle) {
+        this.topicTitle = topicTitle;
     }
 
-    public int getStatus() {
-        return status;
+    public int getTopicParent() {
+        return topicParent;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setTopicParent(int topicParent) {
+        this.topicParent = topicParent;
+    }
+
+    public int getTopicStatus() {
+        return topicStatus;
+    }
+
+    public void setTopicStatus(int topicStatus) {
+        this.topicStatus = topicStatus;
     }
 }

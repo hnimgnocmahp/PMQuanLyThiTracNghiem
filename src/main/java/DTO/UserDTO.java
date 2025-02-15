@@ -1,34 +1,32 @@
 package DTO;
 
-import jakarta.persistence.*;
 
-
-@Entity
-@Table(name = "User", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 public class UserDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //Tăng tự động
     private int userID;
-    private String lastName;
+    private String userName;
+    private String userEmail;
+    private String userPassword;
+    private String userFullName;
+    private int isAdmin;
 
-    private String firstName;
+    public UserDTO() {
+    }
 
-    @Column(unique = true, nullable = false)
-    private String email;
-    private String password;
+    public UserDTO(int userID, String userName, String userEmail, String userPassword, String userFullName, int isAdmin) {
+        this.userID = userID;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+        this.userFullName = userFullName;
+        this.isAdmin = isAdmin;
+    }
 
-    private int role;
-    private int status;
-
-    public UserDTO() {}
-
-    public UserDTO(String lastName, String firstName, String email, String password, int role, int status) {
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.status = status;
+    public UserDTO(String userName, String userEmail, String userPassword, String userFullName, int isAdmin) {
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+        this.userFullName = userFullName;
+        this.isAdmin = isAdmin;
     }
 
     public int getUserID() {
@@ -39,51 +37,43 @@ public class UserDTO {
         this.userID = userID;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUserFullName() {
+        return userFullName;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUserFullName(String userFullName) {
+        this.userFullName = userFullName;
     }
 
-    public int getRole() {
-        return role;
+    public int getIsAdmin() {
+        return isAdmin;
     }
 
-    public void setRole(int role) {
-        this.role = role;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
+    public void setIsAdmin(int isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }

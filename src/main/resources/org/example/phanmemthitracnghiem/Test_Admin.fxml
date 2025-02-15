@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Line?>
 
-<AnchorPane prefHeight="580.0" prefWidth="744.0" style="-fx-background-color: #D8E3F8;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.TestController">
+<AnchorPane prefHeight="580.0" prefWidth="744.0" style="-fx-background-color: #D8E3F8;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Test_Admin_Controller">
    <children>
       <Pane layoutX="17.0" layoutY="69.0" prefHeight="226.0" prefWidth="708.0" style="-fx-background-color: #fff;" styleClass="boder" stylesheets="@../../../CssStyle/AdminStyle.css">
          <children>

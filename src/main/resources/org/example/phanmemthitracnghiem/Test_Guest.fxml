@@ -12,7 +12,7 @@
    <children>
       <ScrollPane layoutY="198.0" prefHeight="382.0" prefWidth="744.0">
          <content>
-             <GridPane fx:id="gp" prefHeight="378.0" prefWidth="744.0" hgap="10.0" vgap="10.0">
+             <GridPane fx:id="gp" prefWidth="744.0" hgap="10.0" vgap="10.0">
                  <columnConstraints>
                      <ColumnConstraints percentWidth="32.5" />
                      <ColumnConstraints percentWidth="32.5" />

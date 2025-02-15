@@ -1,7 +1,7 @@
 package org.example.phanmemthitracnghiem;
 
 
-public class QuestionController {
+public class Question_Admin_Controller {
     private AdminController adminController;
 
 }

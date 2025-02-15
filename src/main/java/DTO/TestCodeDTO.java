@@ -1,64 +1,52 @@
 package DTO;
-import jakarta.persistence.*;
 
-@Entity
-@Table(name = "TestCode")
+
 
 public class TestCodeDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int testCodeID;
-
-    @Column(columnDefinition = "TEXT")
-    private String questionList;
-
-    @ManyToOne
-    @JoinColumn(name = "userID")
-    private UserDTO user;
-
-    @ManyToOne
-    @JoinColumn(name = "testID")
-    private TestDTO test;
+    private String testCodeID;
+    private String exOrder;
+    private String exCode;
+    private String ex_questionIDs;
 
     public TestCodeDTO() {
     }
 
-    public TestCodeDTO(int testCodeID, String questionList, UserDTO user, TestDTO test) {
+    public TestCodeDTO(String testCodeID, String exOrder, String exCode, String ex_questionIDs) {
         this.testCodeID = testCodeID;
-        this.questionList = questionList;
-        this.user = user;
-        this.test = test;
+        this.exOrder = exOrder;
+        this.exCode = exCode;
+        this.ex_questionIDs = ex_questionIDs;
     }
 
-    public int getTestCodeID() {
+    public String getTestCodeID() {
         return testCodeID;
     }
 
-    public void setTestCodeID(int testCodeID) {
+    public void setTestCodeID(String testCodeID) {
         this.testCodeID = testCodeID;
     }
 
-    public String getQuestionList() {
-        return questionList;
+    public String getExOrder() {
+        return exOrder;
     }
 
-    public void setQuestionList(String questionList) {
-        this.questionList = questionList;
+    public void setExOrder(String exOrder) {
+        this.exOrder = exOrder;
     }
 
-    public UserDTO getUser() {
-        return user;
+    public String getExCode() {
+        return exCode;
     }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public void setExCode(String exCode) {
+        this.exCode = exCode;
     }
 
-    public TestDTO getTest() {
-        return test;
+    public String getEx_questionIDs() {
+        return ex_questionIDs;
     }
 
-    public void setTest(TestDTO test) {
-        this.test = test;
+    public void setEx_questionIDs(String ex_questionIDs) {
+        this.ex_questionIDs = ex_questionIDs;
     }
 }

@@ -1,37 +1,23 @@
 package DTO;
 
-
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "Answer")
-@Access(AccessType.FIELD)
 public class AnswerDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int answerID;
-
+    private int questionID;
+    private String answerContent;
     private String image;
-
-    @Column(columnDefinition = "TEXT")
-    private String answerName;
-
-    private int isCorrect;
+    private int isRight;
     private int status;
 
-    @ManyToOne
-    @JoinColumn(name = "questionID")
-    private QuestionDTO question;
 
     public AnswerDTO() {}
 
-    public AnswerDTO(int answerID, String image, String answerName, int isCorrect, int status, QuestionDTO question) {
+    public AnswerDTO(int answerID, int questionID, String answerContent, String image, int isRight, int status) {
         this.answerID = answerID;
+        this.questionID = questionID;
+        this.answerContent = answerContent;
         this.image = image;
-        this.answerName = answerName;
-        this.isCorrect = isCorrect;
+        this.isRight = isRight;
         this.status = status;
-        this.question = question;
     }
 
     public int getAnswerID() {
@@ -42,6 +28,22 @@ public class AnswerDTO {
         this.answerID = answerID;
     }
 
+    public int getQuestionID() {
+        return questionID;
+    }
+
+    public void setQuestionID(int questionID) {
+        this.questionID = questionID;
+    }
+
+    public String getAnswerContent() {
+        return answerContent;
+    }
+
+    public void setAnswerContent(String answerContent) {
+        this.answerContent = answerContent;
+    }
+
     public String getImage() {
         return image;
     }
@@ -50,20 +52,12 @@ public class AnswerDTO {
         this.image = image;
     }
 
-    public String getAnswerName() {
-        return answerName;
+    public int getIsRight() {
+        return isRight;
     }
 
-    public void setAnswerName(String answerName) {
-        this.answerName = answerName;
-    }
-
-    public int getIsCorrect() {
-        return isCorrect;
-    }
-
-    public void setIsCorrect(int isCorrect) {
-        this.isCorrect = isCorrect;
+    public void setIsRight(int isRight) {
+        this.isRight = isRight;
     }
 
     public int getStatus() {
@@ -72,13 +66,5 @@ public class AnswerDTO {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public QuestionDTO getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(QuestionDTO question) {
-        this.question = question;
     }
 }

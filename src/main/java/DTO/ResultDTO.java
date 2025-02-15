@@ -1,89 +1,74 @@
 package DTO;
-import jakarta.persistence.*;
 
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "Result")
-@Access(AccessType.FIELD)
 public class ResultDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int resultID;
-
-    @Column(columnDefinition = "TEXT")
-    private String answerList;
-
-    private int score;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime date;
-
-    @ManyToOne
-    @JoinColumn(name = "userID")
-    private UserDTO user;
-
-    @ManyToOne
-    @JoinColumn(name = "testCodeID")
-    private TestCodeDTO testCode;
+    private int re_num;
+    private int userID;
+    private String exCode;
+    private String rs_answer;
+    private BigDecimal rs_mark;
+    private LocalDateTime rs_date;
 
     public ResultDTO() {
     }
 
-    public ResultDTO(int resultID, String answerList, int score, LocalDateTime date, UserDTO user, TestCodeDTO testCode) {
-        this.resultID = resultID;
-        this.answerList = answerList;
-        this.score = score;
-        this.date = date;
-        this.user = user;
-        this.testCode = testCode;
+    public ResultDTO(int re_num, int userID, String exCode, String rs_answer, BigDecimal rs_mark, LocalDateTime rs_date) {
+        this.re_num = re_num;
+        this.userID = userID;
+        this.exCode = exCode;
+        this.rs_answer = rs_answer;
+        this.rs_mark = rs_mark;
+        this.rs_date = rs_date;
     }
 
-    public int getResultID() {
-        return resultID;
+    public int getRe_num() {
+        return re_num;
     }
 
-    public void setResultID(int resultID) {
-        this.resultID = resultID;
+    public void setRe_num(int re_num) {
+        this.re_num = re_num;
     }
 
-    public String getAnswerList() {
-        return answerList;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setAnswerList(String answerList) {
-        this.answerList = answerList;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
-    public int getScore() {
-        return score;
+    public String getExCode() {
+        return exCode;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setExCode(String exCode) {
+        this.exCode = exCode;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public String getRs_answer() {
+        return rs_answer;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setRs_answer(String rs_answer) {
+        this.rs_answer = rs_answer;
     }
 
-    public UserDTO getUser() {
-        return user;
+    public BigDecimal getRs_mark() {
+        return rs_mark;
     }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public void setRs_mark(BigDecimal rs_mark) {
+        this.rs_mark = rs_mark;
     }
 
-    public TestCodeDTO getTestCode() {
-        return testCode;
+    public LocalDateTime getRs_date() {
+        return rs_date;
     }
 
-    public void setTestCode(TestCodeDTO testCode) {
-        this.testCode = testCode;
+    public void setRs_date(LocalDateTime rs_date) {
+        this.rs_date = rs_date;
     }
 }

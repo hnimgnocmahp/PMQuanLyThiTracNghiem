@@ -4,8 +4,6 @@ module org.example.phanmemthitracnghiem {
 
     requires org.controlsfx.controls;
     requires net.synedra.validatorfx;
-    requires jakarta.persistence;
-    requires org.hibernate.orm.core;
     requires java.sql;
     requires java.naming;
     requires java.desktop;

@@ -1,83 +1,171 @@
 package DAO;
 
 import DTO.UserDTO;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import util.HibernateUtil;
+import util.JDBCUtil;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UserDAO {
+
     public int add(UserDTO user) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.persist(user);
-            transaction.commit();
-            return user.getUserID(); // Lấy ID của user vừa thêm
-        } catch (Exception e) {
+        int ketQua = 0;
+        String sql = "INSERT INTO users (userID, userName, userEmail, userPassword, userFullName, isAdmin) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, user.getUserID());
+            preparedStatement.setString(2, user.getUserName());
+            preparedStatement.setString(3, user.getUserEmail());
+            preparedStatement.setString(4, user.getUserPassword());
+            preparedStatement.setString(5, user.getUserFullName());
+            preparedStatement.setInt(6, user.getIsAdmin());
+
+            ketQua = preparedStatement.executeUpdate();
+            JDBCUtil.close();
+        } catch (SQLException e) {
             e.printStackTrace();
-            return -1; // Lỗi khi thêm
         }
+        return ketQua;
     }
 
     public int update(UserDTO user) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.merge(user);
-            transaction.commit();
-            return 1; // Thành công
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1; // Lỗi khi cập nhật
+        int ketQua = 0;
+        try {
+            Connection con = JDBCUtil.getConnection();
+            String sql = "UPDATE users SET userName=?, userEmail=?, userPassword=?, userFullName=?, isAdmin=? WHERE userID=?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+
+            preparedStatement.setInt(1, user.getUserID());
+            preparedStatement.setString(2, user.getUserName());
+            preparedStatement.setString(3, user.getUserEmail());
+            preparedStatement.setString(4, user.getUserPassword());
+            preparedStatement.setString(5, user.getUserFullName());
+            preparedStatement.setInt(6, user.getIsAdmin());
+
+            ketQua = preparedStatement.executeUpdate();
+
+            JDBCUtil.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
+        return ketQua;
     }
 
     public int delete(int userID) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
-            UserDTO user = session.get(UserDTO.class, userID);
-            if (user == null) {
-                return 0;
-            }
-            user.setStatus(0);
-            session.merge(user);
-            transaction.commit();
-            return 1; // Thành công
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1; // Lỗi khi xóa
+        int ketqua = 0;
+        try {
+            Connection con = JDBCUtil.getConnection();
+            String sql = "DELETE FROM users WHERE userID=?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+
+            preparedStatement.setInt(1, userID);
+
+            ketqua = preparedStatement.executeUpdate();
+
+            JDBCUtil.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
+        return ketqua;
     }
 
     public UserDTO getUserById(int userId) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(UserDTO.class, userId);
-        } catch (Exception e) {
+        UserDTO user = null;
+        String sql = "SELECT * FROM users WHERE userID = ?";
+
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, userId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    user = new UserDTO();
+                    user.setUserID(resultSet.getInt("userID"));
+                    user.setUserName(resultSet.getString("userName"));
+                    user.setUserEmail(resultSet.getString("userEmail"));
+                    user.setUserPassword(resultSet.getString("userPassword"));
+                    user.setUserFullName(resultSet.getString("userFullName"));
+                    user.setIsAdmin(resultSet.getInt("isAdmin"));
+                }
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
-            return null;
         }
+        return user;
     }
 
     public UserDTO getUserByEmail(String email) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            String hql = "FROM UserDTO u WHERE u.email = :email";
-            return session.createQuery(hql, UserDTO.class)
-                    .setParameter("email", email)
-                    .uniqueResult();
-        } catch (Exception e) {
+        UserDTO user = null;
+        String sql = "SELECT * FROM users WHERE userEmail = ?";
+
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, email);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    user = new UserDTO();
+                    user.setUserID(resultSet.getInt("userID"));
+                    user.setUserName(resultSet.getString("userName"));
+                    user.setUserEmail(resultSet.getString("userEmail"));
+                    user.setUserPassword(resultSet.getString("userPassword"));
+                    user.setUserFullName(resultSet.getString("userFullName"));
+                    user.setIsAdmin(resultSet.getInt("isAdmin"));
+                }
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
-            return null;
         }
+        return user;
+    }
+
+    public UserDTO getUserByUserName(String userName) {
+        UserDTO user = null;
+        String sql = "SELECT * FROM users WHERE userName = ?";
+
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, userName);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    user = new UserDTO();
+                    user.setUserID(resultSet.getInt("userID"));
+                    user.setUserName(resultSet.getString("userName"));
+                    user.setUserEmail(resultSet.getString("userEmail"));
+                    user.setUserPassword(resultSet.getString("userPassword"));
+                    user.setUserFullName(resultSet.getString("userFullName"));
+                    user.setIsAdmin(resultSet.getInt("isAdmin"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 
     public boolean isUsernameExists(String email) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            String hql = "SELECT COUNT(u) FROM UserDTO u WHERE u.email = :email";
-            Long count = (Long) session.createQuery(hql)
-                    .setParameter("email", email)
-                    .uniqueResult();
-            return count != null && count > 0;
-        } catch (Exception e) {
+        String sql = "SELECT COUNT(*) FROM users WHERE userEmail = ?";
+
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, email);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
-            return false; // Mặc định là không tồn tại nếu có lỗi
         }
+        return false;
     }
 }

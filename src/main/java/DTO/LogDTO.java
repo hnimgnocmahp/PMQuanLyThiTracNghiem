@@ -1,38 +1,23 @@
 package DTO;
-import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "[Log]")
-@Access(AccessType.FIELD)
 public class LogDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int logID;
-
-    private String action;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime date;
-
-    @ManyToOne
-    @JoinColumn(name = "userID")
-    private UserDTO user;
-
-    @ManyToOne
-    @JoinColumn(name = "testCodeID")
-    private TestCodeDTO testCode;
+    private String logContent;
+    private int logUserID;
+    private String logExCode;
+    private LocalDateTime logDate;
 
     public LogDTO() {
     }
 
-    public LogDTO(int logID, String action, LocalDateTime date, UserDTO user, TestCodeDTO testCode) {
+    public LogDTO(int logID, String logContent, int logUserID, String logExCode, LocalDateTime logDate) {
         this.logID = logID;
-        this.action = action;
-        this.date = date;
-        this.user = user;
-        this.testCode = testCode;
+        this.logContent = logContent;
+        this.logUserID = logUserID;
+        this.logExCode = logExCode;
+        this.logDate = logDate;
     }
 
     public int getLogID() {
@@ -43,36 +28,36 @@ public class LogDTO {
         this.logID = logID;
     }
 
-    public String getAction() {
-        return action;
+    public String getLogContent() {
+        return logContent;
     }
 
-    public void setAction(String action) {
-        this.action = action;
+    public void setLogContent(String logContent) {
+        this.logContent = logContent;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public int getLogUserID() {
+        return logUserID;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setLogUserID(int logUserID) {
+        this.logUserID = logUserID;
     }
 
-    public UserDTO getUser() {
-        return user;
+    public String getLogExCode() {
+        return logExCode;
     }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public void setLogExCode(String logExCode) {
+        this.logExCode = logExCode;
     }
 
-    public TestCodeDTO getTestCode() {
-        return testCode;
+    public LocalDateTime getLogDate() {
+        return logDate;
     }
 
-    public void setTestCode(TestCodeDTO testCode) {
-        this.testCode = testCode;
+    public void setLogDate(LocalDateTime logDate) {
+        this.logDate = logDate;
     }
 }
 

@@ -12,7 +12,7 @@
 
     <!-- Khu vực nội dung chính -->
     <center>
-        <fx:include source="Statistics.fxml" />
+        <fx:include source="Statistics_Admin.fxml" />
     </center>
 
 </BorderPane>
