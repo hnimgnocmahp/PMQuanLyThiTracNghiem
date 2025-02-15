@@ -1,35 +1,24 @@
 package DTO;
 
-import jakarta.persistence.*;
 
-@Entity
-@Table(name = "Question")
-@Access(AccessType.FIELD)
 public class QuestionDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int questionID;
+    private String qContent;
+    private String qPictures;
+    private int qTopicID;
+    private String qLevel;
+    private int qStatus;
 
-    @Column(columnDefinition = "TEXT")
-    private String content;
-
-    private String image;
-    private int level;
-    private int status;
-
-    @ManyToOne
-    @JoinColumn(name = "topicID")
-    private TopicDTO topic;
 
     public QuestionDTO() {}
 
-    public QuestionDTO(int questionID, String content, String image, int level, int status, TopicDTO topic) {
+    public QuestionDTO(int questionID, String qContent, String qPictures, int qTopicID, String qLevel, int qStatus) {
         this.questionID = questionID;
-        this.content = content;
-        this.image = image;
-        this.level = level;
-        this.status = status;
-        this.topic = topic;
+        this.qContent = qContent;
+        this.qPictures = qPictures;
+        this.qTopicID = qTopicID;
+        this.qLevel = qLevel;
+        this.qStatus = qStatus;
     }
 
     public int getQuestionID() {
@@ -40,43 +29,43 @@ public class QuestionDTO {
         this.questionID = questionID;
     }
 
-    public String getContent() {
-        return content;
+    public String getqContent() {
+        return qContent;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setqContent(String qContent) {
+        this.qContent = qContent;
     }
 
-    public String getImage() {
-        return image;
+    public String getqPictures() {
+        return qPictures;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setqPictures(String qPictures) {
+        this.qPictures = qPictures;
     }
 
-    public int getLevel() {
-        return level;
+    public int getqTopicID() {
+        return qTopicID;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
+    public void setqTopicID(int qTopicID) {
+        this.qTopicID = qTopicID;
     }
 
-    public int getStatus() {
-        return status;
+    public String getqLevel() {
+        return qLevel;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setqLevel(String qLevel) {
+        this.qLevel = qLevel;
     }
 
-    public TopicDTO getTopic() {
-        return topic;
+    public int getqStatus() {
+        return qStatus;
     }
 
-    public void setTopic(TopicDTO topic) {
-        this.topic = topic;
+    public void setqStatus(int qStatus) {
+        this.qStatus = qStatus;
     }
 }

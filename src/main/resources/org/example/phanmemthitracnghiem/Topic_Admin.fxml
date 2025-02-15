@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -9,15 +10,16 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="580.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.TopicController">
+<AnchorPane prefHeight="580.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Topic_Admin_Controller">
    <children>
       <Label layoutX="71.0" layoutY="31.0" text="TOPIC INFORMATION" />
-      <Label layoutX="57.0" layoutY="84.0" text="Name" />
-      <TextField layoutX="136.0" layoutY="80.0" />
+      <Label layoutX="56.0" layoutY="59.0" text="Title" />
+      <TextField layoutX="135.0" layoutY="55.0" />
       <TableView layoutX="16.0" layoutY="125.0" prefHeight="417.0" prefWidth="710.0">
         <columns>
           <TableColumn prefWidth="75.0" text="ID" />
-          <TableColumn prefWidth="75.0" text="Topic Name" />
+          <TableColumn prefWidth="75.0" text="Title" />
+            <TableColumn prefWidth="75.0" text="Parent" />
             <TableColumn prefWidth="75.0" text="Status" />
         </columns>
       </TableView>
@@ -57,5 +59,7 @@
             </ImageView>
          </graphic>
       </Button>
+      <ComboBox layoutX="135.0" layoutY="92.0" prefWidth="150.0" />
+      <Label layoutX="56.0" layoutY="96.0" text="Parent" />
    </children>
 </AnchorPane>
