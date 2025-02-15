@@ -5,6 +5,7 @@ import DTO.UserDTO;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public class UserBUS {
     private static UserBUS instance;
@@ -81,5 +82,9 @@ public class UserBUS {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<UserDTO> getAllUsers() {
+        return userDAO.getAllUsers();
     }
 }
