@@ -151,7 +151,26 @@ public class UserDAO {
         return user;
     }
 
-    public boolean isUsernameExists(String email) {
+    public boolean isUsernameExists(String userName) {
+        String sql = "SELECT COUNT(*) FROM users WHERE userName = ?";
+
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, userName);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean isEmailExists(String email) {
         String sql = "SELECT COUNT(*) FROM users WHERE userEmail = ?";
 
         try (Connection connection = JDBCUtil.getConnection();
@@ -192,5 +211,36 @@ public class UserDAO {
             e.printStackTrace();
         }
          return users;
+    }
+
+    public List<UserDTO> searchUsers(String key) {
+        List<UserDTO> users = new ArrayList<>();
+        String sql = "SELECT * FROM users WHERE (userName LIKE ? OR userEmail LIKE ? OR userFullName LIKE ?) AND isAdmin = 1";
+        try (Connection connection = JDBCUtil.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            String search = "%" + key + "%";
+            preparedStatement.setString(1, search);
+            preparedStatement.setString(2, search);
+            preparedStatement.setString(3, search);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    UserDTO user = new UserDTO();
+                    user.setUserID(resultSet.getInt("userID"));
+                    user.setUserName(resultSet.getString("userName"));
+                    user.setUserEmail(resultSet.getString("userEmail"));
+                    user.setUserPassword(resultSet.getString("userPassword"));
+                    user.setUserFullName(resultSet.getString("userFullName"));
+                    user.setIsAdmin(resultSet.getInt("isAdmin"));
+
+                    users.add(user);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return users;
     }
 }

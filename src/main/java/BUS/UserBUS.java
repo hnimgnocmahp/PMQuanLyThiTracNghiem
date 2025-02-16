@@ -28,14 +28,11 @@ public class UserBUS {
     }
 
     public int addUser(UserDTO user) {
-        // Kiểm tra dữ liệu hợp lệ
-        if (user.getUserName().isEmpty() || user.getUserPassword().isEmpty()) {
-            return -1; // Lỗi: Dữ liệu không hợp lệ
-        }
-
         // Kiểm tra tài khoản đã tồn tại chưa
-        if (userDAO.isUsernameExists(user.getUserEmail())) {
-            return -2; // Lỗi: Tài khoản đã tồn tại
+        if (userDAO.isUsernameExists(user.getUserName())) {
+            return -1;
+        } else if (userDAO.isEmailExists(user.getUserEmail())) {
+            return -2;
         }
 
         // Mã hóa mật khẩu trước khi gửi xuống DAO
@@ -86,5 +83,9 @@ public class UserBUS {
 
     public List<UserDTO> getAllUsers() {
         return userDAO.getAllUsers();
+    }
+
+    public List<UserDTO> searchUsers(String key) {
+        return userDAO.searchUsers(key);
     }
 }

@@ -46,5 +46,3 @@ Thumbs.db        # Windows thumbnail cache
 ehthumbs.db      # Windows thumbnail cache
 desktop.ini      # Windows desktop configuration file
 
-#Config account mysql
-src/main/resources/config.properties

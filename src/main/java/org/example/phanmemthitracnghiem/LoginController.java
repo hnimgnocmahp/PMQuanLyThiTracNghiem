@@ -112,7 +112,7 @@ public class LoginController {
 
 
     // Hàm thông báo
-    private void showAlert(String title, String message) {
+    public static void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
@@ -129,7 +129,7 @@ public class LoginController {
             String password = password_login.getText();
             UserDTO userDTO = UserBUS.getInstance().findUserByUserName(email);
 
-            if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) &&userDTO.getIsAdmin()==0) {
+            if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(password) &&userDTO.getIsAdmin()==0) {
                 switchToAdmin(event); // Truyền event vào switchToAdmin
             }else if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) &&userDTO.getIsAdmin()==1) {
                 switchToGuest(event);
@@ -146,7 +146,7 @@ public class LoginController {
         String password = password_login.getText();
         UserDTO userDTO = UserBUS.getInstance().findUserByUserName(email);
 
-        if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) &&userDTO.getIsAdmin()==0) {
+        if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(password) &&userDTO.getIsAdmin()==0) {
             switchToAdmin(event); // Truyền event vào switchToAdmin
         }else if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) &&userDTO.getIsAdmin()==1) {
             switchToGuest(event);
