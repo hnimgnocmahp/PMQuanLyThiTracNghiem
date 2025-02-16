@@ -56,11 +56,11 @@
       </Pane>
       <Pane layoutX="62.0" layoutY="201.0" prefHeight="101.0" prefWidth="193.0" style="-fx-background-color: #fff; -fx-background-radius: 10px;">
          <children>
-            <Label layoutX="8.0" layoutY="14.0" style="-fx-text-fill: #black;" text="Most completed tests">
+            <Label layoutX="8.0" layoutY="14.0"  text="Most completed tests">
                <font>
                   <Font name="Constantia" size="18.0" />
                </font></Label>
-            <Label layoutX="87.0" layoutY="51.0" style="-fx-text-fill: #black;" text="5">
+            <Label layoutX="87.0" layoutY="51.0"  text="5">
                <font>
                   <Font name="Constantia" size="18.0" />
                </font>
@@ -82,12 +82,12 @@
       <ComboBox layoutX="35.0" layoutY="325.0" prefWidth="150.0" promptText="Đề 1" />
       <Pane layoutX="298.0" layoutY="201.0" prefHeight="101.0" prefWidth="391.0" style="-fx-background-color: #fff; -fx-background-radius: 10px;">
          <children>
-            <Label layoutX="8.0" layoutY="14.0" style="-fx-text-fill: #black;" text="The person who completed the most questions">
+            <Label layoutX="8.0" layoutY="14.0"  text="The person who completed the most questions">
                <font>
                   <Font name="Constantia" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="175.0" layoutY="53.0" style="-fx-text-fill: #black;" text="Minh ">
+            <Label layoutX="175.0" layoutY="53.0"  text="Minh ">
                <font>
                   <Font name="Constantia" size="18.0" />
                </font>

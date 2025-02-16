@@ -1,7 +1,6 @@
 module org.example.phanmemthitracnghiem {
     requires javafx.controls;
     requires javafx.fxml;
-    requires org.controlsfx.controls;
     requires net.synedra.validatorfx;
     requires java.sql;
     requires java.naming;
