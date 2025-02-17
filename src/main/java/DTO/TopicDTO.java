@@ -16,6 +16,13 @@ public class TopicDTO {
         this.topicStatus = topicStatus;
     }
 
+    public TopicDTO(int topicID, String topicTitle, int topicParent, int topicStatus) {
+        this.topicID = topicID;
+        this.topicTitle = topicTitle;
+        this.topicParent = topicParent;
+        this.topicStatus = topicStatus;
+    }
+
     public int getTopicID() {
         return topicID;
     }
