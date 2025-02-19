@@ -1,55 +1,69 @@
 package DTO;
 
 public class AnswerDTO {
-    private int answerID;
-    private int questionID;
-    private String answerContent;
-    private String image;
+    private int awID;
+    private int qID;
+    private String awContent;
+    private String awPictures;
     private int isRight;
-    private int status;
+    private int awStatus;
 
-
-    public AnswerDTO() {}
-
-    public AnswerDTO(int answerID, int questionID, String answerContent, String image, int isRight, int status) {
-        this.answerID = answerID;
-        this.questionID = questionID;
-        this.answerContent = answerContent;
-        this.image = image;
+    public AnswerDTO(int awID, int qID, String awContent, String awPictures, int isRight, int awStatus) {
+        this.awID = awID;
+        this.qID = qID;
+        this.awContent = awContent;
+        this.awPictures = awPictures;
         this.isRight = isRight;
-        this.status = status;
+        this.awStatus = awStatus;
     }
 
-    public int getAnswerID() {
-        return answerID;
+    // 🔥 Thêm constructor mặc định
+    public AnswerDTO() {
+        this.awID = 0;
+        this.qID = 0;
+        this.awContent = "";
+        this.awPictures = "";
+        this.isRight = 0;
+        this.awStatus = 1;
     }
 
-    public void setAnswerID(int answerID) {
-        this.answerID = answerID;
+    public int getAwID() {
+        return awID;
     }
 
-    public int getQuestionID() {
-        return questionID;
+    public void setAwID(int awID) {
+        this.awID = awID;
     }
 
-    public void setQuestionID(int questionID) {
-        this.questionID = questionID;
+    public int getqID() {
+        return qID;
     }
 
-    public String getAnswerContent() {
-        return answerContent;
+    public void setqID(int qID) {
+        this.qID = qID;
+    }
+    public void setQID(int qID) {
+        this.qID = qID;
     }
 
-    public void setAnswerContent(String answerContent) {
-        this.answerContent = answerContent;
+    public int getQID() {
+        return qID;
     }
 
-    public String getImage() {
-        return image;
+    public String getAwContent() {
+        return awContent;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setAwContent(String awContent) {
+        this.awContent = awContent;
+    }
+
+    public String getAwPictures() {
+        return awPictures;
+    }
+
+    public void setAwPictures(String awPictures) {
+        this.awPictures = awPictures;
     }
 
     public int getIsRight() {
@@ -60,11 +74,11 @@ public class AnswerDTO {
         this.isRight = isRight;
     }
 
-    public int getStatus() {
-        return status;
+    public int getAwStatus() {
+        return awStatus;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setAwStatus(int awStatus) {
+        this.awStatus = awStatus;
     }
 }

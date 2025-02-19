@@ -1,71 +1,48 @@
 package DTO;
 
+import javafx.beans.property.*;
 
 public class QuestionDTO {
-    private int questionID;
-    private String qContent;
-    private String qPictures;
-    private int qTopicID;
-    private String qLevel;
-    private int qStatus;
+    private final IntegerProperty qID;
+    private final StringProperty qContent;
+    private final StringProperty qPictures;
+    private final IntegerProperty qTopicID;
+    private final StringProperty qLevel;
+    private final IntegerProperty qStatus;
 
-
-    public QuestionDTO() {}
-
-    public QuestionDTO(int questionID, String qContent, String qPictures, int qTopicID, String qLevel, int qStatus) {
-        this.questionID = questionID;
-        this.qContent = qContent;
-        this.qPictures = qPictures;
-        this.qTopicID = qTopicID;
-        this.qLevel = qLevel;
-        this.qStatus = qStatus;
+    public QuestionDTO(int qID, String qContent, String qPictures, int qTopicID, String qLevel, int qStatus) {
+        this.qID = new SimpleIntegerProperty(qID);
+        this.qContent = new SimpleStringProperty(qContent);
+        this.qPictures = new SimpleStringProperty(qPictures);
+        this.qTopicID = new SimpleIntegerProperty(qTopicID);
+        this.qLevel = new SimpleStringProperty(qLevel);
+        this.qStatus = new SimpleIntegerProperty(qStatus);
     }
 
-    public int getQuestionID() {
-        return questionID;
-    }
+    // ✅ Đổi tên getter cho khớp với BUS
+    public int getQID() { return qID.get(); }
+    public void setQID(int qID) { this.qID.set(qID); }
 
-    public void setQuestionID(int questionID) {
-        this.questionID = questionID;
-    }
+    public String getQContent() { return qContent.get(); }
+    public void setQContent(String qContent) { this.qContent.set(qContent); }
 
-    public String getqContent() {
-        return qContent;
-    }
+    public String getQPictures() { return qPictures.get(); }
+    public void setQPictures(String qPictures) { this.qPictures.set(qPictures); }
 
-    public void setqContent(String qContent) {
-        this.qContent = qContent;
-    }
+    public int getQTopicID() { return qTopicID.get(); }
+    public void setQTopicID(int qTopicID) { this.qTopicID.set(qTopicID); }
 
-    public String getqPictures() {
-        return qPictures;
-    }
+    public String getQLevel() { return qLevel.get(); }
+    public void setQLevel(String qLevel) { this.qLevel.set(qLevel); }
 
-    public void setqPictures(String qPictures) {
-        this.qPictures = qPictures;
-    }
+    public int getQStatus() { return qStatus.get(); }
+    public void setQStatus(int qStatus) { this.qStatus.set(qStatus); }
 
-    public int getqTopicID() {
-        return qTopicID;
-    }
-
-    public void setqTopicID(int qTopicID) {
-        this.qTopicID = qTopicID;
-    }
-
-    public String getqLevel() {
-        return qLevel;
-    }
-
-    public void setqLevel(String qLevel) {
-        this.qLevel = qLevel;
-    }
-
-    public int getqStatus() {
-        return qStatus;
-    }
-
-    public void setqStatus(int qStatus) {
-        this.qStatus = qStatus;
-    }
+    // ✅ Getter cho JavaFX TableView
+    public IntegerProperty qIDProperty() { return qID; }
+    public StringProperty qContentProperty() { return qContent; }
+    public StringProperty qPicturesProperty() { return qPictures; }
+    public IntegerProperty qTopicIDProperty() { return qTopicID; }
+    public StringProperty qLevelProperty() { return qLevel; }
+    public IntegerProperty qStatusProperty() { return qStatus; }
 }
