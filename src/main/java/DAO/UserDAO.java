@@ -43,12 +43,13 @@ public class UserDAO {
             String sql = "UPDATE users SET userName=?, userEmail=?, userPassword=?, userFullName=?, isAdmin=? WHERE userID=?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
 
-            preparedStatement.setInt(1, user.getUserID());
-            preparedStatement.setString(2, user.getUserName());
-            preparedStatement.setString(3, user.getUserEmail());
-            preparedStatement.setString(4, user.getUserPassword());
-            preparedStatement.setString(5, user.getUserFullName());
-            preparedStatement.setInt(6, user.getIsAdmin());
+
+            preparedStatement.setString(1, user.getUserName());
+            preparedStatement.setString(2, user.getUserEmail());
+            preparedStatement.setString(3, user.getUserPassword());
+            preparedStatement.setString(4, user.getUserFullName());
+            preparedStatement.setInt(5, user.getIsAdmin());
+            preparedStatement.setInt(6, user.getUserID());
 
             ketQua = preparedStatement.executeUpdate();
 
