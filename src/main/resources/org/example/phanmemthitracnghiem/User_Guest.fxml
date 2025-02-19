@@ -29,21 +29,21 @@
                   <Font name="Constantia" size="18.0" />
                </font>
             </Label>
-            <PasswordField fx:id="newpass_field" layoutX="148.0" layoutY="178.0" prefHeight="25.0" prefWidth="216.0" />
+            <PasswordField fx:id="txtnewPass" layoutX="148.0" layoutY="178.0" prefHeight="25.0" prefWidth="216.0" />
             <Label layoutX="28.0" layoutY="219.0" text="Confirm New Password:">
                <font>
                   <Font name="Constantia" size="18.0" />
                </font>
             </Label>
-            <PasswordField fx:id="confirm_field" layoutX="216.0" layoutY="218.0" />
+            <PasswordField fx:id="txtconfirmPass" layoutX="216.0" layoutY="218.0" />
             <Label layoutX="29.0" layoutY="139.0" text="Old Password:">
                <font>
                   <Font name="Constantia" size="18.0" />
                </font>
             </Label>
-            <PasswordField fx:id="oldpass_field" layoutX="148.0" layoutY="138.0" prefHeight="25.0" prefWidth="216.0" />
+            <PasswordField fx:id="txtoldPass" layoutX="148.0" layoutY="138.0" prefHeight="25.0" prefWidth="216.0" />
             <Button layoutX="14.0" layoutY="337.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="369.0" text="Kết quả thi" />
-            <Button fx:id="doBtn" layoutX="189.0" layoutY="262.0" mnemonicParsing="false">
+            <Button fx:id="updateBtn" layoutX="189.0" layoutY="262.0" mnemonicParsing="false">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -52,14 +52,14 @@
                   </ImageView>
                </graphic>
             </Button>
-            <TextField fx:id="email_field" editable="false" layoutX="83.0" layoutY="98.0" prefHeight="26.0" prefWidth="283.0" />
-            <TextField fx:id="username_field" editable="false" layoutX="114.0" layoutY="58.0" prefHeight="26.0" prefWidth="254.0" />
+            <TextField fx:id="txtEmail" editable="false" layoutX="83.0" layoutY="98.0" prefHeight="26.0" prefWidth="283.0" />
+            <TextField fx:id="txtuserName" editable="false" layoutX="114.0" layoutY="58.0" prefHeight="26.0" prefWidth="254.0" />
             <Label layoutX="29.0" layoutY="19.0" text="ID:">
                <font>
                   <Font name="Constantia" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="id_field" editable="false" layoutX="55.0" layoutY="18.0" prefHeight="26.0" prefWidth="66.0" />
+            <TextField fx:id="txtId" editable="false" layoutX="55.0" layoutY="18.0" prefHeight="26.0" prefWidth="66.0" />
          </children>
       </Pane>
    </children>
