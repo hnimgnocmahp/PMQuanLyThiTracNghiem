@@ -49,5 +49,38 @@ public class TopicBUS {
         return topicDAO.delete2(id);
     }
 
+    public TopicDTO searchTopic(String title, int id){
+        return topicDAO.searchTopic(title,id);
+    }
 
+    public TopicDTO searchTopicByID(int id){
+        return topicDAO.searchTopicByID(id);
+    }
+
+    public boolean Validation (int parentID, String title){
+
+        if ( topicDAO.searchTopicByID(parentID).getTopicTitle() != null){
+            if (topicDAO.searchTopicByID(parentID).getTopicTitle().equals(title)){
+                return false;
+            }
+        }
+
+        System.out.println(topicDAO.searchTopicsChildByTitle(title));
+        for (TopicDTO topic : topicDAO.searchTopicsChildByTitle(title)){
+            if (topic != null){
+                for (TopicDTO topic1 : topicDAO.searchTopicsChild(topic.getTopicID())){
+                    if (topic.getTopicTitle() != null){
+                        if (topic.getTopicTitle().equals(title) ){
+                            return false;
+                        };
+                    }
+                }
+            }
+        }
+
+
+
+
+        return true;
+    }
 }
