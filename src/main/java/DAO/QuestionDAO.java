@@ -98,6 +98,18 @@ public class QuestionDAO {
 
         return result;
     }
+    public boolean updateQuestionStatus(int questionID, int status) {
+        String sql = "UPDATE questions SET qStatus=? WHERE qID=?";
+        try (Connection conn = JDBCUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, status);
+            stmt.setInt(2, questionID);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 
     public QuestionDTO getQuestionById(int questionID) {
@@ -130,7 +142,7 @@ public class QuestionDAO {
 
     public List<QuestionDTO> getAllQuestions() {
         List<QuestionDTO> questions = new ArrayList<>();
-        String sql = "SELECT * FROM questions";
+        String sql = "SELECT * FROM questions WHERE qStatus = 1"; // 🛑 Chỉ lấy câu hỏi còn hoạt động
 
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -153,4 +165,5 @@ public class QuestionDAO {
 
         return questions;
     }
+
 }

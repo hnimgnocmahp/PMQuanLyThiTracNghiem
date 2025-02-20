@@ -37,7 +37,7 @@ public class Question_Admin_Controller {
     private ImageView btnUpdate;
 
     @FXML
-    private ComboBox<?> cbLevel;
+    private ComboBox<String> cbLevel;
 
     @FXML
     private ComboBox<?> cbTopicID;
@@ -72,38 +72,48 @@ public class Question_Admin_Controller {
 
     @FXML
     public void initialize() {
-        currentAnswers = new ArrayList<>(); // 🔥 Fix lỗi bị null
-
+        currentAnswers = new ArrayList<>();
         txtPictures.setVisible(false);
+
+        // ✅ Cấu hình RadioButton nhóm câu trả lời
         rbA.setToggleGroup(answerGroup);
         rbB.setToggleGroup(answerGroup);
         rbC.setToggleGroup(answerGroup);
         rbD.setToggleGroup(answerGroup);
         rbE.setToggleGroup(answerGroup);
 
-        // Liên kết dữ liệu TableView
-        if (colID != null && colContent != null && colLevel != null && colStatus != null) {
-            colID.setCellValueFactory(new PropertyValueFactory<>("qID"));
-            colContent.setCellValueFactory(new PropertyValueFactory<>("qContent"));
-            colLevel.setCellValueFactory(new PropertyValueFactory<>("qLevel"));
-            colStatus.setCellValueFactory(new PropertyValueFactory<>("qStatus"));
-        } else {
-            System.err.println("TableColumns chưa được khởi tạo trong FXML!");
-        }
+        // ✅ Cấu hình dữ liệu cho ComboBox Level (Dễ - Trung bình - Khó)
+        ObservableList<String> levelOptions = FXCollections.observableArrayList("Dễ", "Trung bình", "Khó");
+        cbLevel.setItems(levelOptions);
+        cbLevel.getSelectionModel().select(0); // Mặc định là "Dễ"
 
-        // Bắt sự kiện chọn câu hỏi
-        // Bắt sự kiện chọn một câu hỏi trong bảng
+        // ✅ Cấu hình TableView
+        colID.setCellValueFactory(new PropertyValueFactory<>("qID"));
+        colContent.setCellValueFactory(new PropertyValueFactory<>("qContent"));
+        colLevel.setCellValueFactory(new PropertyValueFactory<>("qLevel"));
+        colStatus.setCellValueFactory(new PropertyValueFactory<>("qStatus"));
+
+        // ✅ Sự kiện khi chọn một câu hỏi trong bảng
         tableQuestions.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 selectedQuestionID = newSelection.getQID();
                 txtContent.setText(newSelection.getQContent());
-                loadAnswers(selectedQuestionID); // 🔥 Load câu trả lời của câu hỏi được chọn
+
+                // ✅ Đặt giá trị Level từ số (1,2,3) thành chữ
+                cbLevel.setValue(switch (newSelection.getQLevel()) {
+                    case "1" -> "Dễ";
+                    case "2" -> "Trung bình";
+                    case "3" -> "Khó";
+                    default -> "Dễ";
+                });
+
+                loadAnswers(selectedQuestionID);
             }
         });
 
-
         loadQuestions();
     }
+
     private boolean validateAnswers() {
         if (currentAnswers == null || currentAnswers.isEmpty()) {
             showAlert("Câu hỏi phải có ít nhất 2 câu trả lời!");
@@ -125,35 +135,26 @@ public class Question_Admin_Controller {
             return false;
         }
         return true;
-    }
-    @FXML
+    } @FXML
     private void handleAddAnswer() {
         if (txtContent.getText().trim().isEmpty()) {
             showAlert("Vui lòng nhập nội dung câu hỏi!");
             return;
         }
 
-        // ✅ Nếu `ComboBox` chưa có dữ liệu, đặt giá trị mặc định là "1"
-        String level = (cbLevel.getValue() != null) ? cbLevel.getValue().toString() : "1";
+        // ✅ Chuyển đổi giá trị Level từ chữ sang số (1, 2, 3)
+        int level = switch (cbLevel.getValue()) {
+            case "Dễ" -> 1;
+            case "Trung bình" -> 2;
+            case "Khó" -> 3;
+            default -> 1;
+        };
 
-        int topicID;
-        try {
-            topicID = (cbTopicID.getValue() != null) ? Integer.parseInt(cbTopicID.getValue().toString()) : 1;
-        } catch (NumberFormatException e) {
-            topicID = 1; // 🔥 Nếu không phải số, đặt mặc định là 1
-        }
+        int topicID = (cbTopicID.getValue() != null) ? Integer.parseInt(cbTopicID.getValue().toString()) : 1;
 
-        // 🔥 Tạo câu hỏi mới (QuestionDTO)
-        QuestionDTO newQuestion = new QuestionDTO(
-                0,  // qID (mới nên đặt 0)
-                txtContent.getText(), // Nội dung câu hỏi
-                "", // Không có hình ảnh
-                topicID, // ID chủ đề
-                level, // Mức độ
-                1  // Trạng thái mặc định là 1 (hiển thị)
-        );
+        // ✅ Tạo câu hỏi mới
+        QuestionDTO newQuestion = new QuestionDTO(0, txtContent.getText(), "", topicID, String.valueOf(level), 1);
 
-        // 🔥 Lưu câu hỏi vào database
         boolean isAdded = QuestionBUS.getInstance().addQuestion(newQuestion);
         if (!isAdded) {
             showAlert("Thêm câu hỏi thất bại!");
@@ -162,23 +163,7 @@ public class Question_Admin_Controller {
 
         int newQuestionID = QuestionBUS.getInstance().getLastInsertID();
 
-        List<AnswerDTO> answerList = new ArrayList<>();
-        if (!txtAnswerA.getText().trim().isEmpty()) {
-            answerList.add(new AnswerDTO(0, newQuestionID, txtAnswerA.getText(), "", rbA.isSelected() ? 1 : 0, 1));
-        }
-        if (!txtAnswerB.getText().trim().isEmpty()) {
-            answerList.add(new AnswerDTO(0, newQuestionID, txtAnswerB.getText(), "", rbB.isSelected() ? 1 : 0, 1));
-        }
-        if (!txtAnswerC.getText().trim().isEmpty()) {
-            answerList.add(new AnswerDTO(0, newQuestionID, txtAnswerC.getText(), "", rbC.isSelected() ? 1 : 0, 1));
-        }
-        if (!txtAnswerD.getText().trim().isEmpty()) {
-            answerList.add(new AnswerDTO(0, newQuestionID, txtAnswerD.getText(), "", rbD.isSelected() ? 1 : 0, 1));
-        }
-        if (!txtAnswerE.getText().trim().isEmpty()) {
-            answerList.add(new AnswerDTO(0, newQuestionID, txtAnswerE.getText(), "", rbE.isSelected() ? 1 : 0, 1));
-        }
-
+        List<AnswerDTO> answerList = createAnswerList(newQuestionID);
         if (answerList.size() < 2) {
             showAlert("Câu hỏi phải có ít nhất 2 câu trả lời!");
             return;
@@ -192,7 +177,31 @@ public class Question_Admin_Controller {
 
         loadQuestions();
         loadAnswers(newQuestionID);
-        showAlert("Thêm câu hỏi và câu trả lời thành công!");
+        showAlert("✅ Thêm câu hỏi và câu trả lời thành công!");
+    }
+
+    /**
+     * 🔥 Chuyển đổi giá trị Level từ String (Dễ, Trung bình, Khó) sang số (1, 2, 3)
+     */
+    private int convertLevelToNumber(String levelText) {
+        return switch (levelText) {
+            case "Dễ" -> 1;
+            case "Trung bình" -> 2;
+            case "Khó" -> 3;
+            default -> 1;
+        };
+    }
+
+    /**
+     * 🔥 Chuyển đổi giá trị Level từ số (1,2,3) sang chữ (Dễ, Trung bình, Khó)
+     */
+    private String convertLevelToText(String level) {
+        return switch (level) {
+            case "1" -> "Dễ";
+            case "2" -> "Trung bình";
+            case "3" -> "Khó";
+            default -> "Dễ";
+        };
     }
 
     @FXML
@@ -209,18 +218,20 @@ public class Question_Admin_Controller {
             return;
         }
 
-        // ✅ Cập nhật Level và Topic (mặc định 1 nếu không chọn)
-        String updatedLevel = (cbLevel.getValue() != null) ? cbLevel.getValue().toString() : "1";
+        // ✅ Chuyển đổi giá trị Level từ chữ sang số (1, 2, 3)
+        int updatedLevel = convertLevelToNumber(cbLevel.getValue());
+
+        // ✅ Cập nhật Topic ID (nếu có)
         int updatedTopicID = (cbTopicID.getValue() != null) ? Integer.parseInt(cbTopicID.getValue().toString()) : 1;
 
         // ✅ Tạo đối tượng QuestionDTO để cập nhật
         QuestionDTO updatedQuestion = new QuestionDTO(
                 selectedQuestionID,
                 updatedQuestionContent,
-                "", // Ảnh (nếu có thể thêm)
+                "", // Ảnh (nếu có thể thêm sau)
                 updatedTopicID,
-                updatedLevel,
-                1 // Trạng thái mặc định
+                String.valueOf(updatedLevel), // Lưu số thay vì chữ!
+                1 // Trạng thái mặc định là 1
         );
 
         // 🔥 Cập nhật câu hỏi trong DB
@@ -270,39 +281,86 @@ public class Question_Admin_Controller {
     @FXML
     private void handleDeleteAnswer() {
         if (selectedQuestionID == -1) {
-            showAlert("⚠️ Vui lòng chọn một câu hỏi trước khi xóa!");
+            showAlert("⚠️ Vui lòng chọn một câu hỏi trước khi ẩn!");
             return;
         }
 
         // 🔥 Hiển thị hộp thoại xác nhận
         Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmDialog.setTitle("Xác nhận xóa");
-        confirmDialog.setHeaderText("Bạn có chắc chắn muốn xóa câu hỏi này?");
-        confirmDialog.setContentText("Hành động này sẽ xóa cả câu hỏi và các câu trả lời liên quan!");
+        confirmDialog.setTitle("Xác nhận ẩn câu hỏi");
+        confirmDialog.setHeaderText("Bạn có chắc chắn muốn ẩn câu hỏi này?");
+        confirmDialog.setContentText("Hành động này sẽ đặt trạng thái của câu hỏi và câu trả lời về 0, nhưng không xóa khỏi hệ thống.");
 
-        ButtonType btnYes = new ButtonType("Xóa", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnYes = new ButtonType("Ẩn", ButtonBar.ButtonData.OK_DONE);
         ButtonType btnNo = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
         confirmDialog.getButtonTypes().setAll(btnYes, btnNo);
 
-        // 🟢 Nếu người dùng xác nhận xóa
+        // 🟢 Nếu người dùng xác nhận ẩn câu hỏi
         confirmDialog.showAndWait().ifPresent(response -> {
             if (response == btnYes) {
-                // 1️⃣ Xóa toàn bộ câu trả lời của câu hỏi
-                boolean answersDeleted = AnswerBUS.getInstance().deleteAnswersByQuestionID(selectedQuestionID);
+                // 1️⃣ Cập nhật trạng thái tất cả câu trả lời về 0
+                boolean answersUpdated = AnswerBUS.getInstance().setAnswersStatusByQuestionID(selectedQuestionID, 0);
 
-                // 2️⃣ Xóa câu hỏi khỏi DB
-                boolean questionDeleted = QuestionBUS.getInstance().deleteQuestion(selectedQuestionID);
+                // 2️⃣ Cập nhật trạng thái của câu hỏi về 0
+                boolean questionUpdated = QuestionBUS.getInstance().setQuestionStatus(selectedQuestionID, 0);
 
                 // 3️⃣ Kiểm tra kết quả và cập nhật UI
-                if (answersDeleted && questionDeleted) {
-                    showAlert("✅ Đã xóa câu hỏi và câu trả lời thành công!");
+                if (answersUpdated && questionUpdated) {
+                    showAlert("✅ Đã ẩn câu hỏi và câu trả lời thành công!");
                     selectedQuestionID = -1;
                     loadQuestions(); // Làm mới danh sách câu hỏi
                 } else {
-                    showAlert("❌ Xóa thất bại! Vui lòng thử lại.");
+                    showAlert("❌ Ẩn thất bại! Vui lòng thử lại.");
                 }
             }
         });
+    }
+
+    @FXML
+    private void handleClearFields() {
+        txtContent.clear();
+        txtAnswerA.clear();
+        txtAnswerB.clear();
+        txtAnswerC.clear();
+        txtAnswerD.clear();
+        txtAnswerE.clear();
+
+        rbA.setSelected(false);
+        rbB.setSelected(false);
+        rbC.setSelected(false);
+        rbD.setSelected(false);
+        rbE.setSelected(false);
+
+        cbLevel.getSelectionModel().select(0);
+        cbTopicID.getSelectionModel().clearSelection();
+
+        currentAnswers.clear();
+        txtPictures.setVisible(false);
+        txtPictures.setImage(null);
+
+        showAlert("✅ Đã xóa toàn bộ nội dung nhập!");
+    }
+
+    private List<AnswerDTO> createAnswerList(int questionID) {
+        List<AnswerDTO> answers = new ArrayList<>();
+
+        if (!txtAnswerA.getText().trim().isEmpty()) {
+            answers.add(new AnswerDTO(0, questionID, txtAnswerA.getText(), "", rbA.isSelected() ? 1 : 0, 1));
+        }
+        if (!txtAnswerB.getText().trim().isEmpty()) {
+            answers.add(new AnswerDTO(0, questionID, txtAnswerB.getText(), "", rbB.isSelected() ? 1 : 0, 1));
+        }
+        if (!txtAnswerC.getText().trim().isEmpty()) {
+            answers.add(new AnswerDTO(0, questionID, txtAnswerC.getText(), "", rbC.isSelected() ? 1 : 0, 1));
+        }
+        if (!txtAnswerD.getText().trim().isEmpty()) {
+            answers.add(new AnswerDTO(0, questionID, txtAnswerD.getText(), "", rbD.isSelected() ? 1 : 0, 1));
+        }
+        if (!txtAnswerE.getText().trim().isEmpty()) {
+            answers.add(new AnswerDTO(0, questionID, txtAnswerE.getText(), "", rbE.isSelected() ? 1 : 0, 1));
+        }
+
+        return answers;
     }
 
 
@@ -349,23 +407,29 @@ public class Question_Admin_Controller {
     }
     private void loadQuestions() {
         List<QuestionDTO> questions = QuestionBUS.getInstance().getAllQuestions();
+
+        // ✅ Chuyển đổi giá trị số thành chữ khi hiển thị trên UI
+        for (QuestionDTO q : questions) {
+            q.setQLevel(convertLevelToText(q.getQLevel())); // Chuyển 1 → "Dễ", 2 → "Trung bình", 3 → "Khó"
+        }
+
         ObservableList<QuestionDTO> observableList = FXCollections.observableArrayList(questions);
         tableQuestions.setItems(observableList);
     }
+
     /**
      * ✅ Load câu trả lời khi chọn câu hỏi
      */
     private void loadAnswers(int questionID) {
-        // 🔥 Kiểm tra nếu không có ID hợp lệ
         if (questionID == -1) {
             System.out.println("⚠️ Không có câu hỏi nào được chọn!");
             return;
         }
 
-        // 🔥 Lấy danh sách câu trả lời từ Database
+        // Lấy danh sách câu trả lời từ database
         currentAnswers = AnswerBUS.getInstance().getAnswersByQuestionID(questionID);
 
-        // 🛠 Xóa nội dung cũ trước khi cập nhật
+        // Xóa nội dung cũ
         txtAnswerA.clear();
         txtAnswerB.clear();
         txtAnswerC.clear();
@@ -377,10 +441,7 @@ public class Question_Admin_Controller {
         rbD.setSelected(false);
         rbE.setSelected(false);
 
-        // 📝 In ra danh sách câu trả lời để kiểm tra
-        System.out.println("📌 Câu trả lời của câu hỏi ID " + questionID + ": " + currentAnswers.size());
-
-        // 🔄 Hiển thị câu trả lời lên UI
+        // Hiển thị dữ liệu lên UI
         for (int i = 0; i < currentAnswers.size(); i++) {
             AnswerDTO answer = currentAnswers.get(i);
             switch (i) {
@@ -407,6 +468,7 @@ public class Question_Admin_Controller {
             }
         }
     }
+
 
 
 

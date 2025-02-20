@@ -73,6 +73,9 @@ public class QuestionBUS {
         }
         return success;
     }
+    public boolean setQuestionStatus(int questionID, int status) {
+        return QuestionDAO.getInstance().updateQuestionStatus(questionID, status);
+    }
 
 
     // Lấy câu hỏi theo ID

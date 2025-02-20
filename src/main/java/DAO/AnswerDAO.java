@@ -131,13 +131,25 @@ public class AnswerDAO {
         }
         return false;
     }
+    public boolean updateAnswersStatusByQuestionID(int questionID, int status) {
+        String sql = "UPDATE answers SET awStatus=? WHERE qID=?";
+        try (Connection conn = JDBCUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, status);
+            stmt.setInt(2, questionID);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     /**
      * ✅ Lấy danh sách câu trả lời theo `qID`
      */
     public List<AnswerDTO> getAnswersByQuestionID(int questionID) {
         List<AnswerDTO> answers = new ArrayList<>();
-        String sql = "SELECT * FROM answers WHERE qID=?";
+        String sql = "SELECT * FROM answers WHERE qID = ? AND awStatus = 1"; // Chỉ lấy câu trả lời chưa bị ẩn
 
         try (Connection conn = JDBCUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -162,5 +174,6 @@ public class AnswerDAO {
 
         return answers;
     }
+
 
 }
