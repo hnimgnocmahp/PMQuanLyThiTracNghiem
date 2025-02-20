@@ -59,12 +59,6 @@ public class TopicBUS {
 
     public boolean Validation (int parentID, String title){
 
-        if ( topicDAO.searchTopicByID(parentID).getTopicTitle() != null){
-            if (topicDAO.searchTopicByID(parentID).getTopicTitle().equals(title)){
-                return false;
-            }
-        }
-
         System.out.println(topicDAO.searchTopicsChildByTitle(title));
         for (TopicDTO topic : topicDAO.searchTopicsChildByTitle(title)){
             if (topic != null){
@@ -78,9 +72,32 @@ public class TopicBUS {
             }
         }
 
-
-
-
         return true;
+    }
+
+    public boolean checkAddTopic(String title, int parentId) {
+        if (topicDAO.searchTopicByID(parentId).getTopicParent() != 0){
+            return false;
+        }
+        if(!Validation(parentId,title)){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkUpdateTopic(String title, int parentId){
+        if (topicDAO.searchTopicByID(parentId).getTopicTitle() != null){
+            if (topicDAO.searchTopicByID(parentId).getTopicTitle().equals(title)){
+                return false;
+            }
+        }
+        if(!Validation(parentId,title)){
+            return false;
+        }
+        return true;
+    }
+
+    public List<TopicDTO> searchTopicsChildByID(int id){
+        return topicDAO.searchTopicsChild(id);
     }
 }

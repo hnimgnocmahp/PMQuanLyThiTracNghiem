@@ -41,7 +41,12 @@ public class Topic_Admin_Controller {
     @FXML
     private ComboBox<String> titleParentField = new ComboBox<>();
 
+    @FXML
+    private ComboBox<String> classifyParentField = new ComboBox<>();
+
     private ObservableList<String> ParentIDList = FXCollections.observableArrayList();
+
+    private ObservableList<String> ParentClassify = FXCollections.observableArrayList();
 
 
     @FXML
@@ -54,6 +59,11 @@ public class Topic_Admin_Controller {
         loadTopicsParent();
         titleParentField.setItems(ParentIDList);
         loadTopics();
+        loadClassifyParent();
+        classifyParentField.setItems(ParentClassify);
+        classifyParentField.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            classifyParent();
+        });
     }
 
     @FXML
@@ -74,7 +84,7 @@ public class Topic_Admin_Controller {
             titleParent = Integer.parseInt(selectedValue.split(" - ")[0]);
         }
 
-        if(!topicBUS.Validation(titleParent,title)){
+        if(!topicBUS.checkAddTopic(titleField.getText(),titleParent)){
             LoginController.showAlert("Nhắc nhở", "Thông tin không hợp lệ");
             return;
         }
@@ -100,13 +110,23 @@ public class Topic_Admin_Controller {
     @FXML
     void deleteTopic(MouseEvent event) {
         int row = tableView.getSelectionModel().getSelectedIndex();
+        int parentID = tableView.getSelectionModel().getSelectedItem().getTopicID();
         if(topicBUS.deleteTopic2(tableView.getItems().get(row).getTopicID()) < 0){
             LoginController.showAlert("Thông báo", "Xóa thất bại");
         }
         else{
+            if (topicBUS.searchTopicsChildByID(parentID) != null){
+                for (TopicDTO topicDTO : topicBUS.searchTopicsChildByID(parentID)){
+                    System.out.println(topicDTO.getTopicID());
+                    topicDTO.setTopicParent(0);
+                    System.out.println(topicDTO.getTopicParent());
+                    topicBUS.updateTopic(topicDTO);
+                }
+            }
             LoginController.showAlert("Thông báo", "Xóa thành công");
             reset();
             loadTopics();
+            loadTopicsParent();
         }
     }
 
@@ -131,9 +151,7 @@ public class Topic_Admin_Controller {
 
         topic.setTopicParent(titleParent);
 
-        System.out.println(topicBUS.Validation(titleParent,titleField.getText()));
-
-        if(!topicBUS.Validation(titleParent,titleField.getText())){
+        if(!topicBUS.checkUpdateTopic(titleField.getText(),titleParent)){
             LoginController.showAlert("Nhắc nhở", "Thông tin không hợp lệ");
             return;
         }
@@ -162,8 +180,9 @@ public class Topic_Admin_Controller {
 
     private void reset(){
         titleField.setText("");
-        titleParentField.setValue(null);
+        titleParentField.setValue("0 - null");
         topic = new TopicDTO();
+        classifyParentField.getSelectionModel().select("Tất cả");
     }
 
     private void loadTopics(){
@@ -172,7 +191,7 @@ public class Topic_Admin_Controller {
     }
 
     private void loadTopicsParent() {
-        List<String> tempList = new ArrayList<>(ParentIDList); // Copy ra danh sách tạm
+        List<String> tempList = new ArrayList<>(); // Copy ra danh sách tạm
         if (!tempList.contains("0 - null")) {
             tempList.add("0 - null");
         }
@@ -193,5 +212,42 @@ public class Topic_Admin_Controller {
             }
         }
         ParentIDList.setAll(tempList); // Cập nhật lại toàn bộ
+    }
+
+    void loadClassifyParent (){
+        ArrayList<String> ParentList = new ArrayList<>();
+        List<TopicDTO> listTopic = topicBUS.loadTopics();
+
+        if (!ParentList.contains("Tất cả")){
+            ParentList.add("Tất cả");
+        }
+
+        if (!ParentList.contains("0 - null")){
+            ParentList.add("0 - null");
+        }
+
+        for (TopicDTO topicDTO : listTopic){
+            if(topicBUS.searchTopicsChildByID(topicDTO.getTopicID()) != null && topicDTO.getTopicParent() == 0){
+                ParentList.add(topicDTO.getTopicID() + " - " + topicDTO.getTopicTitle());
+            }
+        }
+
+        ParentClassify.setAll(ParentList);
+    }
+
+    void classifyParent(){
+        String value = classifyParentField.getSelectionModel().getSelectedItem();
+        ArrayList<TopicDTO> ListTopicChill = new ArrayList<>();
+
+        if (value.equals("Tất cả")){
+            loadTopics();
+            return;
+        }
+        else {
+            for (TopicDTO topic : topicBUS.searchTopicsChildByID(Integer.valueOf(value.split(" -")[0]))) {
+                ListTopicChill.add(topic);
+            }
+        }
+        tableView.setItems(FXCollections.observableArrayList(ListTopicChill));
     }
 }
