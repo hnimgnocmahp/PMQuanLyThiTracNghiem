@@ -17,9 +17,10 @@
       <TextField fx:id="titleField" layoutX="135.0" layoutY="55.0" />
       <TableView fx:id="tableView" layoutX="16.0" layoutY="125.0" onMousePressed="#getRow" prefHeight="417.0" prefWidth="710.0">
         <columns>
-          <TableColumn fx:id="idLabel" prefWidth="222.4000244140625" text="ID" />
-          <TableColumn fx:id="titleLabel" prefWidth="225.5999755859375" text="Title" />
-            <TableColumn fx:id="parentIdLabel" prefWidth="261.60003662109375" text="Parent" />
+          <TableColumn fx:id="idLabel" prefWidth="171.20001220703125" text="ID" />
+          <TableColumn fx:id="titleLabel" prefWidth="182.4000244140625" text="Title" />
+            <TableColumn fx:id="parentIdLabel" prefWidth="184.0" text="Parent" />
+            <TableColumn fx:id="statusLabel" prefWidth="179.199951171875" text="Status" />
         </columns>
       </TableView>
       <Button layoutX="498.0" layoutY="49.0" mnemonicParsing="false" onMouseClicked="#addTopic">

@@ -55,7 +55,7 @@ public class Topic_Admin_Controller {
         idLabel.setCellValueFactory(new PropertyValueFactory<>("topicID"));
         titleLabel.setCellValueFactory(new PropertyValueFactory<>("topicTitle"));
         parentIdLabel.setCellValueFactory(new PropertyValueFactory<>("topicParent"));
-//        statusLabel.setCellValueFactory(new PropertyValueFactory<>("topicStatus"));
+        statusLabel.setCellValueFactory(new PropertyValueFactory<>("topicStatus"));
 
         loadTopicsParent();
         titleParentField.setItems(ParentIDList);
