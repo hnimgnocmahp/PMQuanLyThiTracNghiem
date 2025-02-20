@@ -1,6 +1,4 @@
 package org.example.phanmemthitracnghiem;
-
-
 import BUS.UserBUS;
 import DTO.UserDTO;
 import javafx.collections.FXCollections;
