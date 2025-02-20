@@ -32,12 +32,16 @@ public class TopicBUS {
         if (topicDAO.isTitleIsExists(topicDTO.getTopicTitle())){
             return -1;
         }
-        else{
-            return topicDAO.add(topicDTO);
-        }
+        return topicDAO.add(topicDTO);
     }
 
     public int updateTopic(TopicDTO topicDTO){
+        for (TopicDTO topic : topicDAO.loadTopics()){
+            if (topic.getTopicID() != topicDTO.getTopicID() && topic.getTopicStatus() == 1 && topic.getTopicTitle().equals(topicDTO.getTopicTitle())){
+                return -1;
+            }
+        }
+
         return topicDAO.update(topicDTO);
     }
 
@@ -90,6 +94,10 @@ public class TopicBUS {
                 return false;
             }
         }
+        if (topicDAO.searchTopicByID(parentId).getTopicParent() != 0){
+            return false;
+        }
+
         if(!Validation(parentId,title)){
             return false;
         }

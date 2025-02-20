@@ -115,7 +115,7 @@ public class TopicDAO {
     }
 
     public boolean isTitleIsExists(String title){
-        String sql = "SELECT * FROM topics WHERE tpTitle = ? ";
+        String sql = "SELECT * FROM topics WHERE tpTitle = ? AND tpStatus = 1 ";
 
         try {
             Connection c =  JDBCUtil.getConnection();
