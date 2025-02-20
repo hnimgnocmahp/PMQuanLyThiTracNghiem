@@ -146,9 +146,9 @@ public class LoginController {
         String password = password_login.getText();
         UserDTO userDTO = UserBUS.getInstance().findUserByUserName(email);
 
-        if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(password) &&userDTO.getIsAdmin()==0) {
+        if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(password) && userDTO.getIsAdmin()==0) {
             switchToAdmin(event); // Truyền event vào switchToAdmin
-        }else if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) &&userDTO.getIsAdmin()==1) {
+        }else if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) && userDTO.getIsAdmin()==1) {
             switchToGuest(event);
         } else {
             showAlert("Lỗi", "Tài khoản hoặc mật khẩu không đúng!");
@@ -174,6 +174,7 @@ public class LoginController {
                 email_register.setText(null);
                 password_register.setText(null);
                 confirmPassword_register.setText(null);
+                LoginController.showAlert("Thông báo", "Đăng ký thành công");
             }
         }
     }
