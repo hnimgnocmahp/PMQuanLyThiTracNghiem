@@ -190,9 +190,7 @@ public class Topic_Admin_Controller {
     private void loadTopics(){
         ArrayList<TopicDTO> listTopic = new ArrayList<>();
         for (TopicDTO topicDTO : topicBUS.loadTopics()){
-            if (topicDTO.getTopicStatus() == 1){
                 listTopic.add(topicDTO);
-            }
         }
         ObservableList<TopicDTO> observableList = FXCollections.observableArrayList(listTopic);
         tableView.setItems(observableList);
