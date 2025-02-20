@@ -85,7 +85,7 @@ public class TopicDAO {
             PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setInt(1,0);
-            ps.setInt(2, 1);
+            ps.setInt(2, id);
 
             result = ps.executeUpdate();
             JDBCUtil.close();

@@ -59,7 +59,6 @@ public class TopicBUS {
 
     public boolean Validation (int parentID, String title){
 
-        System.out.println(topicDAO.searchTopicsChildByTitle(title));
         for (TopicDTO topic : topicDAO.searchTopicsChildByTitle(title)){
             if (topic != null){
                 for (TopicDTO topic1 : topicDAO.searchTopicsChild(topic.getTopicID())){

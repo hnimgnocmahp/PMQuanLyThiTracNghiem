@@ -111,15 +111,13 @@ public class Topic_Admin_Controller {
     void deleteTopic(MouseEvent event) {
         int row = tableView.getSelectionModel().getSelectedIndex();
         int parentID = tableView.getSelectionModel().getSelectedItem().getTopicID();
-        if(topicBUS.deleteTopic2(tableView.getItems().get(row).getTopicID()) < 0){
+        if(topicBUS.deleteTopic(tableView.getItems().get(row).getTopicID()) < 0){
             LoginController.showAlert("Thông báo", "Xóa thất bại");
         }
         else{
             if (topicBUS.searchTopicsChildByID(parentID) != null){
                 for (TopicDTO topicDTO : topicBUS.searchTopicsChildByID(parentID)){
-                    System.out.println(topicDTO.getTopicID());
                     topicDTO.setTopicParent(0);
-                    System.out.println(topicDTO.getTopicParent());
                     topicBUS.updateTopic(topicDTO);
                 }
             }
@@ -186,7 +184,13 @@ public class Topic_Admin_Controller {
     }
 
     private void loadTopics(){
-        ObservableList<TopicDTO> observableList = FXCollections.observableArrayList(topicBUS.loadTopics());
+        ArrayList<TopicDTO> listTopic = new ArrayList<>();
+        for (TopicDTO topicDTO : topicBUS.loadTopics()){
+            if (topicDTO.getTopicStatus() == 1){
+                listTopic.add(topicDTO);
+            }
+        }
+        ObservableList<TopicDTO> observableList = FXCollections.observableArrayList(listTopic);
         tableView.setItems(observableList);
     }
 
@@ -206,7 +210,7 @@ public class Topic_Admin_Controller {
                 }
             }
 
-            if (!isExist) {
+            if (!isExist && topicDTO.getTopicStatus() == 1) {
                 String topicTitle = topicBUS.searchTopicByID(topicParent).getTopicTitle();
                 tempList.add(topicParent + " - " + topicTitle);
             }
@@ -218,6 +222,7 @@ public class Topic_Admin_Controller {
         ArrayList<String> ParentList = new ArrayList<>();
         List<TopicDTO> listTopic = topicBUS.loadTopics();
 
+
         if (!ParentList.contains("Tất cả")){
             ParentList.add("Tất cả");
         }
@@ -227,7 +232,7 @@ public class Topic_Admin_Controller {
         }
 
         for (TopicDTO topicDTO : listTopic){
-            if(topicBUS.searchTopicsChildByID(topicDTO.getTopicID()) != null && topicDTO.getTopicParent() == 0){
+            if(topicBUS.searchTopicsChildByID(topicDTO.getTopicID()) != null && topicDTO.getTopicParent() == 0 && topicDTO.getTopicStatus() == 1){
                 ParentList.add(topicDTO.getTopicID() + " - " + topicDTO.getTopicTitle());
             }
         }
