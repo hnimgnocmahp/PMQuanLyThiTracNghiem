@@ -28,6 +28,9 @@
             return success;
         }
 
+        public boolean updateAnswerImage(int awID, String imagePath) {
+            return AnswerDAO.getInstance().updateAnswerImage(awID, imagePath);
+        }
 
         public static AnswerBUS getInstance() {
             if (instance == null) {
