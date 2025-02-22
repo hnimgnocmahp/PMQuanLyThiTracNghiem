@@ -26,12 +26,11 @@ public class QuestionDAO {
         int result = 0;
         String sql = "INSERT INTO questions (qContent, qPictures, qTopicID, qLevel, qStatus) VALUES (?, ?, ?, ?, ?)";
 
-
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setString(1, question.getQContent());
-            preparedStatement.setString(2, question.getQPictures());
+            preparedStatement.setString(2, question.getQPictures()); // ✅ Lưu đường dẫn ảnh
             preparedStatement.setInt(3, question.getQTopicID());
             preparedStatement.setString(4, question.getQLevel());
             preparedStatement.setInt(5, question.getQStatus());
@@ -43,6 +42,7 @@ public class QuestionDAO {
 
         return result;
     }
+
     public int getLastInsertID() {
         int lastID = -1;
         String sql = "SELECT MAX(qID) FROM questions";
@@ -165,5 +165,20 @@ public class QuestionDAO {
 
         return questions;
     }
+    public boolean updateImage(int questionID, String imagePath) {
+        String sql = "UPDATE questions SET qPictures = ? WHERE qID = ?";
+        try (Connection conn = JDBCUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, imagePath); // Cập nhật đường dẫn ảnh mới
+            stmt.setInt(2, questionID);   // Điều kiện là qID tương ứng
+
+            return stmt.executeUpdate() > 0; // Trả về true nếu cập nhật thành công
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 }

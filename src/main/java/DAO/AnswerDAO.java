@@ -22,6 +22,20 @@ public class AnswerDAO {
         }
         return instance;
     }
+    public boolean updateAnswerImage(int awID, String imagePath) {
+        String query = "UPDATE answers SET awPictures = ? WHERE awID = ?";
+        try (Connection conn = JDBCUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, imagePath);
+            stmt.setInt(2, awID);
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     /**
      * ✅ Thêm danh sách câu trả lời cho một câu hỏi

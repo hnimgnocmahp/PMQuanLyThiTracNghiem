@@ -77,6 +77,9 @@ public class QuestionBUS {
         return QuestionDAO.getInstance().updateQuestionStatus(questionID, status);
     }
 
+    public boolean updateQuestionImage(int questionID, String imagePath) {
+        return QuestionDAO.getInstance().updateImage(questionID, imagePath);
+    }
 
     // Lấy câu hỏi theo ID
     public QuestionDTO getQuestionById(int questionID) {

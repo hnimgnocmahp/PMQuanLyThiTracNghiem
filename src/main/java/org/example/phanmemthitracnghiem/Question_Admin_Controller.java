@@ -23,7 +23,13 @@ import java.util.List;
 public class Question_Admin_Controller {
 
     private AdminController adminController;
-
+    private File selectedFileA, selectedFileB, selectedFileC, selectedFileD, selectedFileE;
+    @FXML private ImageView imgAnswerA, imgAnswerB, imgAnswerC, imgAnswerD, imgAnswerE;
+    @FXML private Button btnAddImageA, btnUpdateImageA, btnDeleteImageA;
+    @FXML private Button btnAddImageB, btnUpdateImageB, btnDeleteImageB;
+    @FXML private Button btnAddImageC, btnUpdateImageC, btnDeleteImageC;
+    @FXML private Button btnAddImageD, btnUpdateImageD, btnDeleteImageD;
+    @FXML private Button btnAddImageE, btnUpdateImageE, btnDeleteImageE;
     @FXML
     private ImageView btnAdd;
 
@@ -106,6 +112,7 @@ public class Question_Admin_Controller {
                     case "3" -> "Khó";
                     default -> "Dễ";
                 });
+                loadImageForQuestion(newSelection.getQPictures());
 
                 loadAnswers(selectedQuestionID);
             }
@@ -113,6 +120,23 @@ public class Question_Admin_Controller {
 
         loadQuestions();
     }
+    private void loadImageForQuestion(String imagePath) {
+        if (imagePath != null && !imagePath.isEmpty()) {
+            File imageFile = new File(imagePath);
+            if (imageFile.exists()) {
+                Image image = new Image(imageFile.toURI().toString());
+                txtPictures.setImage(image);
+                txtPictures.setVisible(true); // Hiển thị ảnh
+            } else {
+                txtPictures.setImage(null);
+                txtPictures.setVisible(false); // Ẩn nếu ảnh không tồn tại
+            }
+        } else {
+            txtPictures.setImage(null);
+            txtPictures.setVisible(false); // Ẩn nếu không có ảnh
+        }
+    }
+
 
     private boolean validateAnswers() {
         if (currentAnswers == null || currentAnswers.isEmpty()) {
@@ -135,10 +159,10 @@ public class Question_Admin_Controller {
             return false;
         }
         return true;
-    } @FXML
+    }@FXML
     private void handleAddAnswer() {
         if (txtContent.getText().trim().isEmpty()) {
-            showAlert("Vui lòng nhập nội dung câu hỏi!");
+            showAlert("⚠️ Vui lòng nhập nội dung câu hỏi!");
             return;
         }
 
@@ -152,33 +176,49 @@ public class Question_Admin_Controller {
 
         int topicID = (cbTopicID.getValue() != null) ? Integer.parseInt(cbTopicID.getValue().toString()) : 1;
 
-        // ✅ Tạo câu hỏi mới
-        QuestionDTO newQuestion = new QuestionDTO(0, txtContent.getText(), "", topicID, String.valueOf(level), 1);
+        // ✅ Lấy đường dẫn ảnh nếu có
+        String imagePath = (selectedFile != null) ? selectedFile.getAbsolutePath() : "";
 
+        // ✅ Tạo câu hỏi mới có ảnh
+        QuestionDTO newQuestion = new QuestionDTO(0, txtContent.getText(), imagePath, topicID, String.valueOf(level), 1);
+
+        // 🔥 Thêm câu hỏi vào database
         boolean isAdded = QuestionBUS.getInstance().addQuestion(newQuestion);
         if (!isAdded) {
-            showAlert("Thêm câu hỏi thất bại!");
+            showAlert("❌ Thêm câu hỏi thất bại!");
             return;
         }
 
+        // ✅ Lấy `questionID` vừa được tạo
         int newQuestionID = QuestionBUS.getInstance().getLastInsertID();
 
+        // ✅ Tạo danh sách câu trả lời
         List<AnswerDTO> answerList = createAnswerList(newQuestionID);
+
+        // Kiểm tra xem có ít nhất 2 câu trả lời không
         if (answerList.size() < 2) {
-            showAlert("Câu hỏi phải có ít nhất 2 câu trả lời!");
+            showAlert("⚠️ Câu hỏi phải có ít nhất 2 câu trả lời!");
             return;
         }
 
+        // 🔥 Lưu danh sách câu trả lời vào database
         boolean answersAdded = AnswerBUS.getInstance().addAnswers(answerList);
         if (!answersAdded) {
-            showAlert("Lưu câu trả lời thất bại!");
+            showAlert("❌ Lưu câu trả lời thất bại!");
             return;
         }
 
+        // ✅ Cập nhật ảnh câu trả lời nếu có
+        saveAnswerImages(answerList);
+
+        // 🔥 Làm mới danh sách câu hỏi và câu trả lời
         loadQuestions();
         loadAnswers(newQuestionID);
+
         showAlert("✅ Thêm câu hỏi và câu trả lời thành công!");
     }
+
+
 
     /**
      * 🔥 Chuyển đổi giá trị Level từ String (Dễ, Trung bình, Khó) sang số (1, 2, 3)
@@ -340,28 +380,45 @@ public class Question_Admin_Controller {
 
         showAlert("✅ Đã xóa toàn bộ nội dung nhập!");
     }
-
     private List<AnswerDTO> createAnswerList(int questionID) {
         List<AnswerDTO> answers = new ArrayList<>();
 
-        if (!txtAnswerA.getText().trim().isEmpty()) {
-            answers.add(new AnswerDTO(0, questionID, txtAnswerA.getText(), "", rbA.isSelected() ? 1 : 0, 1));
-        }
-        if (!txtAnswerB.getText().trim().isEmpty()) {
-            answers.add(new AnswerDTO(0, questionID, txtAnswerB.getText(), "", rbB.isSelected() ? 1 : 0, 1));
-        }
-        if (!txtAnswerC.getText().trim().isEmpty()) {
-            answers.add(new AnswerDTO(0, questionID, txtAnswerC.getText(), "", rbC.isSelected() ? 1 : 0, 1));
-        }
-        if (!txtAnswerD.getText().trim().isEmpty()) {
-            answers.add(new AnswerDTO(0, questionID, txtAnswerD.getText(), "", rbD.isSelected() ? 1 : 0, 1));
-        }
-        if (!txtAnswerE.getText().trim().isEmpty()) {
-            answers.add(new AnswerDTO(0, questionID, txtAnswerE.getText(), "", rbE.isSelected() ? 1 : 0, 1));
-        }
+        TextField[] txtAnswers = {txtAnswerA, txtAnswerB, txtAnswerC, txtAnswerD, txtAnswerE};
+        RadioButton[] rbAnswers = {rbA, rbB, rbC, rbD, rbE};
+        ImageView[] imgAnswers = {imgAnswerA, imgAnswerB, imgAnswerC, imgAnswerD, imgAnswerE};
 
+        for (int i = 0; i < txtAnswers.length; i++) {
+            if (!txtAnswers[i].getText().trim().isEmpty()) {
+                String imagePath = (imgAnswers[i].getImage() != null) ? getImagePath(imgAnswers[i]) : "";
+                answers.add(new AnswerDTO(0, questionID, txtAnswers[i].getText(), imagePath, rbAnswers[i].isSelected() ? 1 : 0, 1));
+            }
+        }
         return answers;
     }
+    private String getImagePath(ImageView imageView) {
+        if (imageView.getImage() == null) {
+            return "";
+        }
+
+        // Lấy URI từ ImageView
+        String url = imageView.getImage().getUrl();
+        if (url == null || url.isEmpty()) {
+            return "";
+        }
+
+        // Chuyển đổi URL thành đường dẫn tệp tin
+        File file = new File(url.replace("file:/", "")); // Loại bỏ "file:/" nếu có
+        return file.exists() ? file.getAbsolutePath() : "";
+    }
+    private void saveAnswerImages(List<AnswerDTO> answers) {
+        for (AnswerDTO answer : answers) {
+            if (!answer.getAwPictures().isEmpty()) { // Chỉ cập nhật nếu có hình ảnh
+                AnswerBUS.getInstance().updateAnswer(answer);
+            }
+        }
+    }
+
+
 
 
     @FXML
@@ -396,6 +453,12 @@ public class Question_Admin_Controller {
             answer.setQID(questionID);
             answer.setAwStatus(1);
 
+            // Kiểm tra nếu có hình ảnh thì lưu vào database
+            if (answer.getAwPictures() != null && !answer.getAwPictures().isEmpty()) {
+                AnswerBUS.getInstance().updateAnswer(answer);
+            }
+
+            // Đặt câu trả lời đúng nếu radio button được chọn
             if (i == 0 && rbA.isSelected()) answer.setIsRight(1);
             if (i == 1 && rbB.isSelected()) answer.setIsRight(1);
             if (i == 2 && rbC.isSelected()) answer.setIsRight(1);
@@ -405,6 +468,7 @@ public class Question_Admin_Controller {
             AnswerBUS.getInstance().addAnswer(answer);
         }
     }
+
     private void loadQuestions() {
         List<QuestionDTO> questions = QuestionBUS.getInstance().getAllQuestions();
 
@@ -415,6 +479,73 @@ public class Question_Admin_Controller {
 
         ObservableList<QuestionDTO> observableList = FXCollections.observableArrayList(questions);
         tableQuestions.setItems(observableList);
+    }
+    @FXML
+    private void handleUpdateImage() {
+        if (selectedQuestionID == -1) {
+            showAlert("⚠️ Vui lòng chọn một câu hỏi trước khi cập nhật ảnh!");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Chọn ảnh mới");
+
+        // Chỉ chọn file ảnh (PNG, JPG, JPEG)
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Hình ảnh", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        // Mở hộp thoại chọn file
+        Stage stage = (Stage) btnAddImage.getScene().getWindow();
+        File newFile = fileChooser.showOpenDialog(stage);
+
+        if (newFile != null) {
+            Image newImage = new Image(newFile.toURI().toString());
+            txtPictures.setImage(newImage); // Cập nhật ảnh trên UI
+            txtPictures.setVisible(true);
+
+            // 🔥 Cập nhật ảnh trong database
+            boolean isUpdated = QuestionBUS.getInstance().updateQuestionImage(selectedQuestionID, newFile.getAbsolutePath());
+
+            if (isUpdated) {
+                showAlert("✅ Ảnh đã được cập nhật thành công!");
+            } else {
+                showAlert("❌ Cập nhật ảnh thất bại!");
+            }
+        }
+    }
+
+    @FXML
+    private void handleDeleteImage() {
+        if (selectedQuestionID == -1) {
+            showAlert("⚠️ Vui lòng chọn một câu hỏi trước khi xóa ảnh!");
+            return;
+        }
+
+        // 🔥 Xác nhận xóa ảnh
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDialog.setTitle("Xác nhận xóa ảnh");
+        confirmDialog.setHeaderText("Bạn có chắc chắn muốn xóa ảnh của câu hỏi này?");
+        confirmDialog.setContentText("Sau khi xóa, ảnh sẽ không thể khôi phục.");
+
+        ButtonType btnYes = new ButtonType("Xóa", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnNo = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+        confirmDialog.getButtonTypes().setAll(btnYes, btnNo);
+
+        confirmDialog.showAndWait().ifPresent(response -> {
+            if (response == btnYes) {
+                // 🔥 Xóa ảnh trong database
+                boolean isDeleted = QuestionBUS.getInstance().updateQuestionImage(selectedQuestionID, "");
+
+                if (isDeleted) {
+                    txtPictures.setImage(null);
+                    txtPictures.setVisible(false);
+                    showAlert("✅ Ảnh đã được xóa thành công!");
+                } else {
+                    showAlert("❌ Xóa ảnh thất bại!");
+                }
+            }
+        });
     }
 
     /**
@@ -441,6 +572,18 @@ public class Question_Admin_Controller {
         rbD.setSelected(false);
         rbE.setSelected(false);
 
+        imgAnswerA.setImage(null);
+        imgAnswerB.setImage(null);
+        imgAnswerC.setImage(null);
+        imgAnswerD.setImage(null);
+        imgAnswerE.setImage(null);
+
+        imgAnswerA.setVisible(false);
+        imgAnswerB.setVisible(false);
+        imgAnswerC.setVisible(false);
+        imgAnswerD.setVisible(false);
+        imgAnswerE.setVisible(false);
+
         // Hiển thị dữ liệu lên UI
         for (int i = 0; i < currentAnswers.size(); i++) {
             AnswerDTO answer = currentAnswers.get(i);
@@ -448,26 +591,52 @@ public class Question_Admin_Controller {
                 case 0:
                     txtAnswerA.setText(answer.getAwContent());
                     rbA.setSelected(answer.getIsRight() == 1);
+                    loadAnswerImage(answer.getAwPictures(), imgAnswerA);
                     break;
                 case 1:
                     txtAnswerB.setText(answer.getAwContent());
                     rbB.setSelected(answer.getIsRight() == 1);
+                    loadAnswerImage(answer.getAwPictures(), imgAnswerB);
                     break;
                 case 2:
                     txtAnswerC.setText(answer.getAwContent());
                     rbC.setSelected(answer.getIsRight() == 1);
+                    loadAnswerImage(answer.getAwPictures(), imgAnswerC);
                     break;
                 case 3:
                     txtAnswerD.setText(answer.getAwContent());
                     rbD.setSelected(answer.getIsRight() == 1);
+                    loadAnswerImage(answer.getAwPictures(), imgAnswerD);
                     break;
                 case 4:
                     txtAnswerE.setText(answer.getAwContent());
                     rbE.setSelected(answer.getIsRight() == 1);
+                    loadAnswerImage(answer.getAwPictures(), imgAnswerE);
                     break;
             }
         }
     }
+
+    /**
+     * ✅ Load hình ảnh của câu trả lời nếu có
+     */
+    private void loadAnswerImage(String imagePath, ImageView imageView) {
+        if (imagePath != null && !imagePath.isEmpty()) {
+            File imageFile = new File(imagePath);
+            if (imageFile.exists()) {
+                Image image = new Image(imageFile.toURI().toString());
+                imageView.setImage(image);
+                imageView.setVisible(true); // Hiển thị ảnh nếu có
+            } else {
+                imageView.setImage(null);
+                imageView.setVisible(false); // Ẩn ảnh nếu không tồn tại
+            }
+        } else {
+            imageView.setImage(null);
+            imageView.setVisible(false); // Ẩn ảnh nếu không có đường dẫn
+        }
+    }
+
 
 
 
@@ -500,4 +669,128 @@ public class Question_Admin_Controller {
             btnAddImage.setVisible(false); // Ẩn nút "Add Image"
         }
     }
+
+    private void handleAddAnswerImage(int index) {
+        // Kiểm tra danh sách currentAnswers có đủ phần tử chưa
+        while (currentAnswers.size() <= index) {
+            currentAnswers.add(new AnswerDTO(0, selectedQuestionID, "", "", 0, 1));
+        }
+
+        AnswerDTO answer = currentAnswers.get(index);
+        ImageView imageView = getImageView(index);
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Chọn hình ảnh cho câu trả lời");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Hình ảnh", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        Stage stage = (Stage) imageView.getScene().getWindow();
+        File selectedFile = fileChooser.showOpenDialog(stage);
+
+        if (selectedFile != null) {
+            Image image = new Image(selectedFile.toURI().toString());
+            imageView.setImage(image);
+            imageView.setVisible(true);
+            answer.setAwPictures(selectedFile.getAbsolutePath()); // Lưu đường dẫn vào DTO
+        }
+    }
+
+
+
+    @FXML private void handleAddAnswerImageA() { handleAddAnswerImage(0); }
+    @FXML private void handleAddAnswerImageB() { handleAddAnswerImage(1); }
+    @FXML private void handleAddAnswerImageC() { handleAddAnswerImage(2); }
+    @FXML private void handleAddAnswerImageD() { handleAddAnswerImage(3); }
+    @FXML private void handleAddAnswerImageE() { handleAddAnswerImage(4); }
+
+
+    private ImageView getImageView(int index) {
+        return switch (index) {
+            case 0 -> imgAnswerA;
+            case 1 -> imgAnswerB;
+            case 2 -> imgAnswerC;
+            case 3 -> imgAnswerD;
+            case 4 -> imgAnswerE;
+            default -> null;
+        };
+    }
+
+    @FXML
+    private void handleUpdateAnswerImage(ImageView imageView, AnswerDTO answer) {
+        if (answer == null) {
+            showAlert("Vui lòng chọn câu trả lời trước khi cập nhật ảnh!");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Chọn ảnh mới");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Hình ảnh", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        Stage stage = (Stage) imageView.getScene().getWindow();
+        File newFile = fileChooser.showOpenDialog(stage);
+
+        if (newFile != null) {
+            Image newImage = new Image(newFile.toURI().toString());
+            imageView.setImage(newImage);
+            imageView.setVisible(true);
+            answer.setAwPictures(newFile.getAbsolutePath());
+
+            boolean isUpdated = AnswerBUS.getInstance().updateAnswer(answer);
+            if (isUpdated) {
+                showAlert("✅ Ảnh đã được cập nhật thành công!");
+            } else {
+                showAlert("❌ Cập nhật ảnh thất bại!");
+            }
+        }
+    }
+
+    // Áp dụng cho từng câu trả lời
+    @FXML private void handleUpdateAnswerImageA() { handleUpdateAnswerImage(imgAnswerA, currentAnswers.get(0)); }
+    @FXML private void handleUpdateAnswerImageB() { handleUpdateAnswerImage(imgAnswerB, currentAnswers.get(1)); }
+    @FXML private void handleUpdateAnswerImageC() { handleUpdateAnswerImage(imgAnswerC, currentAnswers.get(2)); }
+    @FXML private void handleUpdateAnswerImageD() { handleUpdateAnswerImage(imgAnswerD, currentAnswers.get(3)); }
+    @FXML private void handleUpdateAnswerImageE() { handleUpdateAnswerImage(imgAnswerE, currentAnswers.get(4)); }
+    @FXML
+    private void handleDeleteAnswerImage(ImageView imageView, AnswerDTO answer) {
+        if (answer == null) {
+            showAlert("Vui lòng chọn câu trả lời trước khi xóa ảnh!");
+            return;
+        }
+
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDialog.setTitle("Xác nhận xóa ảnh");
+        confirmDialog.setHeaderText("Bạn có chắc chắn muốn xóa ảnh của câu trả lời này?");
+        confirmDialog.setContentText("Sau khi xóa, ảnh sẽ không thể khôi phục.");
+
+        ButtonType btnYes = new ButtonType("Xóa", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnNo = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+        confirmDialog.getButtonTypes().setAll(btnYes, btnNo);
+
+        confirmDialog.showAndWait().ifPresent(response -> {
+            if (response == btnYes) {
+                answer.setAwPictures(""); // Xóa đường dẫn ảnh
+                imageView.setImage(null);
+                imageView.setVisible(false);
+
+                boolean isDeleted = AnswerBUS.getInstance().updateAnswer(answer);
+                if (isDeleted) {
+                    showAlert("✅ Ảnh đã được xóa thành công!");
+                } else {
+                    showAlert("❌ Xóa ảnh thất bại!");
+                }
+            }
+        });
+    }
+
+    // Áp dụng cho từng câu trả lời
+    @FXML private void handleDeleteAnswerImageA() { handleDeleteAnswerImage(imgAnswerA, currentAnswers.get(0)); }
+    @FXML private void handleDeleteAnswerImageB() { handleDeleteAnswerImage(imgAnswerB, currentAnswers.get(1)); }
+    @FXML private void handleDeleteAnswerImageC() { handleDeleteAnswerImage(imgAnswerC, currentAnswers.get(2)); }
+    @FXML private void handleDeleteAnswerImageD() { handleDeleteAnswerImage(imgAnswerD, currentAnswers.get(3)); }
+    @FXML private void handleDeleteAnswerImageE() { handleDeleteAnswerImage(imgAnswerE, currentAnswers.get(4)); }
+
+
 }
