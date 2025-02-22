@@ -78,8 +78,7 @@ public class UserDAO {
     }
 
     public UserDTO getUserById(int userId) {
-        UserDTO user = null;
-        String sql = "SELECT * FROM users WHERE userID = ?";
+        String sql = "SELECT userID, userName, userEmail, userFullName, isAdmin FROM users WHERE userID = ?";
 
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -87,19 +86,20 @@ public class UserDAO {
             preparedStatement.setInt(1, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    user = new UserDTO();
-                    user.setUserID(resultSet.getInt("userID"));
-                    user.setUserName(resultSet.getString("userName"));
-                    user.setUserEmail(resultSet.getString("userEmail"));
-                    user.setUserPassword(resultSet.getString("userPassword"));
-                    user.setUserFullName(resultSet.getString("userFullName"));
-                    user.setIsAdmin(resultSet.getInt("isAdmin"));
+                    return new UserDTO(
+                            resultSet.getInt("userID"),
+                            resultSet.getString("userName"),
+                            resultSet.getString("userEmail"),
+                            null, // Không lấy mật khẩu
+                            resultSet.getString("userFullName"),
+                            resultSet.getInt("isAdmin")
+                    );
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Lỗi khi lấy thông tin User: " + e.getMessage());
         }
-        return user;
+        return null; // Trả về null nếu không tìm thấy
     }
 
     public UserDTO getUserByEmail(String email) {
@@ -193,8 +193,8 @@ public class UserDAO {
         List<UserDTO> users = new ArrayList<UserDTO>();
         String sql = "SELECT * FROM users WHERE isAdmin = 1";
         try (Connection connection = JDBCUtil.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery()) {
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
                 UserDTO user = new UserDTO();
@@ -210,14 +210,14 @@ public class UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-         return users;
+        return users;
     }
 
     public List<UserDTO> searchUsers(String key) {
         List<UserDTO> users = new ArrayList<>();
         String sql = "SELECT * FROM users WHERE (userName LIKE ? OR userEmail LIKE ? OR userFullName LIKE ?) AND isAdmin = 1";
         try (Connection connection = JDBCUtil.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             String search = "%" + key + "%";
             preparedStatement.setString(1, search);
@@ -243,4 +243,39 @@ public class UserDAO {
 
         return users;
     }
+
+    // Kiểm tra mật khẩu cũ
+    public boolean checkPassword(String userName, String password) {
+        String sql = "SELECT userPassword FROM users WHERE userName = ?";
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, userName);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    String storedPassword = resultSet.getString("userPassword");
+                    return storedPassword.equals(password); // So sánh mật khẩu đã mã hóa
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Cập nhật mật khẩu mới
+    public boolean updatePassword(String userName, String newPassword) {
+        String sql = "UPDATE users SET userPassword = ? WHERE userName = ?";
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, newPassword);
+            preparedStatement.setString(2, userName);
+            int rowsUpdated = preparedStatement.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }
+

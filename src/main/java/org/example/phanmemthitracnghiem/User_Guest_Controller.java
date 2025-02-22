@@ -1,24 +1,24 @@
 package org.example.phanmemthitracnghiem;
 
 import BUS.UserBUS;
-import DTO.LogDTO;
 import DTO.UserDTO;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import java.time.LocalDateTime;
+import java.io.IOException;
 import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
-
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class User_Guest_Controller {
 
     @FXML
     private TextField txtEmail;
-
-    @FXML
-    private TextField txtId;
 
     @FXML
     private PasswordField txtconfirmPass;
@@ -35,55 +35,84 @@ public class User_Guest_Controller {
     @FXML
     private Button updateBtn;
 
-    private static UserDTO loggedInUser;
+    private UserDTO currentUser;
+
+    private void reloadUserGuestPage() {
+        try {
+            // Lấy Stage hiện tại
+            Stage stage = (Stage) txtoldPass.getScene().getWindow();
+
+            // Load lại giao diện User_Guest.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("User_Guest.fxml"));
+            Parent root = loader.load();
+
+            // Truyền thông tin user vào Controller mới
+            User_Guest_Controller controller = loader.getController();
+            controller.setCurrentUser(currentUser.getUserName());
+
+            // Cập nhật Scene và hiển thị lại
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.centerOnScreen();
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            LoginController.showAlert("Lỗi", "Không thể tải lại giao diện!");
+        }
+    }
+
+    public void setCurrentUser(String userName) {
+        this.currentUser = UserBUS.getInstance().findUserByUserName(userName);
+        if (this.currentUser != null) {
+            loadUserData(this.currentUser);
+        }
+    }
+
+    private void loadUserData(UserDTO user) {
+        if (user != null) {
+            txtuserName.setText(user.getUserName());
+            txtEmail.setText(user.getUserEmail());
+        }
+    }
 
     @FXML
     public void initialize() {
-        // Kiểm tra nếu có người dùng đăng nhập
-        if (loggedInUser != null) {
-            txtId.setText(String.valueOf(loggedInUser.getUserID()));
-            txtEmail.setText(loggedInUser.getUserEmail());
-            txtuserName.setText(loggedInUser.getUserName());
-
-            // Không cho chỉnh sửa các trường thông tin
-            txtId.setEditable(false);
-            txtEmail.setEditable(false);
-            txtuserName.setEditable(false);
-        }
-
-        // Lắng nghe sự kiện chuột trên nút cập nhật mật khẩu
-        updateBtn.setOnMouseClicked(event -> updatePassword(event));
+        // Gán sự kiện cho nút cập nhật mật khẩu
+        updateBtn.setOnMouseClicked(this::updatePassword);
+        txtuserName.setText();
     }
 
+    @FXML
     private void updatePassword(MouseEvent event) {
         String oldPass = txtoldPass.getText();
         String newPass = txtnewPass.getText();
         String confirmPass = txtconfirmPass.getText();
 
         if (oldPass.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty()) {
-            showAlert("Lỗi", "Vui lòng điền đầy đủ thông tin.");
+            LoginController.showAlert("Lỗi", "Vui lòng điền đầy đủ thông tin.");
             return;
         }
 
         if (!newPass.equals(confirmPass)) {
-            showAlert("Lỗi", "Mật khẩu xác nhận không khớp.");
+            LoginController.showAlert("Lỗi", "Mật khẩu xác nhận không khớp.");
             return;
         }
 
         UserBUS userBUS = UserBUS.getInstance();
-        boolean updateResult = userBUS.changePassword(loggedInUser.getUserID(), oldPass, newPass);
+        boolean updateResult = userBUS.changePassword(txtuserName.getText(), oldPass, newPass);
 
         if (updateResult) {
-            showAlert("Thành công", "Mật khẩu đã được cập nhật.");
+            LoginController.showAlert("Thành công", "Mật khẩu đã được cập nhật.");
+
+            // Xóa thông tin nhập vào
             txtoldPass.clear();
             txtnewPass.clear();
             txtconfirmPass.clear();
-        } else {
-            showAlert("Lỗi", "Mật khẩu cũ không đúng hoặc có lỗi xảy ra.");
-        }
-    }
 
-    private void showAlert(String title, String message) {
-        LoginController.showAlert(title, message);
+            // Load lại trang để cập nhật dữ liệu mới
+            reloadUserGuestPage();
+        } else {
+            LoginController.showAlert("Lỗi", "Cập nhật mật khẩu thất bại. Kiểm tra lại mật khẩu cũ.");
+        }
     }
 }
