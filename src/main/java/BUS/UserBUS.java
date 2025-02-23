@@ -88,4 +88,26 @@ public class UserBUS {
     public List<UserDTO> searchUsers(String key) {
         return userDAO.searchUsers(key);
     }
+
+    public UserDTO getUserById(int userID) {
+        return userDAO.getUserById(userID);
+    }
+
+    // Kiểm tra mật khẩu nhập vào
+    public boolean checkPassword(String userName, String inputPassword) {
+        String hashedPassword = hashMD5(inputPassword); // Mã hóa trước khi kiểm tra
+        return userDAO.checkPassword(userName, hashedPassword);
+    }
+
+    // Thay đổi mật khẩu
+    public boolean changePassword(String userName, String oldPassword, String newPassword) {
+        // Kiểm tra mật khẩu cũ
+        if (!checkPassword(userName, oldPassword)) {
+            return false; // Sai mật khẩu cũ
+        }
+
+        // Mã hóa mật khẩu mới và cập nhật
+        String hashedNewPassword = hashMD5(newPassword);
+        return userDAO.updatePassword(userName, hashedNewPassword);
+    }
 }
