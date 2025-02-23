@@ -10,56 +10,58 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="580.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Topic_Admin_Controller">
+<AnchorPane prefHeight="580.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Topic_Admin_Controller">
    <children>
       <Label layoutX="71.0" layoutY="31.0" text="TOPIC INFORMATION" />
       <Label layoutX="56.0" layoutY="59.0" text="Title" />
-      <TextField layoutX="135.0" layoutY="55.0" />
-      <TableView layoutX="16.0" layoutY="125.0" prefHeight="417.0" prefWidth="710.0">
+      <TextField fx:id="titleField" layoutX="135.0" layoutY="55.0" />
+      <TableView fx:id="tableView" layoutX="16.0" layoutY="125.0" onMousePressed="#getRow" prefHeight="417.0" prefWidth="710.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="ID" />
-          <TableColumn prefWidth="75.0" text="Title" />
-            <TableColumn prefWidth="75.0" text="Parent" />
-            <TableColumn prefWidth="75.0" text="Status" />
+          <TableColumn fx:id="idLabel" prefWidth="171.20001220703125" text="ID" />
+          <TableColumn fx:id="titleLabel" prefWidth="182.4000244140625" text="Title" />
+            <TableColumn fx:id="parentIdLabel" prefWidth="184.0" text="Parent" />
+            <TableColumn fx:id="statusLabel" prefWidth="179.199951171875" text="Status" />
         </columns>
       </TableView>
-      <Button layoutX="371.0" layoutY="81.0" mnemonicParsing="false">
+      <Button layoutX="498.0" layoutY="49.0" mnemonicParsing="false" onMouseClicked="#addTopic">
          <graphic>
-            <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="30.0" fitWidth="14.0" onMouseClicked="#addTopic" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../Image/plus.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="426.0" layoutY="81.0" mnemonicParsing="false">
+      <Button layoutX="557.0" layoutY="49.0" mnemonicParsing="false" onMouseClicked="#updateTopic">
          <graphic>
-            <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="30.0" fitWidth="14.0" onMouseClicked="#updateTopic" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../Image/refresh.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="475.0" layoutY="81.0" mnemonicParsing="false">
+      <Button layoutX="614.0" layoutY="49.0" mnemonicParsing="false" onMouseClicked="#deleteTopic">
          <graphic>
-            <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="30.0" fitWidth="14.0" onMouseClicked="#deleteTopic" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../Image/delete.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="524.0" layoutY="81.0" mnemonicParsing="false">
+      <Button layoutX="670.0" layoutY="49.0" mnemonicParsing="false" onMouseClicked="#cancelTopic">
          <graphic>
-            <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="30.0" fitWidth="14.0" onMouseClicked="#cancelTopic" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../Image/close.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <ComboBox layoutX="135.0" layoutY="92.0" prefWidth="150.0" />
+      <ComboBox fx:id="titleParentField" layoutX="135.0" layoutY="92.0" prefWidth="150.0" />
       <Label layoutX="56.0" layoutY="96.0" text="Parent" />
+      <Label layoutX="508.0" layoutY="95.0" text="Classify" />
+      <ComboBox fx:id="classifyParentField" layoutX="585.0" layoutY="91.0" prefHeight="26.0" prefWidth="117.0" />
    </children>
 </AnchorPane>

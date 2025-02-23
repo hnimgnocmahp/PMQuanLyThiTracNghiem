@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class UserDAO {
+public class  UserDAO {
 
     public int add(UserDTO user) {
         int ketQua = 0;
