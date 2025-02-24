@@ -43,15 +43,6 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="179.0" layoutY="205.0" mnemonicParsing="false" onMouseClicked="#deleteUser">
-         <graphic>
-            <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../Image/delete.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
       <TableView fx:id="tableUser" layoutX="13.0" layoutY="284.0" onMouseClicked="#getRowData" prefHeight="285.0" prefWidth="720.0">
         <columns>
             <TableColumn fx:id="columnUserID" prefWidth="52.00000286102295" text="ID" />
@@ -60,7 +51,7 @@
             <TableColumn fx:id="columnUserName" prefWidth="192.0" text="User Name" />
         </columns>
       </TableView>
-      <Button layoutX="236.0" layoutY="206.0" mnemonicParsing="false" onMouseClicked="#cancelAction">
+      <Button layoutX="182.0" layoutY="206.0" mnemonicParsing="false" onMouseClicked="#cancelAction">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -84,5 +75,6 @@
             <Font name="Constantia Bold" size="10.0" />
          </font>
       </Label>
+      <Button layoutX="66.0" layoutY="240.0" mnemonicParsing="false" onMouseClicked="#importUserList" text="Import Users" />
    </children>
 </AnchorPane>

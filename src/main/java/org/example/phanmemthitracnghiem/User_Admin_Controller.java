@@ -1,16 +1,25 @@
 package org.example.phanmemthitracnghiem;
 import BUS.UserBUS;
+import DAO.UserDAO;
 import DTO.UserDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User_Admin_Controller {
     @FXML
@@ -109,7 +118,14 @@ public class User_Admin_Controller {
 
     @FXML
     void updateUser(MouseEvent event) {
-
+        UserDTO userDTO = tableUser.getSelectionModel().getSelectedItem();
+        if (userDTO != null) {
+            userDTO.setUserFullName(this.txtFullName.getText());
+            if (UserBUS.getInstance().updateUser(userDTO) > 0) {
+                LoginController.showAlert("Thông báo", "Cập nhật tên thành công");
+                loadUserData();
+            }
+        }
     }
 
     @FXML
@@ -125,6 +141,50 @@ public class User_Admin_Controller {
             txtEmail.setText(userDTO.getUserEmail());
             txtFullName.setText(userDTO.getUserFullName());
             txtUserName.setText(userDTO.getUserName());
+            txtEmail.setDisable(true);
+            txtUserName.setDisable(true);
+        }
+    }
+
+    public static List<UserDTO> readUsersFromExcel(File file) {
+        List<UserDTO> userList = new ArrayList<>();
+
+        try (FileInputStream fis = new FileInputStream(file);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheetAt(0); // Lấy sheet đầu tiên
+            for (Row row : sheet) {
+                UserDTO user = new UserDTO();
+                user.setUserName(row.getCell(0).getStringCellValue());
+                user.setUserEmail(row.getCell(1).getStringCellValue());
+                user.setUserPassword(row.getCell(2).getStringCellValue());
+                user.setUserFullName(row.getCell(3).getStringCellValue());
+                user.setIsAdmin((int) row.getCell(4).getNumericCellValue());
+
+                userList.add(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return userList;
+    }
+
+    @FXML
+    void importUserList(MouseEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+        File file = fileChooser.showOpenDialog(new Stage());
+
+        if (file != null) {
+            User_Admin_Controller ExcelReader;
+            List<UserDTO> users = readUsersFromExcel(file);
+
+            for (UserDTO user : users) {
+                System.out.println(user.getUserFullName());
+                UserBUS.getInstance().addUser(user);
+            }
+            loadUserData();
+            System.out.println("Import thành công " + users.size() + " user!");
         }
     }
 
@@ -150,7 +210,6 @@ public class User_Admin_Controller {
 
         // Tải dữ liệu từ CSDL vào bảng
         loadUserData();
-
 
     }
 }
