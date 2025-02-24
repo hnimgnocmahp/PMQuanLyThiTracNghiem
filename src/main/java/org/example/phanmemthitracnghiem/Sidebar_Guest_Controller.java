@@ -1,5 +1,6 @@
 package org.example.phanmemthitracnghiem;
 
+import Interface.UserAwareController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -12,7 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class Sidebar_Guest_Controller {
+public class Sidebar_Guest_Controller implements UserAwareController {
     private GuestController guestController;
 
     @FXML
@@ -26,6 +27,18 @@ public class Sidebar_Guest_Controller {
 
     @FXML
     private HBox userButton;
+
+    private String username;
+
+    @Override
+    public void setUserName(String userName) {
+        this.username = userName;
+    }
+
+    @Override
+    public String getUserName() {
+        return username;
+    }
 
 
     @FXML
@@ -59,9 +72,9 @@ public class Sidebar_Guest_Controller {
 
     @FXML
     public void initialize() {
-        testButton1.setOnMouseClicked(event -> guestController.setCenterContent("Test_Guest.fxml"));
-        userButton.setOnMouseClicked(event -> guestController.setCenterContent("User_Guest.fxml"));
-        statisticsButton.setOnMouseClicked(event -> guestController.setCenterContent("Statistics_Guest.fxml"));
+        testButton1.setOnMouseClicked(event -> guestController.setCenterContent("Test_Guest.fxml", username));
+        userButton.setOnMouseClicked(event -> guestController.setCenterContent("User_Guest.fxml", username));
+        statisticsButton.setOnMouseClicked(event -> guestController.setCenterContent("Statistics_Guest.fxml", username));
     }
 
 }

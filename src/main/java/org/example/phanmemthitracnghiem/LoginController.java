@@ -132,7 +132,7 @@ public class LoginController {
             if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(password) &&userDTO.getIsAdmin()==0) {
                 switchToAdmin(event); // Truyền event vào switchToAdmin
             }else if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) &&userDTO.getIsAdmin()==1) {
-                switchToGuest(event);
+                switchToGuest(event, email);
             } else {
                 showAlert("Lỗi", "Email hoặc mật khẩu không đúng!");
             }
@@ -149,7 +149,7 @@ public class LoginController {
         if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(password) && userDTO.getIsAdmin()==0) {
             switchToAdmin(event); // Truyền event vào switchToAdmin
         }else if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) && userDTO.getIsAdmin()==1) {
-            switchToGuest(event);
+            switchToGuest(event, email);
         } else {
             showAlert("Lỗi", "Tài khoản hoặc mật khẩu không đúng!");
         }
@@ -241,7 +241,7 @@ public class LoginController {
     }
 
     // Hàm truy cập trang guest
-    private void switchToGuest(KeyEvent event) {
+    private void switchToGuest(KeyEvent event, String username) {
         try {
             // Lấy Stage hiện tại từ sự kiện
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -250,8 +250,12 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Guest.fxml"));
             Parent root = loader.load();
 
+            GuestController guestController = loader.getController();
+
+
             // Tạo Scene mới
             Scene scene = new Scene(root);
+            guestController.setUserName(username);
 
             // Cập nhật Stage hiện tại
             stage.setTitle("Phần mềm thi trắc nghiệm");
@@ -266,7 +270,7 @@ public class LoginController {
     }
 
     // Hàm truy cập trang guest
-    private void switchToGuest(MouseEvent event) {
+    private void switchToGuest(MouseEvent event, String username) {
         try {
             // Lấy Stage hiện tại từ sự kiện
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -274,16 +278,19 @@ public class LoginController {
             // Tải Admin.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Guest.fxml"));
             Parent root = loader.load();
+            Scene scene = new Scene(root);
+            GuestController guestController = loader.getController();
+            guestController.setUserName(username);
+//            System.out.println(username);
 
             // Tạo Scene mới
-            Scene scene = new Scene(root);
-
             // Cập nhật Stage hiện tại
             stage.setTitle("Phần mềm thi trắc nghiệm");
             stage.setScene(scene);
             // Căn giữa màn hình
             stage.centerOnScreen();
             stage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Lỗi", "Không thể tải giao diện Admin!");
