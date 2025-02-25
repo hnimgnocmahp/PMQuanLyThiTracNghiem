@@ -8,6 +8,7 @@ public class TestDTO {
     private String testCode;
     private String testTitle;
     private int testTime;
+    private int topicID;
     private int num_ease;
     private int num_medium;
     private int num_diff;
@@ -18,11 +19,11 @@ public class TestDTO {
     public TestDTO() {
     }
 
-    public TestDTO(int testID, String testCode, String testTitle, int testTime, int num_ease, int num_medium, int num_diff, int testLimit, int testDate, int testStatus) {
-        this.testID = testID;
+    public TestDTO(String testCode, String testTitle, int testTime, int topicID, int num_ease, int num_medium, int num_diff, int testLimit, int testDate, int testStatus) {
         this.testCode = testCode;
         this.testTitle = testTitle;
         this.testTime = testTime;
+        this.topicID = topicID;
         this.num_ease = num_ease;
         this.num_medium = num_medium;
         this.num_diff = num_diff;
@@ -61,6 +62,14 @@ public class TestDTO {
 
     public void setTestTime(int testTime) {
         this.testTime = testTime;
+    }
+
+    public int getTopicID() {
+        return topicID;
+    }
+
+    public void setTopicID(int topicID) {
+        this.topicID = topicID;
     }
 
     public int getNum_ease() {
