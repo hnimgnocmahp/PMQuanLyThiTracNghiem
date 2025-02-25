@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="580.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Question_Admin_Controller">
+<AnchorPane prefHeight="580.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Question_Admin_Controller">
    <children>
       <Label layoutX="14.0" layoutY="47.0" text="Question Information" />
       <Label layoutX="9.0" layoutY="70.0" text="Question" />
@@ -33,7 +25,7 @@
       <ComboBox id="cbLevel" fx:id="cbLevel" layoutX="587.0" layoutY="66.0" prefHeight="25.0" prefWidth="97.0" />
       <Label layoutX="549.0" layoutY="102.0" text="Topic" />
       <ComboBox id="cbTopicID" fx:id="cbTopicID" layoutX="587.0" layoutY="98.0" prefHeight="25.0" prefWidth="97.0" />
-      <Button layoutX="100.0" layoutY="292.0" mnemonicParsing="false" text="Import excel" />
+      <Button fx:id="btn_import" layoutX="100.0" layoutY="292.0" mnemonicParsing="false" onAction="#import_excel" text="Import excel" />
       <Label layoutX="12.0" layoutY="296.0" text="Question List" />
       <TableView fx:id="tableQuestions" layoutX="7.0" layoutY="323.0" prefHeight="255.0" prefWidth="737.0">
         <columns>

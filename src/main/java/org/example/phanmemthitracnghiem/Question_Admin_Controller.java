@@ -15,8 +15,18 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -791,6 +801,69 @@ public class Question_Admin_Controller {
     @FXML private void handleDeleteAnswerImageC() { handleDeleteAnswerImage(imgAnswerC, currentAnswers.get(2)); }
     @FXML private void handleDeleteAnswerImageD() { handleDeleteAnswerImage(imgAnswerD, currentAnswers.get(3)); }
     @FXML private void handleDeleteAnswerImageE() { handleDeleteAnswerImage(imgAnswerE, currentAnswers.get(4)); }
+
+    @FXML private Button btn_import;
+
+    @FXML private void import_excel(ActionEvent e) {
+        JFileChooser fileChooser = new JFileChooser();
+        int result = fileChooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            importData(file.getAbsolutePath());
+        }
+    }
+
+    public static void importData(String filePath) {
+        String jdbcURL = "jdbc:mysql://localhost:3306/tracnghiem?useSSL=false&serverTimezone=UTC";
+        String dbUser = "root";
+        String dbPassword = "";
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println("JDBC Driver Loaded Successfully!");
+
+            try (Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
+
+                FileInputStream file = new FileInputStream(new File(filePath));
+                Workbook workbook = WorkbookFactory.create(file)) {
+
+                Sheet questionSheet = workbook.getSheet("Questions");
+                String questionSQL = "INSERT INTO questions (qID, qContent, qPictures, qTopicID, qLevel, qStatus) VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement questionStmt = connection.prepareStatement(questionSQL);
+
+                for (Row row : questionSheet) {
+                    if (row.getRowNum() == 0) continue; // Skip header
+                    questionStmt.setInt(1, (int) row.getCell(0).getNumericCellValue());
+                    questionStmt.setString(2, row.getCell(1).getStringCellValue());
+                    questionStmt.setString(3, row.getCell(2).getStringCellValue());
+                    questionStmt.setInt(4, (int) row.getCell(3).getNumericCellValue());
+                    questionStmt.setString(5, row.getCell(4).getStringCellValue());
+                    questionStmt.setInt(6, (int) row.getCell(5).getNumericCellValue());
+                    questionStmt.executeUpdate();
+                }
+
+                Sheet answerSheet = workbook.getSheet("Answers");
+                String answerSQL = "INSERT INTO answers (awID, qID, awContent, awPictures, isRight, awStatus) VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement answerStmt = connection.prepareStatement(answerSQL);
+
+                for (Row row : answerSheet) {
+                    if (row.getRowNum() == 0) continue;
+                    answerStmt.setInt(1, (int) row.getCell(0).getNumericCellValue());
+                    answerStmt.setInt(2, (int) row.getCell(1).getNumericCellValue());
+                    answerStmt.setString(3, row.getCell(2).getStringCellValue());
+                    answerStmt.setString(4, row.getCell(3).getStringCellValue());
+                    answerStmt.setInt(5, (int) row.getCell(4).getNumericCellValue());
+                    answerStmt.setInt(6, (int) row.getCell(5).getNumericCellValue());
+                    answerStmt.executeUpdate();
+                }
+
+                JOptionPane.showMessageDialog(null, "Import Successful!");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+        }
+    }
 
 
 }

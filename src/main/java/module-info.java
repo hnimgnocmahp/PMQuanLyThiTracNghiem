@@ -5,9 +5,10 @@ module org.example.phanmemthitracnghiem {
     requires net.synedra.validatorfx;
     requires java.sql;
     requires java.naming;
-    requires java.desktop;
     requires jdk.jfr;
     requires javafx.base;
+    requires org.apache.poi.poi;
+    requires java.desktop;
 
     opens org.example.phanmemthitracnghiem to javafx.fxml;
     opens DTO to javafx.base;
