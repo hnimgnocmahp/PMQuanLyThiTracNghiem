@@ -3,9 +3,11 @@ package org.example.phanmemthitracnghiem;
 import BUS.AnswerBUS;
 import BUS.QuestionBUS;
 import DAO.QuestionDAO;
+import DAO.TopicDAO;
 import DTO.AnswerDTO;
 import DTO.QuestionDTO;
 import DTO.TopicDTO;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -37,6 +39,9 @@ public class Question_Admin_Controller {
     private Button btnAddImage;
 
     @FXML
+    private TableColumn<QuestionDTO, String> colTopic;
+
+    @FXML
     private ImageView btnDelete;
 
     @FXML
@@ -46,7 +51,7 @@ public class Question_Admin_Controller {
     private ComboBox<String> cbLevel;
 
     @FXML
-    private ComboBox<?> cbTopicID;
+    private ComboBox<TopicDTO> cbTopicID;
     @FXML
     private TableView<QuestionDTO> tableQuestions; // ✅ Sửa kiểu dữ liệu
     @FXML
@@ -78,6 +83,7 @@ public class Question_Admin_Controller {
 
     @FXML
     public void initialize() {
+        loadTopics();
         currentAnswers = new ArrayList<>();
         txtPictures.setVisible(false);
 
@@ -87,7 +93,11 @@ public class Question_Admin_Controller {
         rbC.setToggleGroup(answerGroup);
         rbD.setToggleGroup(answerGroup);
         rbE.setToggleGroup(answerGroup);
-
+        colTopic.setCellValueFactory(cellData -> {
+            int topicID = cellData.getValue().getQTopicID();
+            String topicName = TopicDAO.getInstance().getTopicNameByID(topicID);
+            return new SimpleStringProperty(topicName);
+        });
         // ✅ Cấu hình dữ liệu cho ComboBox Level (Dễ - Trung bình - Khó)
         ObservableList<String> levelOptions = FXCollections.observableArrayList("Dễ", "Trung bình", "Khó");
         cbLevel.setItems(levelOptions);
@@ -174,7 +184,12 @@ public class Question_Admin_Controller {
             default -> 1;
         };
 
-        int topicID = (cbTopicID.getValue() != null) ? Integer.parseInt(cbTopicID.getValue().toString()) : 1;
+        TopicDTO selectedTopic = cbTopicID.getValue();
+        if (selectedTopic == null) {
+            showAlert("⚠️ Vui lòng chọn chủ đề trước khi thêm câu hỏi!");
+            return; // Ngăn không cho tiếp tục nếu không có chủ đề
+        }
+        int topicID = selectedTopic.getTopicID();
 
         // ✅ Lấy đường dẫn ảnh nếu có
         String imagePath = (selectedFile != null) ? selectedFile.getAbsolutePath() : "";
@@ -261,15 +276,23 @@ public class Question_Admin_Controller {
         // ✅ Chuyển đổi giá trị Level từ chữ sang số (1, 2, 3)
         int updatedLevel = convertLevelToNumber(cbLevel.getValue());
 
-        // ✅ Cập nhật Topic ID (nếu có)
-        int updatedTopicID = (cbTopicID.getValue() != null) ? Integer.parseInt(cbTopicID.getValue().toString()) : 1;
+        TopicDTO selectedTopic = cbTopicID.getSelectionModel().getSelectedItem();
+        if (selectedTopic == null) {
+            showAlert("⚠️ Vui lòng chọn chủ đề!");
+            return;
+        }
+
+        int topicID = selectedTopic.getTopicID(); // ✅ Lấy topicID đúng cách
+
+        // ✅ In log kiểm tra
+        System.out.println("📌 Chủ đề được chọn: " + topicID);
 
         // ✅ Tạo đối tượng QuestionDTO để cập nhật
         QuestionDTO updatedQuestion = new QuestionDTO(
                 selectedQuestionID,
                 updatedQuestionContent,
                 "", // Ảnh (nếu có thể thêm sau)
-                updatedTopicID,
+                topicID,
                 String.valueOf(updatedLevel), // Lưu số thay vì chữ!
                 1 // Trạng thái mặc định là 1
         );
@@ -692,7 +715,7 @@ public class Question_Admin_Controller {
             Image image = new Image(selectedFile.toURI().toString());
             imageView.setImage(image);
             imageView.setVisible(true);
-            answer.setAwPictures(selectedFile.getAbsolutePath()); // Lưu đường dẫn vào DTO
+            answer.setAwPictures(selectedFile.getAbsolutePath()); // Lưu đường dẫn vào DTO 
         }
     }
 
@@ -792,5 +815,29 @@ public class Question_Admin_Controller {
     @FXML private void handleDeleteAnswerImageD() { handleDeleteAnswerImage(imgAnswerD, currentAnswers.get(3)); }
     @FXML private void handleDeleteAnswerImageE() { handleDeleteAnswerImage(imgAnswerE, currentAnswers.get(4)); }
 
+    private void loadTopics() {
+        List<TopicDTO> topicList = TopicDAO.getInstance().getAllTopics();
+
+        if (topicList.isEmpty()) {
+            System.out.println("⚠️ Không có chủ đề nào trong CSDL!");
+            return;
+        }
+
+        ObservableList<TopicDTO> topics = FXCollections.observableArrayList(topicList);
+        cbTopicID.setItems(topics); // 🔥 Lưu danh sách `TopicDTO` vào ComboBox
+        cbTopicID.getSelectionModel().selectFirst(); // Chọn mục đầu tiên mặc định
+    }
+
+
+
+
+    @FXML
+    private void handleTopicSelection() {
+        TopicDTO selectedTopic = cbTopicID.getSelectionModel().getSelectedItem();
+        if (selectedTopic != null) {
+            int selectedTopicID = selectedTopic.getTopicID();
+            System.out.println("Topic ID được chọn: " + selectedTopicID);
+        }
+    }
 
 }

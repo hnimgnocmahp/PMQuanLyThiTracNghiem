@@ -12,7 +12,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="580.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Question_Admin_Controller">
+<AnchorPane prefHeight="580.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Question_Admin_Controller">
    <children>
       <Label layoutX="14.0" layoutY="47.0" text="Question Information" />
       <Label layoutX="9.0" layoutY="70.0" text="Question" />
@@ -32,15 +32,16 @@
       <Label layoutX="548.0" layoutY="68.0" text="Level" />
       <ComboBox id="cbLevel" fx:id="cbLevel" layoutX="587.0" layoutY="66.0" prefHeight="25.0" prefWidth="97.0" />
       <Label layoutX="549.0" layoutY="102.0" text="Topic" />
-      <ComboBox id="cbTopicID" fx:id="cbTopicID" layoutX="587.0" layoutY="98.0" prefHeight="25.0" prefWidth="97.0" />
+      <ComboBox id="cbTopicID" fx:id="cbTopicID" layoutX="587.0" layoutY="98.0" onAction="#handleTopicSelection" prefHeight="25.0" prefWidth="97.0" />
       <Button layoutX="100.0" layoutY="292.0" mnemonicParsing="false" text="Import excel" />
       <Label layoutX="12.0" layoutY="296.0" text="Question List" />
       <TableView fx:id="tableQuestions" layoutX="7.0" layoutY="323.0" prefHeight="255.0" prefWidth="737.0">
         <columns>
           <TableColumn id="colID" fx:id="colID" prefWidth="75.0" text="ID" />
-          <TableColumn id="colContent" fx:id="colContent" prefWidth="501.33333587646484" text="Question" />
-            <TableColumn id="colLevel" fx:id="colLevel" minWidth="0.0" prefWidth="82.0" text="Level" />
-            <TableColumn id="colStatus" fx:id="colStatus" prefWidth="74.6666259765625" text="Status" />
+          <TableColumn id="colContent" fx:id="colContent" prefWidth="368.0" text="Question" />
+            <TableColumn id="colLevel" fx:id="colLevel" minWidth="0.0" prefWidth="112.0" text="Level" />
+            <TableColumn id="colLevel" fx:id="colTopic" minWidth="0.0" prefWidth="99.0" text="Topic" />
+            <TableColumn id="colStatus" fx:id="colStatus" prefWidth="82.0" text="Status" />
         </columns>
       </TableView>
       <RadioButton fx:id="rbA" layoutX="18.0" layoutY="109.0" mnemonicParsing="false" text="A">

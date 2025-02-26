@@ -16,8 +16,24 @@ public class TopicDTO {
         this.topicStatus = topicStatus;
     }
 
+
+    public TopicDTO(int topicID, String topicTitle, int topicParent, int topicStatus) {
+        this.topicID = topicID;
+        this.topicTitle = topicTitle;
+        this.topicParent = topicParent;
+        this.topicStatus = topicStatus;
+    }
+
+    @Override
+    public String toString() {
+        return topicTitle; // 🔥 Chỉ hiển thị tên chủ đề, không hiển thị ID!
+    }
+
+
+
     public int getTopicID() {
-        return topicID;
+        return topicID;  // Đảm bảo topicID không bị set = 0
+
     }
 
     public void setTopicID(int topicID) {
