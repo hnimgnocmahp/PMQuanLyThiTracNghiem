@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
@@ -19,6 +20,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -647,10 +650,6 @@ public class Question_Admin_Controller {
         }
     }
 
-
-
-
-
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Thông báo");
@@ -805,63 +804,77 @@ public class Question_Admin_Controller {
     @FXML private Button btn_import;
 
     @FXML private void import_excel(ActionEvent e) {
-        JFileChooser fileChooser = new JFileChooser();
-        int result = fileChooser.showOpenDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            importData(file.getAbsolutePath());
-        }
+
     }
 
-    public static void importData(String filePath) {
-        String jdbcURL = "jdbc:mysql://localhost:3306/tracnghiem?useSSL=false&serverTimezone=UTC";
-        String dbUser = "root";
-        String dbPassword = "";
+    public static List<QuestionDTO> readQuestionsFromExcel(File file) {
+        List<QuestionDTO> questionList = new ArrayList<>();
 
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("JDBC Driver Loaded Successfully!");
+        try (FileInputStream fis = new FileInputStream(file);
+             Workbook workbook = new XSSFWorkbook(fis)) {
 
-            try (Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
+            Sheet sheet = workbook.getSheet("Questions"); // Lấy sheet đầu tiên
+            for (Row row : sheet) {
+                QuestionDTO questionDTO = new QuestionDTO();
+                questionDTO.setQContent(row.getCell(0).getStringCellValue());
+                questionDTO.setQPictures(row.getCell(1).getStringCellValue());
+                questionDTO.setQTopicID((int) row.getCell(2).getNumericCellValue());
+                questionDTO.setQLevel(row.getCell(3).getStringCellValue());
+                questionDTO.setQStatus((int) row.getCell(4).getNumericCellValue());
 
-                FileInputStream file = new FileInputStream(new File(filePath));
-                Workbook workbook = WorkbookFactory.create(file)) {
-
-                Sheet questionSheet = workbook.getSheet("Questions");
-                String questionSQL = "INSERT INTO questions (qID, qContent, qPictures, qTopicID, qLevel, qStatus) VALUES (?, ?, ?, ?, ?, ?)";
-                PreparedStatement questionStmt = connection.prepareStatement(questionSQL);
-
-                for (Row row : questionSheet) {
-                    if (row.getRowNum() == 0) continue; // Skip header
-                    questionStmt.setInt(1, (int) row.getCell(0).getNumericCellValue());
-                    questionStmt.setString(2, row.getCell(1).getStringCellValue());
-                    questionStmt.setString(3, row.getCell(2).getStringCellValue());
-                    questionStmt.setInt(4, (int) row.getCell(3).getNumericCellValue());
-                    questionStmt.setString(5, row.getCell(4).getStringCellValue());
-                    questionStmt.setInt(6, (int) row.getCell(5).getNumericCellValue());
-                    questionStmt.executeUpdate();
-                }
-
-                Sheet answerSheet = workbook.getSheet("Answers");
-                String answerSQL = "INSERT INTO answers (awID, qID, awContent, awPictures, isRight, awStatus) VALUES (?, ?, ?, ?, ?, ?)";
-                PreparedStatement answerStmt = connection.prepareStatement(answerSQL);
-
-                for (Row row : answerSheet) {
-                    if (row.getRowNum() == 0) continue;
-                    answerStmt.setInt(1, (int) row.getCell(0).getNumericCellValue());
-                    answerStmt.setInt(2, (int) row.getCell(1).getNumericCellValue());
-                    answerStmt.setString(3, row.getCell(2).getStringCellValue());
-                    answerStmt.setString(4, row.getCell(3).getStringCellValue());
-                    answerStmt.setInt(5, (int) row.getCell(4).getNumericCellValue());
-                    answerStmt.setInt(6, (int) row.getCell(5).getNumericCellValue());
-                    answerStmt.executeUpdate();
-                }
-
-                JOptionPane.showMessageDialog(null, "Import Successful!");
+                questionList.add(questionDTO);
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return questionList;
+    }
+
+    public static List<AnswerDTO> readAnswersFromExcel(File file) {
+        List<AnswerDTO> answers= new ArrayList<>();
+
+        try (FileInputStream fis = new FileInputStream(file);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheet("Answers"); // Lấy sheet đầu tiên
+            for (Row row : sheet) {
+                AnswerDTO answerDTO = new AnswerDTO();
+                QuestionDTO questionDTO = QuestionBUS.getInstance().getQuestionByContent(row.getCell(0).getStringCellValue());
+                answerDTO.setQID(questionDTO.getQID());
+                answerDTO.setAwContent(row.getCell(1).getStringCellValue());
+                answerDTO.setAwPictures(row.getCell(2).getStringCellValue());
+                answerDTO.setIsRight((int) row.getCell(3).getNumericCellValue());
+                answerDTO.setAwStatus((int) row.getCell(4).getNumericCellValue());
+
+                answers.add(answerDTO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return answers;
+    }
+
+    @FXML
+    void import_excel(MouseEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+        File file = fileChooser.showOpenDialog(new Stage());
+
+        if (file != null) {
+            List<QuestionDTO> questions = readQuestionsFromExcel(file);
+
+            for (QuestionDTO questionDTO : questions) {
+                QuestionBUS.getInstance().addQuestion(questionDTO);
+            }
+            System.out.println("Import thành công q" + questions.size());
+            loadQuestions();
+
+            List<AnswerDTO> answer = readAnswersFromExcel(file);
+
+            for (AnswerDTO answerDTO : answer) {
+                AnswerBUS.getInstance().addAnswer(answerDTO);
+            }
+            System.out.println("Import thành công a" + questions.size());
         }
     }
 

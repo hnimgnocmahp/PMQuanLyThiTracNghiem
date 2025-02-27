@@ -92,6 +92,18 @@ public class QuestionBUS {
         return question;
     }
 
+    public QuestionDTO getQuestionByContent(String content) {
+        QuestionDTO question = questionDAO.getQuestionByContent(content);
+        if (question != null) {
+            logger.info("Lấy dữ liệu câu hỏi thành công: ID " + content);
+        } else {
+            logger.warning("Không tìm thấy câu hỏi: ID " + content);
+        }
+        return question;
+    }
+
+
+
     // Lấy danh sách tất cả câu hỏi
     public List<QuestionDTO> getAllQuestions() {
         List<QuestionDTO> questions = questionDAO.getAllQuestions();

@@ -140,6 +140,34 @@ public class QuestionDAO {
         return question;
     }
 
+    public QuestionDTO getQuestionByContent(String content) {
+        QuestionDTO question = null;
+        String sql = "SELECT * FROM questions WHERE qContent=?";
+
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, content);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                question = new QuestionDTO(
+                        resultSet.getInt("qID"),
+                        resultSet.getString("qContent"),
+                        resultSet.getString("qPictures"),
+                        resultSet.getInt("qTopicID"),
+                        resultSet.getString("qLevel"),
+                        resultSet.getInt("qStatus")
+                );
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return question;
+    }
+
     public List<QuestionDTO> getAllQuestions() {
         List<QuestionDTO> questions = new ArrayList<>();
         String sql = "SELECT * FROM questions WHERE qStatus = 1"; // 🛑 Chỉ lấy câu hỏi còn hoạt động
@@ -179,6 +207,8 @@ public class QuestionDAO {
             return false;
         }
     }
+
+
 
 
 }

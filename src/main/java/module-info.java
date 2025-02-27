@@ -9,6 +9,7 @@ module org.example.phanmemthitracnghiem {
     requires javafx.base;
     requires org.apache.poi.poi;
     requires java.desktop;
+    requires org.apache.poi.ooxml;
 
     opens org.example.phanmemthitracnghiem to javafx.fxml;
     opens DTO to javafx.base;
