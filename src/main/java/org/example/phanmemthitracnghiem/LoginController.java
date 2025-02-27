@@ -134,7 +134,7 @@ public class LoginController {
             }else if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) &&userDTO.getIsAdmin()==1) {
                 switchToGuest(event, email);
             } else {
-                showAlert("Lỗi", "Email hoặc mật khẩu không đúng!");
+                showAlert("Lỗi", "Tài khoản hoặc mật khẩu không đúng!");
             }
         }
     }
@@ -145,13 +145,15 @@ public class LoginController {
         String email = email_login.getText();
         String password = password_login.getText();
         UserDTO userDTO = UserBUS.getInstance().findUserByUserName(email);
+        System.out.println(email_login);
+        System.out.println(userDTO.getUserName());
 
         if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(password) && userDTO.getIsAdmin()==0) {
             switchToAdmin(event); // Truyền event vào switchToAdmin
         }else if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) && userDTO.getIsAdmin()==1) {
             switchToGuest(event, email);
         } else {
-            showAlert("Lỗi", "Tài khoản hoặc mật khẩu không đúng!");
+            showAlert("Thông báo", "Tài khoản hoặc mật khẩu không đúng!");
         }
     }
 
