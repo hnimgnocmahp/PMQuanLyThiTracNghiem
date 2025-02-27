@@ -14,7 +14,16 @@
         <junit.version>5.10.0</junit.version>
     </properties>
 
+
+
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>5.4.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -24,11 +33,6 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>22-ea+11</version>
-        </dependency>
-        <dependency>
-            <groupId>org.controlsfx</groupId>
-            <artifactId>controlsfx</artifactId>
-            <version>11.1.2</version>
         </dependency>
         <dependency>
             <groupId>net.synedra</groupId>
@@ -61,7 +65,7 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>5.2.3</version> <!-- Sử dụng phiên bản mới nhất -->
+            <version>5.2.5</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
