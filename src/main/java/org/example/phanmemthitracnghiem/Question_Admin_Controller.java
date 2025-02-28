@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,11 @@ public class Question_Admin_Controller {
 
     @FXML
     private TableColumn<QuestionDTO, String> colTopic;
+    @FXML
+    private TextField searchtx;
 
+    @FXML
+    private Button btnsearch;
     @FXML
     private ImageView btnDelete;
 
@@ -86,7 +91,10 @@ public class Question_Admin_Controller {
         loadTopics();
         currentAnswers = new ArrayList<>();
         txtPictures.setVisible(false);
+        btnsearch.setOnAction(event -> searchtxbtn());
 
+// Hỗ trợ tìm kiếm khi nhấn Enter
+        searchtx.setOnAction(event -> searchtxbtn());
         // ✅ Cấu hình RadioButton nhóm câu trả lời
         rbA.setToggleGroup(answerGroup);
         rbB.setToggleGroup(answerGroup);
@@ -838,6 +846,18 @@ public class Question_Admin_Controller {
             int selectedTopicID = selectedTopic.getTopicID();
             System.out.println("Topic ID được chọn: " + selectedTopicID);
         }
+    }
+    @FXML
+    private void searchtxbtn() {
+        String keyword = searchtx.getText().trim();
+        if (keyword.isEmpty()) {
+            loadQuestions(); // Nếu ô tìm kiếm trống, tải lại toàn bộ danh sách
+            return;
+        }
+
+        List<QuestionDTO> searchResults = QuestionBUS.getInstance().searchQuestions(keyword);
+        ObservableList<QuestionDTO> observableList = FXCollections.observableArrayList(searchResults);
+        tableQuestions.setItems(observableList);
     }
 
 }

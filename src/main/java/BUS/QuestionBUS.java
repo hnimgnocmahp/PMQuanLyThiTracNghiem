@@ -58,6 +58,9 @@ public class QuestionBUS {
         }
         return success;
     }
+    public List<QuestionDTO> searchQuestions(String keyword) {
+        return QuestionDAO.getInstance().searchQuestions(keyword);
+    }
 
     public boolean deleteQuestion(int questionID) {
         if (questionID <= 0) {
