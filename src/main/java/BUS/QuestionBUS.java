@@ -12,7 +12,7 @@ public class QuestionBUS {
     private final QuestionDAO questionDAO;
     private static final Logger logger = Logger.getLogger(QuestionBUS.class.getName());
 
-    private QuestionBUS() {
+    public QuestionBUS() {
         this.questionDAO = QuestionDAO.getInstance(); // Sử dụng Singleton cho DAO
     }
 
@@ -107,6 +107,16 @@ public class QuestionBUS {
     // Lấy danh sách tất cả câu hỏi
     public List<QuestionDTO> getAllQuestions() {
         List<QuestionDTO> questions = questionDAO.getAllQuestions();
+        if (!questions.isEmpty()) {
+            logger.info("Lấy danh sách câu hỏi thành công, tổng số: " + questions.size());
+        } else {
+            logger.warning("Không có câu hỏi nào trong hệ thống.");
+        }
+        return questions;
+    }
+
+    public List<QuestionDTO> getQuestionsByIDTopic (int IDTopic){
+        List<QuestionDTO> questions = questionDAO.getQuestionByIdTopic(IDTopic);
         if (!questions.isEmpty()) {
             logger.info("Lấy danh sách câu hỏi thành công, tổng số: " + questions.size());
         } else {
