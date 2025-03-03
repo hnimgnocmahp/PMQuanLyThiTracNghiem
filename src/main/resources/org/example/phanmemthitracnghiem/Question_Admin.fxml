@@ -7,68 +7,75 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="580.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Question_Admin_Controller">
    <children>
-      <Label layoutX="14.0" layoutY="57.0" text="Question Information" />
-      <Label layoutX="9.0" layoutY="83.0" text="Question" />
-      <TextField layoutX="61.0" layoutY="79.0" prefHeight="25.0" prefWidth="305.0" />
+      <Label layoutX="14.0" layoutY="47.0" text="Question Information" />
+      <Label layoutX="9.0" layoutY="70.0" text="Question" />
+      <TextField id="txtContent" fx:id="txtContent" layoutX="61.0" layoutY="66.0" prefHeight="25.0" prefWidth="305.0" />
       <Label layoutX="33.0" layoutY="72.0" />
-      <TextField layoutX="61.0" layoutY="111.0" prefHeight="25.0" prefWidth="305.0" />
-      <TextField layoutX="61.0" layoutY="143.0" prefHeight="25.0" prefWidth="305.0" />
-      <TextField layoutX="61.0" layoutY="175.0" prefHeight="25.0" prefWidth="305.0" />
-      <TextField layoutX="61.0" layoutY="207.0" prefHeight="25.0" prefWidth="305.0" />
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="372.0" layoutY="82.0" pickOnBounds="true" preserveRatio="true" />
-      <Button layoutX="372.0" layoutY="79.0" mnemonicParsing="false" text="Add image" />
-      <Label layoutX="581.0" layoutY="81.0" text="Level" />
-      <ComboBox layoutX="640.0" layoutY="79.0" prefHeight="25.0" prefWidth="97.0" />
-      <Label layoutX="581.0" layoutY="113.0" text="Topic" />
-      <ComboBox layoutX="640.0" layoutY="111.0" prefHeight="25.0" prefWidth="97.0" />
-      <Button layoutX="582.0" layoutY="219.0" mnemonicParsing="false" text="Import excel" />
-      <Label layoutX="13.0" layoutY="257.0" text="Question List" />
-      <TableView layoutX="7.0" layoutY="272.0" prefHeight="303.0" prefWidth="734.0">
+      <TextField fx:id="txtAnswerA" layoutX="61.0" layoutY="105.0" prefHeight="25.0" prefWidth="305.0" />
+      <TextField fx:id="txtAnswerB" layoutX="61.0" layoutY="143.0" prefHeight="25.0" prefWidth="305.0" />
+      <Button fx:id="btnAddImage" layoutX="429.0" layoutY="68.0" mnemonicParsing="false" onAction="#handleAddImage" prefHeight="25.0" prefWidth="27.0">
+         <graphic>
+            <ImageView id="btnAdd" fx:id="btnAdd6" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/plus.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <ImageView id="txtPictures" fx:id="txtPictures" fitHeight="33.0" fitWidth="48.0" layoutX="368.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true" />
+      <Label layoutX="548.0" layoutY="68.0" text="Level" />
+      <ComboBox id="cbLevel" fx:id="cbLevel" layoutX="587.0" layoutY="66.0" prefHeight="25.0" prefWidth="97.0" />
+      <Label layoutX="549.0" layoutY="102.0" text="Topic" />
+      <ComboBox id="cbTopicID" fx:id="cbTopicID" layoutX="587.0" layoutY="98.0" prefHeight="25.0" prefWidth="97.0" />
+      <Button layoutX="100.0" layoutY="292.0" mnemonicParsing="false" onMouseClicked="#import_excel" text="Import excel" />
+      <Label layoutX="12.0" layoutY="296.0" text="Question List" />
+      <TableView fx:id="tableQuestions" layoutX="7.0" layoutY="323.0" prefHeight="255.0" prefWidth="737.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="ID" />
-          <TableColumn prefWidth="501.33333587646484" text="Question" />
-            <TableColumn minWidth="0.0" prefWidth="82.0" text="Level" />
-            <TableColumn prefWidth="74.6666259765625" text="Status" />
+          <TableColumn id="colID" fx:id="colID" prefWidth="75.0" text="ID" />
+          <TableColumn id="colContent" fx:id="colContent" prefWidth="501.33333587646484" text="Question" />
+            <TableColumn id="colLevel" fx:id="colLevel" minWidth="0.0" prefWidth="82.0" text="Level" />
+            <TableColumn id="colStatus" fx:id="colStatus" prefWidth="74.6666259765625" text="Status" />
         </columns>
       </TableView>
-      <RadioButton layoutX="18.0" layoutY="115.0" mnemonicParsing="false" text="A" />
-      <RadioButton layoutX="18.0" layoutY="147.0" mnemonicParsing="false" text="B" />
-      <RadioButton layoutX="18.0" layoutY="178.0" mnemonicParsing="false" text="C" />
-      <RadioButton layoutX="18.0" layoutY="211.0" mnemonicParsing="false" text="D" />
-      <Button layoutX="585.0" layoutY="183.0" mnemonicParsing="false">
+      <RadioButton fx:id="rbA" layoutX="18.0" layoutY="109.0" mnemonicParsing="false" text="A">
+         <toggleGroup>
+            <ToggleGroup fx:id="answerGroup" />
+         </toggleGroup></RadioButton>
+      <RadioButton fx:id="rbB" layoutX="18.0" layoutY="147.0" mnemonicParsing="false" text="B" toggleGroup="$answerGroup" />
+      <Button layoutX="214.0" layoutY="292.0" mnemonicParsing="false" onAction="#handleAddAnswer">
          <graphic>
-            <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="btnAdd" fx:id="btnAdd" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../Image/plus.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="624.0" layoutY="183.0" mnemonicParsing="false">
+      <Button layoutX="255.0" layoutY="292.0" mnemonicParsing="false" onAction="#handleUpdateAnswer">
          <graphic>
-            <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="btnUpdate" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../Image/refresh.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="665.0" layoutY="183.0" mnemonicParsing="false">
+      <Button layoutX="293.0" layoutY="292.0" mnemonicParsing="false" onAction="#handleDeleteAnswer">
          <graphic>
-            <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="btnDelete" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../Image/delete.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="705.0" layoutY="183.0" mnemonicParsing="false">
+      <Button layoutX="334.0" layoutY="292.0" mnemonicParsing="false" onAction="#handleClearFields" prefHeight="24.0" prefWidth="30.0">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -83,5 +90,152 @@
             <Image url="@../../../Image/search-interface-symbol.png" />
          </image>
       </ImageView>
+      <RadioButton fx:id="rbC" layoutX="18.0" layoutY="187.0" mnemonicParsing="false" text="C" toggleGroup="$answerGroup" />
+      <RadioButton fx:id="rbD" layoutX="18.0" layoutY="223.0" mnemonicParsing="false" text="D" toggleGroup="$answerGroup" />
+      <RadioButton fx:id="rbE" layoutX="18.0" layoutY="254.0" mnemonicParsing="false" text="E" toggleGroup="$answerGroup" />
+      <TextField fx:id="txtAnswerC" layoutX="61.0" layoutY="183.0" prefHeight="25.0" prefWidth="305.0" />
+      <TextField fx:id="txtAnswerD" layoutX="61.0" layoutY="219.0" prefHeight="25.0" prefWidth="305.0" />
+      <TextField fx:id="txtAnswerE" layoutX="61.0" layoutY="250.0" prefHeight="25.0" prefWidth="305.0" />
+      <Button fx:id="handleUpdateImage" layoutX="467.0" layoutY="67.0" mnemonicParsing="false" onAction="#handleUpdateImage" prefHeight="25.0" prefWidth="24.0">
+         <graphic>
+            <ImageView fx:id="btnUpdate6" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/refresh.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="handleDeleteImage" layoutX="509.0" layoutY="67.0" mnemonicParsing="false" onAction="#handleDeleteImage">
+         <graphic>
+            <ImageView fx:id="btnDelete6" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/delete.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btnAddImageA" layoutX="429.0" layoutY="101.0" mnemonicParsing="false" onAction="#handleAddAnswerImageA" prefHeight="25.0" prefWidth="30.0">
+         <graphic>
+            <ImageView id="btnAdd" fx:id="btnAdd5" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/plus.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btnAddImageB" layoutX="429.0" layoutY="142.0" mnemonicParsing="false" onAction="#handleAddAnswerImageB" prefHeight="25.0" prefWidth="17.0">
+         <graphic>
+            <ImageView id="btnAdd" fx:id="btnAdd4" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/plus.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btnAddImageC" layoutX="428.0" layoutY="181.0" mnemonicParsing="false" onAction="#handleAddAnswerImageC" prefHeight="25.0" prefWidth="27.0">
+         <graphic>
+            <ImageView id="btnAdd" fx:id="btnAdd3" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/plus.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btnAddImageD" layoutX="429.0" layoutY="219.0" mnemonicParsing="false" onAction="#handleAddAnswerImageD" prefHeight="25.0" prefWidth="24.0">
+         <graphic>
+            <ImageView id="btnAdd" fx:id="btnAdd2" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/plus.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btnAddImageE" layoutX="429.0" layoutY="251.0" mnemonicParsing="false" onAction="#handleAddAnswerImageE" prefHeight="24.0" prefWidth="17.0">
+         <graphic>
+            <ImageView id="btnAdd" fx:id="btnAdd1" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/plus.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btnUpdateImageA" layoutX="467.0" layoutY="102.0" mnemonicParsing="false" onAction="#handleUpdateAnswerImageA" prefHeight="25.0" prefWidth="0.0">
+         <graphic>
+            <ImageView fx:id="btnUpdate5" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/refresh.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btnUpdateImageB" layoutX="467.0" layoutY="143.0" mnemonicParsing="false" onAction="#handleUpdateAnswerImageB" prefHeight="25.0" prefWidth="9.0">
+         <graphic>
+            <ImageView fx:id="btnUpdate4" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/refresh.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btnUpdateImageC" layoutX="467.0" layoutY="181.0" mnemonicParsing="false" onAction="#handleUpdateAnswerImageC" prefHeight="25.0" prefWidth="12.0">
+         <graphic>
+            <ImageView fx:id="btnUpdate3" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/refresh.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btnUpdateImageD" layoutX="467.0" layoutY="219.0" mnemonicParsing="false" onAction="#handleUpdateAnswerImageD" prefHeight="25.0" prefWidth="0.0">
+         <graphic>
+            <ImageView fx:id="btnUpdate2" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/refresh.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btnUpdateImageE" layoutX="467.0" layoutY="250.0" mnemonicParsing="false" onAction="#handleUpdateAnswerImageE" prefHeight="25.0" prefWidth="8.0">
+         <graphic>
+            <ImageView fx:id="btnUpdate1" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/refresh.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btnDeleteImageA" layoutX="509.0" layoutY="103.0" mnemonicParsing="false" onAction="#handleDeleteAnswerImageA">
+         <graphic>
+            <ImageView fx:id="btnDelete3" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/delete.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btnDeleteImageB" layoutX="509.0" layoutY="143.0" mnemonicParsing="false" onAction="#handleDeleteAnswerImageB">
+         <graphic>
+            <ImageView fx:id="btnDelete1" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/delete.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btnDeleteImageC" layoutX="509.0" layoutY="182.0" mnemonicParsing="false" onAction="#handleDeleteAnswerImageC">
+         <graphic>
+            <ImageView fx:id="btnDelete2" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/delete.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btnDeleteImageD" layoutX="509.0" layoutY="219.0" mnemonicParsing="false" onAction="#handleDeleteAnswerImageD">
+         <graphic>
+            <ImageView fx:id="btnDelete4" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/delete.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btnDeleteImageE" layoutX="509.0" layoutY="250.0" mnemonicParsing="false" onAction="#handleDeleteAnswerImageE">
+         <graphic>
+            <ImageView fx:id="btnDelete5" fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Image/delete.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <ImageView id="txtPictures" fx:id="imgAnswerA" fitHeight="33.0" fitWidth="48.0" layoutX="368.0" layoutY="101.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView id="txtPictures" fx:id="imgAnswerB" fitHeight="33.0" fitWidth="48.0" layoutX="368.0" layoutY="139.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView id="txtPictures" fx:id="imgAnswerC" fitHeight="33.0" fitWidth="48.0" layoutX="368.0" layoutY="181.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView id="txtPictures" fx:id="imgAnswerD" fitHeight="33.0" fitWidth="48.0" layoutX="368.0" layoutY="215.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView id="txtPictures" fx:id="imgAnswerE" fitHeight="33.0" fitWidth="48.0" layoutX="368.0" layoutY="246.0" pickOnBounds="true" preserveRatio="true" />
    </children>
 </AnchorPane>

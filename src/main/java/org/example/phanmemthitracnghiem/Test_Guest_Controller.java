@@ -1,16 +1,22 @@
 package org.example.phanmemthitracnghiem;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -67,6 +73,7 @@ public class Test_Guest_Controller implements Initializable{
         hb_2.setAlignment(Pos.CENTER_LEFT);
 
         Button button = new Button("Làm bài");
+        button.setOnAction(e -> switchToExamScene(button,testTitle,testTime,num_questions));
         VBox vBox = new VBox(title, hb, hb_1, hb_2, button);
         vBox.setStyle("-fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-color: #f8f8f8; -fx-border-width: 2");
         vBox.setPrefHeight(200);
@@ -76,6 +83,36 @@ public class Test_Guest_Controller implements Initializable{
         vBox.setPadding(new Insets(10));
         return vBox;
 
+    }
+
+
+
+    public void switchToExamScene(Button button, String title, int time, int question) {
+        try {
+            // Load giao diện bài thi
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Exam.fxml"));
+            Parent root = loader.load();
+
+            Exam_Controller examController = loader.getController();
+            if (examController != null) {
+                examController.setQuestions(question);
+                examController.setTime(time);
+                examController.setTitle(title);
+
+                // Gọi sau khi set dữ liệu
+                examController.initializeExam();
+            } else {
+                System.out.println("Lỗi: Không thể lấy Exam_Controller");
+            }
+            // Lấy stage hiện tại từ button
+            Stage currentStage = (Stage) button.getScene().getWindow();
+            currentStage.setScene(new Scene(root, 944, 580)); // Đặt kích thước phù hợp
+            currentStage.show();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
