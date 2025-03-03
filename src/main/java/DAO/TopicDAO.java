@@ -2,6 +2,7 @@ package DAO;
 
 import BUS.TopicBUS;
 import DTO.TopicDTO;
+import DTO.UserDTO;
 import util.JDBCUtil;
 
 import java.sql.*;
@@ -208,6 +209,59 @@ public class TopicDAO {
         return topicDTOList;
     }
 
+    public List<TopicDTO> getTopicsChild(int parentID){
+        ArrayList<TopicDTO> topicDTOList = new ArrayList<>();
+        String sql = "SELECT * FROM topics WHERE tpParent = ? AND tpStatus = 1 ";
+
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1,parentID);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                TopicDTO topicDTO = new TopicDTO();
+
+                topicDTO.setTopicID(rs.getInt("tpID"));
+                topicDTO.setTopicTitle(rs.getString("tpTitle"));
+                topicDTO.setTopicParent(rs.getInt("tpParent"));
+                topicDTO.setTopicStatus(rs.getInt("tpStatus"));
+
+                topicDTOList.add(topicDTO);
+            }
+            JDBCUtil.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return topicDTOList;
+    }
+
+    public List<TopicDTO> getTopicWithParentNull() {
+        ArrayList<TopicDTO> topicDTOList = new ArrayList<>();
+        String sql = "SELECT * FROM topics WHERE tpParent = 0 AND tpStatus = 1 ";
+
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                TopicDTO topicDTO = new TopicDTO();
+
+                topicDTO.setTopicID(rs.getInt("tpID"));
+                topicDTO.setTopicTitle(rs.getString("tpTitle"));
+                topicDTO.setTopicParent(rs.getInt("tpParent"));
+                topicDTO.setTopicStatus(rs.getInt("tpStatus"));
+
+                topicDTOList.add(topicDTO);
+            }
+            JDBCUtil.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return topicDTOList;
+    }
+
     public List<TopicDTO> searchTopicsChildByTitle(String title){
         ArrayList<TopicDTO> topicDTOList = new ArrayList<>();
         String sql = "SELECT * FROM topics WHERE tpTitle = ?";
@@ -235,4 +289,48 @@ public class TopicDAO {
         }
         return topicDTOList;
     }
+
+    public List<TopicDTO> getAll() {
+        List<TopicDTO> topicList = new ArrayList<TopicDTO>();
+        String sql = "SELECT * FROM topics";
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                TopicDTO topicDTO = new TopicDTO();
+                topicDTO.setTopicID(resultSet.getInt("tpID"));
+                topicDTO.setTopicTitle(resultSet.getString("tpTitle"));
+                topicDTO.setTopicParent(resultSet.getInt("tpParent"));
+                topicDTO.setTopicStatus(resultSet.getInt("tpStatus"));
+
+                topicList.add(topicDTO);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return topicList;
+    }
+
+    public TopicDTO getTopicByTitle(String title) {
+        TopicDTO topic = null; // Chỉ cần một đối tượng, không phải danh sách
+        String sql = "SELECT * FROM topics WHERE tpTitle = ?";
+
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, title); // Gán giá trị vào câu lệnh SQL
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) { // Lấy kết quả đầu tiên nếu có
+                topic = new TopicDTO();
+                topic.setTopicID(resultSet.getInt("tpID"));
+                topic.setTopicTitle(resultSet.getString("tpTitle"));
+                topic.setTopicParent(resultSet.getInt("tpParent"));
+                topic.setTopicStatus(resultSet.getInt("tpStatus"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return topic;    }
 }

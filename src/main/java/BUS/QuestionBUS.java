@@ -3,7 +3,10 @@ package BUS;
 import DAO.QuestionDAO;
 import DTO.QuestionDTO;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -113,5 +116,25 @@ public class QuestionBUS {
             logger.warning("Không có câu hỏi nào trong hệ thống.");
         }
         return questions;
+    }
+
+    public List<QuestionDTO> getQuestionsForTopic(int topicID) {
+        List<QuestionDTO> questions = questionDAO.getQuestionsForTopic(topicID);
+        return questions;
+    }
+
+    // Hàm chọn ngẫu nhiên câu hỏi từ danh sách
+    public List<QuestionDTO> selectRandomQuestions(List<QuestionDTO> questions, String difficulty, int count) {
+        List<QuestionDTO> filteredQuestions = new ArrayList<>();
+        for (QuestionDTO question : questions) {
+            if (question.getQLevel().equals(difficulty)) {
+                filteredQuestions.add(question);
+            }
+        }
+
+        // Xáo trộn danh sách câu hỏi
+        Collections.shuffle(filteredQuestions, new Random());
+
+        return filteredQuestions.subList(0, Math.min(count, filteredQuestions.size()));
     }
 }

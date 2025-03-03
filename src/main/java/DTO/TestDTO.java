@@ -1,29 +1,28 @@
 package DTO;
 
-
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 public class TestDTO {
     private int testID;
     private String testCode;
     private String testTitle;
     private int testTime;
-    private int topicID;
+    private int tpID;
     private int num_ease;
     private int num_medium;
     private int num_diff;
     private int testLimit;
-    private int testDate;
+    private Date testDate;
     private int testStatus;
 
     public TestDTO() {
     }
 
-    public TestDTO(String testCode, String testTitle, int testTime, int topicID, int num_ease, int num_medium, int num_diff, int testLimit, int testDate, int testStatus) {
+    public TestDTO(String testCode, String testTitle, int testTime, int tpID, int num_ease, int num_medium, int num_diff, int testLimit, Date testDate, int testStatus) {
         this.testCode = testCode;
         this.testTitle = testTitle;
         this.testTime = testTime;
-        this.topicID = topicID;
+        this.tpID = tpID;
         this.num_ease = num_ease;
         this.num_medium = num_medium;
         this.num_diff = num_diff;
@@ -64,12 +63,12 @@ public class TestDTO {
         this.testTime = testTime;
     }
 
-    public int getTopicID() {
-        return topicID;
+    public int getTpID() {
+        return tpID;
     }
 
-    public void setTopicID(int topicID) {
-        this.topicID = topicID;
+    public void setTpID(int tpID) {
+        this.tpID = tpID;
     }
 
     public int getNum_ease() {
@@ -104,11 +103,11 @@ public class TestDTO {
         this.testLimit = testLimit;
     }
 
-    public int getTestDate() {
+    public Date getTestDate() {
         return testDate;
     }
 
-    public void setTestDate(int testDate) {
+    public void setTestDate(Date testDate) {
         this.testDate = testDate;
     }
 

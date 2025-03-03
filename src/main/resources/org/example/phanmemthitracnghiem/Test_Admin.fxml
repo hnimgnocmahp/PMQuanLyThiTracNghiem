@@ -18,19 +18,19 @@
       <Pane layoutX="17.0" layoutY="69.0" prefHeight="226.0" prefWidth="708.0" style="-fx-background-color: #fff;" styleClass="boder" stylesheets="@../../../CssStyle/AdminStyle.css">
          <children>
             <Line endX="607.0" endY="-7.62939453125E-6" layoutX="101.0" startX="-100.0" />
-            <Label layoutX="329.0" layoutY="4.0" text="TEST INFORMATION" />
+            <Label layoutX="77.0" layoutY="6.0" text="TEST INFORMATION" />
             <Line endX="0.29289817810058594" endY="0.7070999145507812" startX="0.49999046325683594" startY="225.5404052734375" />
             <Line endX="503.6666259765625" endY="15.0404052734375" layoutX="202.0" layoutY="211.0" startX="-201.0" startY="15.0404052734375" />
             <Line endX="167.0" endY="-31.00000762939453" layoutX="541.0" layoutY="31.0" startX="167.0" startY="195.0" />
-            <Label layoutX="43.0" layoutY="33.0" text="Name" />
-            <TextField layoutX="113.0" layoutY="29.0" prefHeight="25.0" prefWidth="233.0" />
-            <Label layoutX="42.0" layoutY="74.0" text="Topic" />
-            <Label layoutX="44.0" layoutY="115.0" prefHeight="17.0" prefWidth="30.0" text="Date" />
-            <Label layoutX="43.0" layoutY="154.0" text="Limit" />
-            <DatePicker layoutX="113.0" layoutY="111.0" prefHeight="25.0" prefWidth="233.0" />
-            <TextField layoutX="113.0" layoutY="150.0" prefHeight="25.0" prefWidth="233.0" />
-            <ComboBox layoutX="113.0" layoutY="70.0" prefHeight="25.0" prefWidth="233.0" />
-            <Button layoutX="125.0" layoutY="182.0" mnemonicParsing="false">
+            <Label layoutX="11.0" layoutY="36.0" text="Title" />
+            <TextField fx:id="txtTitle" layoutX="43.0" layoutY="32.0" prefHeight="25.0" prefWidth="172.0" />
+            <Label layoutX="10.0" layoutY="77.0" text="Topic" />
+            <Label layoutX="12.0" layoutY="118.0" prefHeight="17.0" prefWidth="30.0" text="Date" />
+            <Label layoutX="11.0" layoutY="157.0" text="Limit" />
+            <DatePicker fx:id="txtDate" layoutX="43.0" layoutY="114.0" prefHeight="25.0" prefWidth="172.0" />
+            <TextField fx:id="txtLimit" layoutX="43.0" layoutY="153.0" prefHeight="25.0" prefWidth="172.0" />
+            <ComboBox fx:id="txtTopic" layoutX="43.0" layoutY="73.0" prefHeight="25.0" prefWidth="172.0" />
+            <Button layoutX="43.0" layoutY="193.0" mnemonicParsing="false" onMouseClicked="#addTest">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -39,7 +39,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="183.0" layoutY="182.0" mnemonicParsing="false">
+            <Button layoutX="101.0" layoutY="193.0" mnemonicParsing="false" onMouseClicked="#updateTest">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -48,7 +48,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="238.0" layoutY="182.0" mnemonicParsing="false">
+            <Button layoutX="156.0" layoutY="193.0" mnemonicParsing="false" onMouseClicked="#deleteTest">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -57,7 +57,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="299.0" layoutY="181.0" mnemonicParsing="false">
+            <Button layoutX="217.0" layoutY="192.0" mnemonicParsing="false" onMouseClicked="#cancel">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -66,34 +66,40 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Label layoutX="402.0" layoutY="152.0" text="Time" />
+            <Label layoutX="243.0" layoutY="154.0" text="Time" />
+            <Label layoutX="465.0" layoutY="36.0" text="Test Code" />
+            <TextField fx:id="txtTestCode" layoutX="524.0" layoutY="32.0" prefHeight="25.0" prefWidth="172.0" />
+            <TextField fx:id="txtTime" layoutX="280.0" layoutY="152.0" prefHeight="25.0" prefWidth="172.0" />
+            <Label layoutX="535.0" layoutY="6.0" text="TESTCODE INFORMATION" />
+            <Label layoutX="471.0" layoutY="72.0" text="Num TC" />
+            <TextField fx:id="txtNumTestCode" layoutX="524.0" layoutY="68.0" prefHeight="25.0" prefWidth="172.0" />
          </children>
       </Pane>
-      <TextField layoutX="166.0" layoutY="24.0" prefHeight="33.0" prefWidth="448.0" />
+      <TextField layoutX="166.0" layoutY="24.0" onKeyReleased="#searchTest" prefHeight="33.0" prefWidth="448.0" />
       <ImageView fitHeight="25.0" fitWidth="24.0" layoutX="127.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../Image/search-interface-symbol.png" />
          </image>
       </ImageView>
-      <Label layoutX="426.0" layoutY="104.0" text="Easy" />
-      <Label layoutX="416.0" layoutY="142.0" text="Medium" />
-      <Label layoutX="422.0" layoutY="181.0" text="Hard" />
-      <TextField layoutX="474.0" layoutY="100.0" prefHeight="25.0" prefWidth="233.0" />
-      <TextField layoutX="474.0" layoutY="138.0" prefHeight="25.0" prefWidth="233.0" />
-      <TextField layoutX="474.0" layoutY="177.0" prefHeight="25.0" prefWidth="233.0" />
-      <TextField layoutX="474.0" layoutY="219.0" prefHeight="25.0" prefWidth="233.0" />
-      <TableView layoutX="17.0" layoutY="305.0" prefHeight="265.0" prefWidth="706.0">
+      <Label layoutX="261.0" layoutY="104.0" text="Easy" />
+      <Label layoutX="249.0" layoutY="142.0" text="Medium" />
+      <Label layoutX="260.0" layoutY="181.0" text="Hard" />
+      <TextField fx:id="txtEasy" layoutX="295.0" layoutY="100.0" prefHeight="25.0" prefWidth="172.0" />
+      <TextField fx:id="txtMedium" layoutX="295.0" layoutY="138.0" prefHeight="25.0" prefWidth="172.0" />
+      <TextField fx:id="txtHard" layoutX="296.0" layoutY="177.0" prefHeight="25.0" prefWidth="172.0" />
+      <TableView fx:id="tableTest" layoutX="17.0" layoutY="305.0" prefHeight="265.0" prefWidth="706.0">
         <columns>
-          <TableColumn prefWidth="35.99999809265137" text="ID" />
-          <TableColumn prefWidth="62.000003814697266" text="Test Code" />
-            <TableColumn prefWidth="49.99999237060547" text="Title" />
-            <TableColumn prefWidth="50.0" text="Time" />
-            <TableColumn prefWidth="74.00001525878906" text="Topic ID" />
-            <TableColumn prefWidth="70.0" text="numEasy" />
-            <TableColumn prefWidth="82.66668701171875" text="numMedium" />
-            <TableColumn prefWidth="85.33322143554688" text="numDiff" />
-            <TableColumn prefWidth="102.666748046875" text="Limit" />
-            <TableColumn prefWidth="91.33331298828125" text="Date" />
+          <TableColumn fx:id="columnTestID" prefWidth="35.99999809265137" text="ID" />
+          <TableColumn fx:id="columnTestCode" prefWidth="62.000003814697266" text="Test Code" />
+            <TableColumn fx:id="columnTitle" prefWidth="49.99999237060547" text="Title" />
+            <TableColumn fx:id="columnTime" prefWidth="50.0" text="Time" />
+            <TableColumn fx:id="columnTopic" prefWidth="74.00001525878906" text="Topic ID" />
+            <TableColumn fx:id="columnEasy" prefWidth="70.0" text="numEasy" />
+            <TableColumn fx:id="columnMedium" prefWidth="82.66668701171875" text="numMedium" />
+            <TableColumn fx:id="columnDiff" prefWidth="85.33322143554688" text="numDiff" />
+            <TableColumn fx:id="columnLimit" prefWidth="61.33331298828125" text="Limit" />
+            <TableColumn fx:id="columnDate" prefWidth="64.66668701171875" text="Date" />
+            <TableColumn fx:id="columnStatus" prefWidth="64.66668701171875" text="Status" />
         </columns>
       </TableView>
    </children>

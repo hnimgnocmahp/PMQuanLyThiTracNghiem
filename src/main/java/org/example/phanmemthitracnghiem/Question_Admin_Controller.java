@@ -868,15 +868,12 @@ public class Question_Admin_Controller {
             for (QuestionDTO questionDTO : questions) {
                 QuestionBUS.getInstance().addQuestion(questionDTO);
             }
-            System.out.println("Import thành công q" + questions.size());
             loadQuestions();
-
             List<AnswerDTO> answer = readAnswersFromExcel(file);
-
             for (AnswerDTO answerDTO : answer) {
                 AnswerBUS.getInstance().addAnswer(answerDTO);
             }
-            System.out.println("Import thành công a" + questions.size());
+
         }
     }
 
