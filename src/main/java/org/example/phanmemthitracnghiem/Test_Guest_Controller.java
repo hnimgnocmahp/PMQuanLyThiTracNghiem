@@ -1,5 +1,6 @@
 package org.example.phanmemthitracnghiem;
 
+import DTO.TestDTO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -30,10 +31,10 @@ public class Test_Guest_Controller implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-
         int columns = 3; // Số cột mong muốn
         int row = 0, col = 0;
-            VBox testItem = createTestCodeItem("Lý - A", 20, 2, 30, 25);
+//        List<TestDTO> testList = TestB
+            VBox testItem = createTestCodeItem("a", 9   , 20, 2, 30, 25);
             testItem.setMaxWidth(255);
             testItem.setMaxHeight(255);
 
@@ -47,34 +48,48 @@ public class Test_Guest_Controller implements Initializable{
     }
 
     // Tạo style đề thi
-    private VBox createTestCodeItem(String testTitle, int num_questions, int testLimit, int testTime, int testDate ) {
+    private VBox createTestCodeItem(String testTitle, int tpID, int num_questions, int testLimit, int testTime, int testDate ) {
         Label title = new Label(testTitle);
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: 'Arial'");
 
-        Label numTitle = new Label("Số câu: ");
+        Label topic = new Label("Topic: ");
+        topic.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: 'Times New Roman'");
+        Label topiclb = new Label(String.valueOf(tpID));
+        topiclb.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: 'Arial'");
+        HBox hb_0 = new HBox(topic, topiclb);
+        hb_0.setAlignment(Pos.CENTER_LEFT);
+
+        Label numTitle = new Label("Num: ");
         numTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: 'Times New Roman'");
         Label num = new Label(String.valueOf(num_questions));
         num.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: 'Arial'");
-        HBox hb = new HBox(numTitle, num);
-        hb.setAlignment(Pos.CENTER_LEFT);
+        HBox hb_1 = new HBox(numTitle, num);
+        hb_0.setAlignment(Pos.CENTER_LEFT);
 
-        Label timeTitle = new Label("Thời gian làm bài: ");
+        Label timeTitle = new Label("Time: ");
         timeTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: 'Times New Roman'");
         Label time = new Label(String.valueOf(testTime));
         time.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: 'Arial'");
-        HBox hb_1 = new HBox(timeTitle, time);
-        hb_1.setAlignment(Pos.CENTER_LEFT);
+        HBox hb_2 = new HBox(timeTitle, time);
+        hb_2.setAlignment(Pos.CENTER_LEFT);
 
-        Label dateTitle = new Label("Thời gian mở: ");
+        Label dateTitle = new Label("Date: ");
         dateTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: 'Times New Roman'");
         Label date = new Label(String.valueOf(testDate));
         date.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: 'Arial'");
-        HBox hb_2 = new HBox(dateTitle, date);
-        hb_2.setAlignment(Pos.CENTER_LEFT);
+        HBox hb_3 = new HBox(dateTitle, date);
+        hb_3.setAlignment(Pos.CENTER_LEFT);
 
-        Button button = new Button("Làm bài");
+        Label limitTitle = new Label("Limit: ");
+        limitTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: 'Times New Roman'");
+        Label limitlb = new Label(String.valueOf(testLimit));
+        limitlb.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: 'Arial'");
+        HBox hb_4 = new HBox(limitTitle, limitlb);
+        hb_4.setAlignment(Pos.CENTER_LEFT);
+
+        Button button = new Button("Exercise");
         button.setOnAction(e -> switchToExamScene(button,testTitle,testTime,num_questions));
-        VBox vBox = new VBox(title, hb, hb_1, hb_2, button);
+        VBox vBox = new VBox(title, hb_0, hb_1, hb_2, hb_3, hb_4, button);
         vBox.setStyle("-fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-color: #f8f8f8; -fx-border-width: 2");
         vBox.setPrefHeight(200);
 

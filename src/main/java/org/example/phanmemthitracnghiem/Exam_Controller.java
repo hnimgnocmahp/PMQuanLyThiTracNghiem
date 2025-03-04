@@ -49,51 +49,61 @@ public class Exam_Controller {
     private VBox sidebar1;
 
     private TopicBUS topicBUS;
+
     private QuestionBUS questionBUS;
 
     private int questions;  // Số câu hỏi
+
     private String title;
+
     private int time;
 
     private int currentQuestionIndex = 0; // Chỉ số câu hỏi hiện tại
+
     private Map<Integer, String> userAnswers = new HashMap<>(); // Lưu đáp án người dùng chọn
+
     private List<QuestionDTO> questionsContent = new ArrayList<>(); // Danh sách câu hỏi
+
     private List<AnswerDTO[]> answerChoices = new ArrayList<>(); // Danh sách đáp án tương ứng
+
     private ToggleGroup answerGroup = new ToggleGroup();
 
     // Getters/setters
     public int getTime() {
         return time;
     }
+
+
     public void setTime(int time) {
         this.time = time;
     }
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public int getQuestions() {
         return questions;
     }
+
     public void setQuestions(int questions) {
         this.questions = questions;
-        System.out.println("Số câu hỏi: " + questions);
     }
 
     @FXML
     public void initialize() {
         topicBUS = new TopicBUS();
+
         questionBUS = new QuestionBUS();
+        
         setupScrollPane();
     }
 
     public void initializeExam() {
-        System.out.println("Khởi tạo bài thi...");
-        System.out.println("Tiêu đề: " + title);
-        System.out.println("Thời gian: " + time);
-        System.out.println("Số câu hỏi: " + questions);
         loadQuestion();
         loadQuestionContent();
     }
@@ -131,7 +141,6 @@ public class Exam_Controller {
             loadQuestionContent();
         }
     }
-
 
     @FXML
     void previous(MouseEvent event) {
@@ -294,7 +303,6 @@ public class Exam_Controller {
                 listAnswer.add(answerDTO);
             }
             answerChoices.add(listAnswer.toArray(new AnswerDTO[0]));
-            System.out.println("Tổng số câu hỏi: " + questionsContent.size());
         }
 
         // Tạo sidebar hiển thị danh sách câu hỏi (ví dụ: số câu và trạng thái đã làm/chưa làm)
@@ -384,9 +392,9 @@ public class Exam_Controller {
                     HBox answerBox = new HBox(10, radioButton, answerImageView);
                     answerContainer.getChildren().add(answerBox);
                 } catch (Exception e) {
-                    System.err.println("Không thể load ảnh của đáp án: " + e.getMessage());
-                    answerContainer.getChildren().add(radioButton);
-                }
+                System.err.println("Không thể load ảnh của đáp án: " + e.getMessage());
+                answerContainer.getChildren().add(radioButton);
+            }
             } else {
                 answerContainer.getChildren().add(radioButton);
             }
