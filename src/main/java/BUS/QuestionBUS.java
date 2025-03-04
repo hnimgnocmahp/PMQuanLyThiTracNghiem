@@ -15,7 +15,7 @@ public class QuestionBUS {
     private final QuestionDAO questionDAO;
     private static final Logger logger = Logger.getLogger(QuestionBUS.class.getName());
 
-    private QuestionBUS() {
+    public QuestionBUS() {
         this.questionDAO = QuestionDAO.getInstance(); // Sử dụng Singleton cho DAO
     }
 

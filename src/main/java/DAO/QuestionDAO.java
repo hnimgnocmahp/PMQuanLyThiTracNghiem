@@ -139,6 +139,36 @@ public class QuestionDAO {
 
         return question;
     }
+    public List<QuestionDTO> getQuestionByIdTopic(int questionIDTopic) {
+        ArrayList<QuestionDTO> questions = new ArrayList<>();
+        String sql = "SELECT * FROM questions WHERE qTopicID=?";
+
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, questionIDTopic);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                QuestionDTO question = new QuestionDTO(
+                        resultSet.getInt("qID"),
+                        resultSet.getString("qContent"),
+                        resultSet.getString("qPictures"),
+                        resultSet.getInt("qTopicID"),
+                        resultSet.getString("qLevel"),
+                        resultSet.getInt("qStatus")
+                );
+                questions.add(question);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return questions;
+    }
+
+
 
     public QuestionDTO getQuestionByContent(String content) {
         QuestionDTO question = null;

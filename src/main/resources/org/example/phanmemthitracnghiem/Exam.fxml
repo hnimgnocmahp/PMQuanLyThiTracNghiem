@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Exam_Controller">
+   <children>
+      <VBox fx:id="sidebar" alignment="TOP_CENTER" layoutY="3.0" prefHeight="580.0" prefWidth="200.0" styleClass="sidebar">
+         <children>
+            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" smooth="false">
+               <image>
+                  <Image url="@../../../Image/SGU-LOGO-400x400.png" />
+               </image>
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
+            </ImageView>
+            <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" prefHeight="465.0" prefWidth="161.0">
+               <content>
+                  <VBox fx:id="sidebar1" alignment="TOP_CENTER" prefHeight="580.0" prefWidth="200.0" styleClass="sidebar" />
+               </content>
+            </ScrollPane>
+         </children>
+      </VBox>
+      <AnchorPane layoutX="200.0" layoutY="3.0" prefHeight="580.0" prefWidth="744.0" style="-fx-background-color: #D8E3F8;">
+         <children>
+            <Pane id="question" layoutX="18.0" layoutY="64.0" prefHeight="225.0" prefWidth="708.0" style="-fx-background-color: #fff;" styleClass="boder" stylesheets="@../../../CssStyle/AdminStyle.css">
+               <children>
+                  <Line endX="607.0" endY="-7.62939453125E-6" layoutX="101.0" startX="-100.0" />
+                  <Line endX="0.29289817810058594" endY="0.7070999145507812" startX="0.49999046325683594" startY="225.5404052734375" />
+                  <Line endX="503.6666259765625" endY="15.0404052734375" layoutX="202.0" layoutY="211.0" startX="-201.0" startY="15.0404052734375" />
+                  <Line endX="167.0" endY="-31.00000762939453" layoutX="541.0" layoutY="31.0" startX="167.0" startY="195.0" />
+                  <VBox fx:id="questionContainer" layoutX="1.0" prefHeight="226.0" prefWidth="708.0" />
+               </children>
+            </Pane>
+            <Pane id="question" layoutX="18.0" layoutY="309.0" prefHeight="225.0" prefWidth="708.0" style="-fx-background-color: #fff;" styleClass="boder" stylesheets="@../../../CssStyle/AdminStyle.css">
+               <children>
+                  <Line endX="607.0" endY="-7.62939453125E-6" layoutX="101.0" startX="-100.0" />
+                  <Line endX="0.29289817810058594" endY="0.7070999145507812" startX="0.49999046325683594" startY="225.5404052734375" />
+                  <Line endX="503.6666259765625" endY="15.0404052734375" layoutX="202.0" layoutY="211.0" startX="-201.0" startY="15.0404052734375" />
+                  <Line endX="167.0" endY="-31.00000762939453" layoutX="541.0" layoutY="31.0" startX="167.0" startY="195.0" />
+                  <Button layoutX="606.0" layoutY="187.0" mnemonicParsing="false" onMouseClicked="#next" text="Câu tiếp theo" />
+                  <Button layoutX="501.0" layoutY="187.0" mnemonicParsing="false" onMouseClicked="#previous" prefHeight="25.0" prefWidth="87.0" text="Câu trước" />
+                  <VBox fx:id="answerContainer" layoutX="2.0" layoutY="1.0" prefHeight="181.0" prefWidth="706.0" />
+               </children>
+            </Pane>
+            <Button layoutX="626.0" layoutY="546.0" mnemonicParsing="false" onMouseClicked="#submit" prefHeight="26.0" prefWidth="87.0" text="Nộp bài" />
+            <Label layoutX="342.0" layoutY="14.0" prefHeight="36.0" prefWidth="67.0" text="KIỂM TRA" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

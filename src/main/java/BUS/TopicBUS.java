@@ -9,7 +9,7 @@ public class TopicBUS {
     private TopicDAO topicDAO;
     private static TopicBUS instance;
 
-    private TopicBUS() {
+    public TopicBUS() {
         topicDAO = new TopicDAO();
     }
 
