@@ -198,6 +198,36 @@ public class QuestionDAO {
         return question;
     }
 
+    public List<QuestionDTO> getQuestionsForTopic(int topicID) {
+        List<QuestionDTO> questions = new ArrayList<>();
+        String sql = "SELECT * FROM questions WHERE qTopicID = ? AND qStatus = 1";
+
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            // Set the topicID parameter before executing the query
+            preparedStatement.setInt(1, topicID);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    QuestionDTO question = new QuestionDTO(
+                            resultSet.getInt("qID"),
+                            resultSet.getString("qContent"),
+                            resultSet.getString("qPictures"),
+                            resultSet.getInt("qTopicID"),
+                            resultSet.getString("qLevel"),
+                            resultSet.getInt("qStatus")
+                    );
+                    questions.add(question);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return questions;
+    }
+
     public List<QuestionDTO> getAllQuestions() {
         List<QuestionDTO> questions = new ArrayList<>();
         String sql = "SELECT * FROM questions WHERE qStatus = 1"; // 🛑 Chỉ lấy câu hỏi còn hoạt động

@@ -6,11 +6,10 @@ import Interface.UserAwareController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+
 import java.io.IOException;
-import javafx.scene.control.Alert;
+
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -19,7 +18,7 @@ import javafx.stage.Stage;
 public class User_Guest_Controller implements UserAwareController {
 
     @FXML
-    private TextField txtEmail;
+    private Label txtEmail;
 
     @FXML
     private PasswordField txtconfirmPass;
@@ -31,7 +30,7 @@ public class User_Guest_Controller implements UserAwareController {
     private PasswordField txtoldPass;
 
     @FXML
-    private TextField txtuserName;
+    private Label txtuserName;
 
     @FXML
     private Button updateBtn;
