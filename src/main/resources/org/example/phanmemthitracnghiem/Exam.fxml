@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Exam_Controller">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Exam_Controller">
    <children>
       <VBox fx:id="sidebar" alignment="TOP_CENTER" layoutY="3.0" prefHeight="580.0" prefWidth="200.0" styleClass="sidebar">
          <children>
@@ -48,15 +48,33 @@
                   <Line endX="0.29289817810058594" endY="0.7070999145507812" startX="0.49999046325683594" startY="225.5404052734375" />
                   <Line endX="503.6666259765625" endY="15.0404052734375" layoutX="202.0" layoutY="211.0" startX="-201.0" startY="15.0404052734375" />
                   <Line endX="167.0" endY="-31.00000762939453" layoutX="541.0" layoutY="31.0" startX="167.0" startY="195.0" />
-                  <Button layoutX="606.0" layoutY="187.0" mnemonicParsing="false" onMouseClicked="#next" text="Câu tiếp theo" />
-                  <Button layoutX="501.0" layoutY="187.0" mnemonicParsing="false" onMouseClicked="#previous" prefHeight="25.0" prefWidth="87.0" text="Câu trước" />
+                  <Button layoutX="606.0" layoutY="187.0" mnemonicParsing="false" onMouseClicked="#next" style="-fx-background-color: #D8E3F8;" text="Câu tiếp theo" />
+                  <Button layoutX="501.0" layoutY="187.0" mnemonicParsing="false" onMouseClicked="#previous" prefHeight="25.0" prefWidth="87.0" style="-fx-background-color: #D8E3F8;" text="Câu trước">
+                     <font>
+                        <Font name="Consolas" size="12.0" />
+                     </font></Button>
                   <VBox fx:id="answerContainer" layoutX="2.0" layoutY="1.0" prefHeight="181.0" prefWidth="706.0" />
                </children>
             </Pane>
             <Button layoutX="626.0" layoutY="546.0" mnemonicParsing="false" onMouseClicked="#submit" prefHeight="26.0" prefWidth="87.0" text="Nộp bài" />
-            <Label layoutX="342.0" layoutY="14.0" prefHeight="36.0" prefWidth="67.0" text="KIỂM TRA" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
+            <Label layoutX="322.0" layoutY="14.0" prefHeight="36.0" prefWidth="100.0" text="KIỂM TRA" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
                <font>
-                  <Font size="14.0" />
+                  <Font name="Constantia" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="time" layoutX="602.0" layoutY="18.0" prefHeight="28.0" prefWidth="115.0">
+               <font>
+                  <Font name="Times New Roman" size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="18.0" layoutY="18.0" text="Mã đề: ">
+               <font>
+                  <Font name="Times New Roman" size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="exCode" layoutX="89.0" layoutY="18.0" prefHeight="28.0" prefWidth="190.0">
+               <font>
+                  <Font name="Times New Roman" size="24.0" />
                </font>
             </Label>
          </children>

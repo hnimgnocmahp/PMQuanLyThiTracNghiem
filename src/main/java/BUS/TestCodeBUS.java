@@ -5,6 +5,8 @@ import DAO.UserDAO;
 import DTO.TestCodeDTO;
 import DTO.UserDTO;
 
+import java.util.List;
+
 public class TestCodeBUS {
 
     private static TestCodeBUS instance;
@@ -38,5 +40,13 @@ public class TestCodeBUS {
 
     public int delete(String id) {
         return testCodeDAO.delete(id);
+    }
+
+    public TestCodeDTO getTestCodeByID(String id) {
+        return testCodeDAO.getTestCodeById(id);
+    }
+
+    public TestCodeDTO getRandomTestCode(String testCode) {
+        return testCodeDAO.getRandomTestCodeByTestCode(testCode);
     }
 }

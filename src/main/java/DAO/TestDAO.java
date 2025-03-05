@@ -44,21 +44,11 @@ public class TestDAO {
         int ketQua = 0;
         try {
             Connection con = JDBCUtil.getConnection();
-            String sql = "UPDATE test SET testCode=?, testTilte=?, testTime=?, tpID=?, num_easy=?, num_medium=?, num_diff=?, testLimit=?, testDate=?, testStatus=? WHERE testID=?";
+            String sql = "UPDATE test SET testLimit=? WHERE testID=?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
 
-
-            preparedStatement.setString(1, test.getTestCode());
-            preparedStatement.setString(2, test.getTestTitle());
-            preparedStatement.setInt(3, test.getTestTime());
-            preparedStatement.setInt(4, test.getTpID());
-            preparedStatement.setInt(5, test.getNum_ease());
-            preparedStatement.setInt(6, test.getNum_medium());
-            preparedStatement.setInt(7, test.getNum_diff());
-            preparedStatement.setInt(8, test.getTestLimit());
-            preparedStatement.setDate(9, test.getTestDate());
-            preparedStatement.setInt(10, test.getTestStatus());
-            preparedStatement.setInt(11, test.getTestID());
+            preparedStatement.setInt(1, test.getTestLimit());
+            preparedStatement.setInt(2, test.getTestID());
 
             ketQua = preparedStatement.executeUpdate();
 
@@ -114,5 +104,35 @@ public class TestDAO {
             e.printStackTrace();
         }
         return tests;
+    }
+
+    public TestDTO getTestByID(String testCode) {
+        String sql = "SELECT testID, testCode, testTilte, testTime, tpID, num_easy, num_medium, num_diff, testLimit, testDate, testStatus FROM test WHERE testCode = ?";
+
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, testCode);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new TestDTO(
+                            resultSet.getInt("testID"),
+                            resultSet.getString("testCode"),
+                            resultSet.getString("testTilte"),
+                            resultSet.getInt("testTime"),
+                            resultSet.getInt("tpID"),
+                            resultSet.getInt("num_easy"),
+                            resultSet.getInt("num_medium"),
+                            resultSet.getInt("num_diff"),
+                            resultSet.getInt("testLimit"),
+                            resultSet.getDate("testDate"),
+                            resultSet.getInt("testStatus")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy thông tin User: " + e.getMessage());
+        }
+        return null; // Trả về null nếu không tìm thấy
     }
 }
