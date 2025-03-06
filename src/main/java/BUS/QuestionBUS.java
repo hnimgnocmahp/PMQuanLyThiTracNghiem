@@ -116,4 +116,8 @@ public class QuestionBUS {
 
         return filteredQuestions.subList(0, Math.min(count, filteredQuestions.size()));
     }
+
+    public List<QuestionDTO> searchQuestions(String keyword) {
+        return QuestionDAO.getInstance().searchQuestions(keyword);
+    }
 }

@@ -34,6 +34,9 @@ public class Sidebar_Admin_Controller {
     private HBox userButton;
 
     @FXML
+    private HBox logButton;
+
+    @FXML
     void logout(MouseEvent event) {
         try {
             // Lấy Stage hiện tại từ sự kiện
@@ -70,6 +73,7 @@ public class Sidebar_Admin_Controller {
         userButton.setOnMouseClicked(event -> adminController.setCenterContent("User_Admin.fxml"));
         statisticsButton.setOnMouseClicked(event -> adminController.setCenterContent("Statistics_Admin.fxml"));
         topicButton.setOnMouseClicked(event -> adminController.setCenterContent("Topic_Admin.fxml"));
+        logButton.setOnMouseClicked(event -> adminController.setCenterContent("Log_Admin.fxml"));
     }
 
 }

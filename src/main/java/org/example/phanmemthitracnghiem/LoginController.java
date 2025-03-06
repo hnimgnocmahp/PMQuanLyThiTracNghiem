@@ -1,8 +1,8 @@
 package org.example.phanmemthitracnghiem;
 
 import BUS.UserBUS;
+import Session.Session;
 import DTO.UserDTO;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -14,11 +14,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-import jdk.jfr.Event;
 
-import javax.naming.Binding;
-import java.awt.event.ActionEvent;
-import java.awt.geom.Point2D;
 import java.io.IOException;
 
 public class LoginController {
@@ -133,6 +129,7 @@ public class LoginController {
                 switchToAdmin(event); // Truyền event vào switchToAdmin
             }else if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) &&userDTO.getIsAdmin()==1) {
                 switchToGuest(event, email);
+                Session.username = userDTO.getUserName();
             } else {
                 showAlert("Lỗi", "Tài khoản hoặc mật khẩu không đúng!");
             }
@@ -145,13 +142,13 @@ public class LoginController {
         String email = email_login.getText();
         String password = password_login.getText();
         UserDTO userDTO = UserBUS.getInstance().findUserByUserName(email);
-        System.out.println(email_login);
-        System.out.println(userDTO.getUserName());
+
 
         if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(password) && userDTO.getIsAdmin()==0) {
             switchToAdmin(event); // Truyền event vào switchToAdmin
         }else if (userDTO != null && userDTO.getUserName().equals(email) && userDTO.getUserPassword().equals(UserBUS.hashMD5(password)) && userDTO.getIsAdmin()==1) {
             switchToGuest(event, email);
+            Session.username = userDTO.getUserName();
         } else {
             showAlert("Thông báo", "Tài khoản hoặc mật khẩu không đúng!");
         }
@@ -283,7 +280,8 @@ public class LoginController {
             Scene scene = new Scene(root);
             GuestController guestController = loader.getController();
             guestController.setUserName(username);
-//            System.out.println(username);
+
+
 
             // Tạo Scene mới
             // Cập nhật Stage hiện tại

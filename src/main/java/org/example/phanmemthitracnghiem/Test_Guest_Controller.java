@@ -6,6 +6,7 @@ import BUS.TopicBUS;
 import DTO.TestCodeDTO;
 import DTO.TestDTO;
 import DTO.TopicDTO;
+import Interface.UserAwareController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,7 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import jdk.incubator.vector.VectorOperators;
+//import jdk.incubator.vector.VectorOperators;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,7 +32,20 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class Test_Guest_Controller implements Initializable{
+public class Test_Guest_Controller implements Initializable, UserAwareController {
+
+    private String username;
+
+
+    @Override
+    public void setUserName(String userName) {
+        this.username = userName;
+    }
+
+    @Override
+    public String getUserName() {
+        return username;
+    }
 
     @FXML
     private GridPane gp;
@@ -39,7 +53,6 @@ public class Test_Guest_Controller implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         int columns = 3; // Số cột mong muốn
         int row = 0, col = 0;
         List<TestDTO> testList = TestBUS.getInstance().getTests();
@@ -60,7 +73,6 @@ public class Test_Guest_Controller implements Initializable{
                 row++;
             }
         }
-
 
     }
 
@@ -117,8 +129,6 @@ public class Test_Guest_Controller implements Initializable{
 
     }
 
-
-
     public void switchToExamScene(Button button, String testCode) {
         TestDTO test = TestBUS.getInstance().selectTestByTestCode(testCode);
         if (test.getTestLimit() < 1) {
@@ -145,9 +155,10 @@ public class Test_Guest_Controller implements Initializable{
 
             Exam_Controller examController = loader.getController();
             if (examController != null) {
-
+                examController.setUserName(username);
                 // Gọi sau khi set dữ liệu
                 examController.initializeExam(testCode);
+                System.out.println(examController.getUserName());
             } else {
                 System.out.println("Lỗi: Không thể lấy Exam_Controller");
             }
@@ -161,5 +172,9 @@ public class Test_Guest_Controller implements Initializable{
             e.printStackTrace();
         }
     }
+
+
+
+
 
 }

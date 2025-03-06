@@ -26,6 +26,8 @@ public class GuestController implements UserAwareController {
         }
     }
 
+
+
     @Override
     public String getUserName() {
         return username;
@@ -44,6 +46,11 @@ public class GuestController implements UserAwareController {
 
             if (controller instanceof User_Guest_Controller){
                 ((User_Guest_Controller) controller).loadUserData(UserBUS.getInstance().findUserByUserName(username1));
+            }
+
+            if (controller instanceof Exam_Controller){
+                Exam_Controller examController = (Exam_Controller) controller;
+                examController.setUserName(username1);
             }
 
             borderpane.setCenter(newContent); // Thay đổi phần center của BorderPane

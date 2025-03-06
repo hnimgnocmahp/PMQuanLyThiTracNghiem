@@ -2,6 +2,9 @@ package org.example.phanmemthitracnghiem;
 
 import BUS.*;
 import DTO.*;
+import Interface.UserAwareController;
+import Session.Session;
+import com.google.gson.Gson;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -25,13 +28,28 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Exam_Controller {
+public class Exam_Controller  implements UserAwareController {
+
+    private String username;
+
+    private String exCodeDTO;
+
+
+    @Override
+    public void setUserName(String userName) {
+        this.username = userName;
+    }
+
+    @Override
+    public String getUserName() {
+        return username;
+    }
 
     @FXML
     private VBox answerContainer;
@@ -253,7 +271,19 @@ public class Exam_Controller {
         Stage currentStage = (Stage) questionContainer.getScene().getWindow();
         currentStage.setScene(new Scene(vbox, 800, 600));
         currentStage.show();
+
+
+
+        // Lưu vào bảng result
+//        UserDTO userDTO = UserBUS.getInstance().findUserByUserName(Session.username);
+//        String jsonAnswers = new Gson().toJson(userAnswers.toString());
+//        ResultDTO resultDTO = new ResultDTO(1, userDTO.getUserID(), exCodeDTO, jsonAnswers, mark, LocalDate.now());
+//        ResultBUS.getInstance().addResult(resultDTO);
+
+
+
     }
+
 
     // Lớp nội bộ lưu trữ kết quả chi tiết của từng câu hỏi
     public static class QuestionResult {
@@ -304,6 +334,7 @@ public class Exam_Controller {
     public void loadQuestion(String testCode) {
         TestCodeDTO testCodeDTO = TestCodeBUS.getInstance().getRandomTestCode(testCode);
 
+        exCodeDTO = testCodeDTO.getExCode();
         //set Mã đề lên view
         exCode.setText(testCodeDTO.getExCode());
 
