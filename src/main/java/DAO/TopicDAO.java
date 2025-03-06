@@ -332,5 +332,31 @@ public class TopicDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return topic;    }
+        return topic;
+    }
+
+    public List<TopicDTO> getTopicWithParentNotNull() {
+        ArrayList<TopicDTO> topicDTOList = new ArrayList<>();
+        String sql = "SELECT * FROM topics WHERE tpParent != 0 AND tpStatus = 1 ";
+
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                TopicDTO topicDTO = new TopicDTO();
+
+                topicDTO.setTopicID(rs.getInt("tpID"));
+                topicDTO.setTopicTitle(rs.getString("tpTitle"));
+                topicDTO.setTopicParent(rs.getInt("tpParent"));
+                topicDTO.setTopicStatus(rs.getInt("tpStatus"));
+
+                topicDTOList.add(topicDTO);
+            }
+            JDBCUtil.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return topicDTOList;
+    }
 }

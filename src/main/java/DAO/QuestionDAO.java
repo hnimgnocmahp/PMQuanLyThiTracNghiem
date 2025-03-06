@@ -268,7 +268,33 @@ public class QuestionDAO {
         }
     }
 
+    public List<QuestionDTO> searchQuestions(String keyword) {
+        List<QuestionDTO> questions = new ArrayList<>();
+        String sql = "SELECT qID, qContent, qPictures, qTopicID, qLevel, qStatus FROM questions WHERE qContent LIKE ?";
 
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            String searchKeyword = "%" + keyword + "%";
+            preparedStatement.setString(1, searchKeyword);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    questions.add(new QuestionDTO(
+                            resultSet.getInt("qID"),
+                            resultSet.getString("qContent"),
+                            resultSet.getString("qPictures"),
+                            resultSet.getInt("qTopicID"), //
+                            resultSet.getString("qLevel"),
+                            resultSet.getInt("qStatus")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return questions;
+    }
 
 
 }

@@ -10,9 +10,9 @@
 
 <AnchorPane prefHeight="580.0" prefWidth="744.0" style="-fx-background-color: #D8E3F8;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Test_Guest_Controller">
    <children>
-      <ScrollPane layoutY="198.0" prefHeight="382.0" prefWidth="744.0">
+      <ScrollPane layoutY="137.0" prefHeight="443.0" prefWidth="744.0">
          <content>
-             <GridPane fx:id="gp" prefWidth="744.0" hgap="10.0" vgap="10.0">
+             <GridPane fx:id="gp" hgap="10.0" prefWidth="744.0" style="-fx-background-color: #D8E3F8;" vgap="10.0">
                  <columnConstraints>
                      <ColumnConstraints percentWidth="32.5" />
                      <ColumnConstraints percentWidth="32.5" />

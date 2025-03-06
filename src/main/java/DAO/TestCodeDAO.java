@@ -1,9 +1,12 @@
 package DAO;
 
 import DTO.TestCodeDTO;
+import DTO.UserDTO;
 import util.JDBCUtil;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -87,4 +90,54 @@ public class TestCodeDAO {
         }
         return ketqua;
     }
+
+    public TestCodeDTO getTestCodeById(String testCodeID) {
+        String sql = "SELECT testCode, exOrder, exCode, ex_quesIDs FROM exams WHERE testCode = ?";
+
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, testCodeID);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new TestCodeDTO(
+                            resultSet.getString("testCode"),
+                            resultSet.getString("exOrder"),
+                            resultSet.getString("exCode"),
+                            resultSet.getString("ex_quesIDs")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy thông tin User: " + e.getMessage());
+        }
+        return null; // Trả về null nếu không tìm thấy
+    }
+
+    public TestCodeDTO getRandomTestCodeByTestCode(String testCode) {
+        String sql = "SELECT testCode, exOrder, exCode, ex_quesIDs FROM exams WHERE testCode LIKE ? ORDER BY RAND() LIMIT 1";
+
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            // Use LIKE with wildcard to match similar testCodes
+            preparedStatement.setString(1, testCode + "%");
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new TestCodeDTO(
+                            resultSet.getString("testCode"),
+                            resultSet.getString("exOrder"),
+                            resultSet.getString("exCode"),
+                            resultSet.getString("ex_quesIDs")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy TestCode ngẫu nhiên: " + e.getMessage());
+        }
+
+        return null; // Trả về null nếu không tìm thấy
+    }
+
 }

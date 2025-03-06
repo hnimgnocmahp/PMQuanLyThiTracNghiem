@@ -31,6 +31,20 @@ public class TestDTO {
         this.testStatus = testStatus;
     }
 
+    public TestDTO(int testID, String testCode, String testTitle, int testTime, int tpID, int num_ease, int num_medium, int num_diff, int testLimit, Date testDate, int testStatus) {
+        this.testID = testID;
+        this.testCode = testCode;
+        this.testTitle = testTitle;
+        this.testTime = testTime;
+        this.tpID = tpID;
+        this.num_ease = num_ease;
+        this.num_medium = num_medium;
+        this.num_diff = num_diff;
+        this.testLimit = testLimit;
+        this.testDate = testDate;
+        this.testStatus = testStatus;
+    }
+
     public int getTestID() {
         return testID;
     }

@@ -35,8 +35,6 @@ public class User_Guest_Controller implements UserAwareController {
     @FXML
     private Button updateBtn;
 
-    private UserDTO currentUser;
-
     private String username;
 
     @Override
@@ -47,40 +45,6 @@ public class User_Guest_Controller implements UserAwareController {
     @Override
     public String getUserName() {
         return username;
-    }
-
-    private void reloadUserGuestPage() {
-        try {
-
-            // Lấy Stage hiện tại
-            Stage stage = (Stage) txtoldPass.getScene().getWindow();
-
-            // Load lại giao diện User_Guest.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("User_Guest.fxml"));
-            Parent root = loader.load();
-
-            // Truyền thông tin user vào Controller mới
-            User_Guest_Controller controller = loader.getController();
-            controller.setCurrentUser(username);
-
-
-            // Cập nhật Scene và hiển thị lại
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.centerOnScreen();
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            LoginController.showAlert("Lỗi", "Không thể tải lại giao diện!");
-        }
-    }
-
-    public UserDTO setCurrentUser(String userName) {
-        this.currentUser = UserBUS.getInstance().findUserByUserName(userName);
-        if (this.currentUser != null) {
-             loadUserData(this.currentUser);
-        }
-        return this.currentUser;
     }
 
     public void loadUserData(UserDTO user) {
@@ -101,7 +65,6 @@ public class User_Guest_Controller implements UserAwareController {
         String oldPass = txtoldPass.getText();
         String newPass = txtnewPass.getText();
         String confirmPass = txtconfirmPass.getText();
-//        System.out.println(username);
 
         if (oldPass.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty()) {
             LoginController.showAlert("Lỗi", "Vui lòng điền đầy đủ thông tin.");
@@ -123,10 +86,6 @@ public class User_Guest_Controller implements UserAwareController {
             txtoldPass.clear();
             txtnewPass.clear();
             txtconfirmPass.clear();
-
-            // Load lại trang để cập nhật dữ liệu mới
-//            reloadUserGuestPage();
-//            setCurrentUser(this.currentUser.getUserName());
 
         } else {
             LoginController.showAlert("Lỗi", "Cập nhật mật khẩu thất bại. Kiểm tra lại mật khẩu cũ.");

@@ -34,9 +34,9 @@ public class TestBUS {
         return result;
     }
 
-//    public int updateUser(UserDTO user) {
-//        return userDAO.update(user);
-//    }
+    public int updateTest(TestDTO test) {
+        return testDAO.update(test);
+    }
 //
 //    public int deleteUser(int id) {
 //        return userDAO.delete(id);
@@ -44,5 +44,9 @@ public class TestBUS {
 
     public List<TestDTO> getTests() {
         return testDAO.selectAll();
+    }
+
+    public TestDTO selectTestByTestCode(String testCode) {
+        return testDAO.getTestByID(testCode);
     }
 }

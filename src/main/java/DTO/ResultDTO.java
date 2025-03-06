@@ -2,34 +2,35 @@ package DTO;
 
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ResultDTO {
-    private int re_num;
+    private int rs_num;
     private int userID;
     private String exCode;
-    private String rs_answer;
+    private String rs_answers;
     private BigDecimal rs_mark;
-    private LocalDateTime rs_date;
+    private LocalDate rs_date;
 
     public ResultDTO() {
     }
 
-    public ResultDTO(int re_num, int userID, String exCode, String rs_answer, BigDecimal rs_mark, LocalDateTime rs_date) {
-        this.re_num = re_num;
+    public ResultDTO(int rs_num, int userID, String exCode, String rs_answers, BigDecimal rs_mark, LocalDate rs_date) {
+        this.rs_num = rs_num;
         this.userID = userID;
         this.exCode = exCode;
-        this.rs_answer = rs_answer;
+        this.rs_answers = rs_answers;
         this.rs_mark = rs_mark;
         this.rs_date = rs_date;
     }
 
-    public int getRe_num() {
-        return re_num;
+    public int getRs_num() {
+        return rs_num;
     }
 
-    public void setRe_num(int re_num) {
-        this.re_num = re_num;
+    public void setRs_num(int rs_num) {
+        this.rs_num = rs_num;
     }
 
     public int getUserID() {
@@ -48,12 +49,12 @@ public class ResultDTO {
         this.exCode = exCode;
     }
 
-    public String getRs_answer() {
-        return rs_answer;
+    public String getRs_answers() {
+        return rs_answers;
     }
 
-    public void setRs_answer(String rs_answer) {
-        this.rs_answer = rs_answer;
+    public void setRs_answers(String rs_answers) {
+        this.rs_answers = rs_answers;
     }
 
     public BigDecimal getRs_mark() {
@@ -64,11 +65,11 @@ public class ResultDTO {
         this.rs_mark = rs_mark;
     }
 
-    public LocalDateTime getRs_date() {
+    public LocalDate getRs_date() {
         return rs_date;
     }
 
-    public void setRs_date(LocalDateTime rs_date) {
+    public void setRs_date(LocalDate rs_date) {
         this.rs_date = rs_date;
     }
 }

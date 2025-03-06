@@ -124,6 +124,10 @@ public class TopicBUS {
     public TopicDTO getTopicByTitle(String title) {
         return topicDAO.getTopicByTitle(title);
     }
+
+    public List<TopicDTO> getTopicWithParentNotNull() {
+        return topicDAO.getTopicWithParentNotNull();
+    }
 }
 
 

@@ -1,13 +1,15 @@
 package org.example.phanmemthitracnghiem;
 
-import BUS.AnswerBUS;
-import BUS.QuestionBUS;
-import BUS.TopicBUS;
-import DTO.AnswerDTO;
-import DTO.QuestionDTO;
-import DTO.ResultDTO;
+import BUS.*;
+import DTO.*;
+import Interface.UserAwareController;
+import Session.Session;
+import com.google.gson.Gson;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,18 +22,34 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Exam_Controller {
+public class Exam_Controller  implements UserAwareController {
+
+    private String username;
+
+    private String exCodeDTO;
+
+
+    @Override
+    public void setUserName(String userName) {
+        this.username = userName;
+    }
+
+    @Override
+    public String getUserName() {
+        return username;
+    }
 
     @FXML
     private VBox answerContainer;
@@ -48,15 +66,15 @@ public class Exam_Controller {
     @FXML
     private VBox sidebar1;
 
+    @FXML
+    private Label time;
+
+    @FXML
+    private Label exCode;
+
     private TopicBUS topicBUS;
 
     private QuestionBUS questionBUS;
-
-    private int questions;  // Số câu hỏi
-
-    private String title;
-
-    private int time;
 
     private int currentQuestionIndex = 0; // Chỉ số câu hỏi hiện tại
 
@@ -68,32 +86,6 @@ public class Exam_Controller {
 
     private ToggleGroup answerGroup = new ToggleGroup();
 
-    // Getters/setters
-    public int getTime() {
-        return time;
-    }
-
-
-    public void setTime(int time) {
-        this.time = time;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public int getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(int questions) {
-        this.questions = questions;
-    }
-
     @FXML
     public void initialize() {
         topicBUS = new TopicBUS();
@@ -103,9 +95,42 @@ public class Exam_Controller {
         setupScrollPane();
     }
 
-    public void initializeExam() {
-        loadQuestion();
+    public void initializeExam(String testCode) {
+        TestDTO testDTO = TestBUS.getInstance().selectTestByTestCode(testCode);
+        startCountdown(testDTO.getTestTime());
+        loadQuestion(testCode);
         loadQuestionContent();
+    }
+
+    private void startCountdown(int totalMinutes) {
+        // Sử dụng mảng để lưu trữ giá trị có thể thay đổi
+        final int[] totalSeconds = { totalMinutes * 60 };
+
+        // Hiển thị thời gian ban đầu ngay lập tức
+        time.setText(String.format("%d : 00", totalMinutes));
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            // Tính toán phút và giây còn lại
+            int minutesLeft = totalSeconds[0] / 60;
+            int secondsLeft = totalSeconds[0] % 60;
+
+            // Định dạng hiển thị
+            String timeDisplay = String.format("%d : %02d", minutesLeft, secondsLeft);
+            time.setText(timeDisplay);
+
+            // Giảm tổng số giây
+            if (totalSeconds[0] > 0) {
+                totalSeconds[0]--;
+            } else {
+                // Hết giờ - dừng timeline
+                ((Timeline) event.getSource()).stop();
+//                handleTimeOut();
+            }
+        }));
+
+        // Thiết lập để chạy liên tục
+        timeline.setCycleCount(totalMinutes * 60);
+        timeline.play();
     }
 
     private void setupScrollPane() {
@@ -129,11 +154,11 @@ public class Exam_Controller {
             if (answer != null && !answer.trim().isEmpty()) {
                 // Nếu đã chọn đáp án thì đánh dấu xanh
                 sidebar1.getChildren().get(currentQuestionIndex)
-                        .setStyle("-fx-background-color: green; -fx-border-color: black;");
+                        .setStyle("-fx-background-color: #60f772");
             } else {
                 // Nếu chưa chọn đáp án thì đánh dấu đỏ
                 sidebar1.getChildren().get(currentQuestionIndex)
-                        .setStyle("-fx-background-color: red; -fx-border-color: black;");
+                        .setStyle("-fx-background-color: red");
             }
 
             // Tăng chỉ số câu hỏi và load câu hỏi mới
@@ -151,11 +176,11 @@ public class Exam_Controller {
             if (answer != null && !answer.trim().isEmpty()) {
                 // Nếu đã chọn đáp án thì đánh dấu xanh
                 sidebar1.getChildren().get(currentQuestionIndex)
-                        .setStyle("-fx-background-color: green; -fx-border-color: black;");
+                        .setStyle("-fx-background-color: #60f772");
             } else {
                 // Nếu chưa chọn đáp án thì đánh dấu đỏ
                 sidebar1.getChildren().get(currentQuestionIndex)
-                        .setStyle("-fx-background-color: red; -fx-border-color: black;");
+                        .setStyle("-fx-background-color: red");
             }
             currentQuestionIndex--;
             loadQuestionContent();
@@ -246,7 +271,19 @@ public class Exam_Controller {
         Stage currentStage = (Stage) questionContainer.getScene().getWindow();
         currentStage.setScene(new Scene(vbox, 800, 600));
         currentStage.show();
+
+
+
+        // Lưu vào bảng result
+//        UserDTO userDTO = UserBUS.getInstance().findUserByUserName(Session.username);
+//        String jsonAnswers = new Gson().toJson(userAnswers.toString());
+//        ResultDTO resultDTO = new ResultDTO(1, userDTO.getUserID(), exCodeDTO, jsonAnswers, mark, LocalDate.now());
+//        ResultBUS.getInstance().addResult(resultDTO);
+
+
+
     }
+
 
     // Lớp nội bộ lưu trữ kết quả chi tiết của từng câu hỏi
     public static class QuestionResult {
@@ -294,9 +331,22 @@ public class Exam_Controller {
         }
     }
 
-    public void loadQuestion() {
-        // Lấy danh sách câu hỏi và đáp án từ BUS
-        for (QuestionDTO questionDTO : questionBUS.getAllQuestions()) {
+    public void loadQuestion(String testCode) {
+        TestCodeDTO testCodeDTO = TestCodeBUS.getInstance().getRandomTestCode(testCode);
+
+        exCodeDTO = testCodeDTO.getExCode();
+        //set Mã đề lên view
+        exCode.setText(testCodeDTO.getExCode());
+
+        String ex_quesID = testCodeDTO.getEx_questionIDs().replaceAll("\\[|\\]|\\s", "");
+        String[] strArray = ex_quesID.split(","); // Tách chuỗi thành mảng chuỗi
+
+        QuestionDTO questionDTO = new QuestionDTO();
+
+        int[] intArray = new int[strArray.length];
+        for (int i = 0; i < strArray.length; i++) {
+            intArray[i] = Integer.parseInt(strArray[i]);
+            questionDTO = QuestionBUS.getInstance().getQuestionById(intArray[i]);
             List<AnswerDTO> listAnswer = new ArrayList<>();
             questionsContent.add(questionDTO);
             for (AnswerDTO answerDTO : AnswerBUS.getInstance().getAnswersByQuestionID(questionDTO.getQID())) {
@@ -308,17 +358,11 @@ public class Exam_Controller {
         // Tạo sidebar hiển thị danh sách câu hỏi (ví dụ: số câu và trạng thái đã làm/chưa làm)
         for (int i = 0; i < questionsContent.size(); i++) {
             Label questionLabel = new Label("Câu " + (i + 1));
-            CheckBox doneCheckBox = new CheckBox();
-            doneCheckBox.setDisable(true);
-//            if (answerChoices.get(currentQuestionIndex) != null) {
-//                doneCheckBox.setSelected(true);
-//                doneCheckBox.setStyle("-fx-background-color: green; -fx-border-color: black;");
-//            } else {
-//                doneCheckBox.setStyle("-fx-background-color: red; -fx-border-color: black;");
-//            }
+            questionLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: normal; -fx-font-family: 'Times New Roman'");
             Region spacer = new Region();
             HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
-            HBox questionBox = new HBox(20, questionLabel, spacer, doneCheckBox);
+            HBox questionBox = new HBox(20, questionLabel, spacer);
+            questionBox.setAlignment(Pos.CENTER);
             sidebar1.getChildren().add(questionBox);
         }
     }
@@ -333,6 +377,7 @@ public class Exam_Controller {
         // Hiển thị nội dung câu hỏi
         QuestionDTO currentQuestion = questionsContent.get(currentQuestionIndex);
         Label questionLabel = new Label("câu " + (currentQuestionIndex + 1)  + ": " + currentQuestion.getQContent());
+        questionLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: normal; -fx-font-family: 'Times New Roman'");
         questionContainer.getChildren().add(questionLabel);
 
         // Nếu câu hỏi có ảnh, load ảnh từ classpath hoặc file system

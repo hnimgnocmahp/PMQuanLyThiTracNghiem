@@ -37,13 +37,7 @@ public class QuestionBUS {
     // Thêm câu hỏi
     public boolean addQuestion(QuestionDTO question) {
         int result = questionDAO.add(question);
-        if (result > 0) {
-            logger.info("Thêm câu hỏi thành công: " + question.getQContent());
-            return true;
-        } else {
-            logger.warning("Thêm câu hỏi thất bại: " + question.getQContent());
-            return false;
-        }
+        return result > 0;
     }
 
     // Cập nhật câu hỏi
@@ -87,21 +81,11 @@ public class QuestionBUS {
     // Lấy câu hỏi theo ID
     public QuestionDTO getQuestionById(int questionID) {
         QuestionDTO question = questionDAO.getQuestionById(questionID);
-        if (question != null) {
-            logger.info("Lấy dữ liệu câu hỏi thành công: ID " + questionID);
-        } else {
-            logger.warning("Không tìm thấy câu hỏi: ID " + questionID);
-        }
         return question;
     }
 
     public QuestionDTO getQuestionByContent(String content) {
         QuestionDTO question = questionDAO.getQuestionByContent(content);
-        if (question != null) {
-            logger.info("Lấy dữ liệu câu hỏi thành công: ID " + content);
-        } else {
-            logger.warning("Không tìm thấy câu hỏi: ID " + content);
-        }
         return question;
     }
 
@@ -110,11 +94,6 @@ public class QuestionBUS {
     // Lấy danh sách tất cả câu hỏi
     public List<QuestionDTO> getAllQuestions() {
         List<QuestionDTO> questions = questionDAO.getAllQuestions();
-        if (!questions.isEmpty()) {
-            logger.info("Lấy danh sách câu hỏi thành công, tổng số: " + questions.size());
-        } else {
-            logger.warning("Không có câu hỏi nào trong hệ thống.");
-        }
         return questions;
     }
 
@@ -136,5 +115,9 @@ public class QuestionBUS {
         Collections.shuffle(filteredQuestions, new Random());
 
         return filteredQuestions.subList(0, Math.min(count, filteredQuestions.size()));
+    }
+
+    public List<QuestionDTO> searchQuestions(String keyword) {
+        return QuestionDAO.getInstance().searchQuestions(keyword);
     }
 }

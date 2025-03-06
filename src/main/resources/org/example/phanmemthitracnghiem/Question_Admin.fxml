@@ -30,17 +30,18 @@
          </graphic></Button>
       <ImageView id="txtPictures" fx:id="txtPictures" fitHeight="33.0" fitWidth="48.0" layoutX="368.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true" />
       <Label layoutX="548.0" layoutY="68.0" text="Level" />
-      <ComboBox id="cbLevel" fx:id="cbLevel" layoutX="587.0" layoutY="66.0" prefHeight="25.0" prefWidth="97.0" />
+      <ComboBox id="cbLevel" fx:id="cbLevel" layoutX="587.0" layoutY="66.0" prefHeight="25.0" prefWidth="133.0" />
       <Label layoutX="549.0" layoutY="102.0" text="Topic" />
-      <ComboBox id="cbTopicID" fx:id="cbTopicID" layoutX="587.0" layoutY="98.0" prefHeight="25.0" prefWidth="97.0" />
+      <ComboBox id="cbTopicID" fx:id="cbTopicID" layoutX="587.0" layoutY="98.0" prefHeight="25.0" prefWidth="133.0" />
       <Button layoutX="100.0" layoutY="292.0" mnemonicParsing="false" onMouseClicked="#import_excel" text="Import excel" />
       <Label layoutX="12.0" layoutY="296.0" text="Question List" />
       <TableView fx:id="tableQuestions" layoutX="7.0" layoutY="323.0" prefHeight="255.0" prefWidth="737.0">
         <columns>
           <TableColumn id="colID" fx:id="colID" prefWidth="75.0" text="ID" />
-          <TableColumn id="colContent" fx:id="colContent" prefWidth="501.33333587646484" text="Question" />
-            <TableColumn id="colLevel" fx:id="colLevel" minWidth="0.0" prefWidth="82.0" text="Level" />
-            <TableColumn id="colStatus" fx:id="colStatus" prefWidth="74.6666259765625" text="Status" />
+          <TableColumn id="colContent" fx:id="colContent" prefWidth="212.66671752929688" text="Question" />
+            <TableColumn id="colLevel" fx:id="colLevel" minWidth="0.0" prefWidth="136.0" text="Level" />
+            <TableColumn id="colLevel" fx:id="colTopic" minWidth="0.0" prefWidth="136.0" text="TopicID" />
+            <TableColumn id="colStatus" fx:id="colStatus" prefWidth="175.33333333333337" text="Status" />
         </columns>
       </TableView>
       <RadioButton fx:id="rbA" layoutX="18.0" layoutY="109.0" mnemonicParsing="false" text="A">
@@ -84,7 +85,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <TextField layoutX="168.0" layoutY="14.0" prefHeight="33.0" prefWidth="448.0" />
+      <TextField fx:id="txtSearchTest" layoutX="168.0" layoutY="14.0" onKeyReleased="#searchTest" prefHeight="33.0" prefWidth="448.0" />
       <ImageView fitHeight="25.0" fitWidth="24.0" layoutX="129.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../Image/search-interface-symbol.png" />

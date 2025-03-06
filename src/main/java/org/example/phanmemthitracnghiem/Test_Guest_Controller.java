@@ -1,6 +1,12 @@
 package org.example.phanmemthitracnghiem;
 
+import BUS.TestBUS;
+import BUS.TestCodeBUS;
+import BUS.TopicBUS;
+import DTO.TestCodeDTO;
 import DTO.TestDTO;
+import DTO.TopicDTO;
+import Interface.UserAwareController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,13 +22,30 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+//import jdk.incubator.vector.VectorOperators;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class Test_Guest_Controller implements Initializable{
+public class Test_Guest_Controller implements Initializable, UserAwareController {
+
+    private String username;
+
+
+    @Override
+    public void setUserName(String userName) {
+        this.username = userName;
+    }
+
+    @Override
+    public String getUserName() {
+        return username;
+    }
 
     @FXML
     private GridPane gp;
@@ -30,11 +53,16 @@ public class Test_Guest_Controller implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         int columns = 3; // Số cột mong muốn
         int row = 0, col = 0;
-//        List<TestDTO> testList = TestB
-            VBox testItem = createTestCodeItem("a", 9   , 20, 2, 30, 25);
+        List<TestDTO> testList = TestBUS.getInstance().getTests();
+        for (TestDTO test : testList) {
+            List<TopicDTO> topicListWithChildren = TopicBUS.getInstance().getTopicsChildByID(test.getTpID());
+            String topicListTitle = "";
+            for (TopicDTO topicChild : topicListWithChildren) {
+                topicListTitle += topicChild.getTopicTitle() + "  ";
+            }
+            VBox testItem = createTestCodeItem(test.getTestCode(), test.getTestTitle(), topicListTitle, test.getNum_ease()+ test.getNum_medium()+ test.getNum_diff(), test.getTestLimit(), test.getTestTime(), test.getTestDate());
             testItem.setMaxWidth(255);
             testItem.setMaxHeight(255);
 
@@ -44,17 +72,18 @@ public class Test_Guest_Controller implements Initializable{
                 col = 0;
                 row++;
             }
+        }
 
     }
 
     // Tạo style đề thi
-    private VBox createTestCodeItem(String testTitle, int tpID, int num_questions, int testLimit, int testTime, int testDate ) {
+    private VBox createTestCodeItem(String testCode, String testTitle, String topicList, int num_questions, int testLimit, int testTime, Date testDate ) {
         Label title = new Label(testTitle);
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: 'Arial'");
 
         Label topic = new Label("Topic: ");
         topic.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: 'Times New Roman'");
-        Label topiclb = new Label(String.valueOf(tpID));
+        Label topiclb = new Label(topicList);
         topiclb.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: 'Arial'");
         HBox hb_0 = new HBox(topic, topiclb);
         hb_0.setAlignment(Pos.CENTER_LEFT);
@@ -88,7 +117,7 @@ public class Test_Guest_Controller implements Initializable{
         hb_4.setAlignment(Pos.CENTER_LEFT);
 
         Button button = new Button("Exercise");
-        button.setOnAction(e -> switchToExamScene(button,testTitle,testTime,num_questions));
+        button.setOnAction(e -> switchToExamScene(button, testCode));
         VBox vBox = new VBox(title, hb_0, hb_1, hb_2, hb_3, hb_4, button);
         vBox.setStyle("-fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-color: #f8f8f8; -fx-border-width: 2");
         vBox.setPrefHeight(200);
@@ -100,22 +129,36 @@ public class Test_Guest_Controller implements Initializable{
 
     }
 
+    public void switchToExamScene(Button button, String testCode) {
+        TestDTO test = TestBUS.getInstance().selectTestByTestCode(testCode);
+        if (test.getTestLimit() < 1) {
+            LoginController.showAlert("Thông báo", "Bạn đã hết lượt làm đề này");
+            return;
+        }
 
+        Date today = new Date();
+        today.setHours(0);
+        today.setMinutes(0);
+        today.setSeconds(0);
+        if (test.getTestDate().after(today)) {
+            LoginController.showAlert("Thông báo", "Chưa tới ngày mở đề");
+            return;
+        }
+        test.setTestLimit(test.getTestLimit() - 1);
+        TestBUS.getInstance().updateTest(test);
 
-    public void switchToExamScene(Button button, String title, int time, int question) {
         try {
+
             // Load giao diện bài thi
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Exam.fxml"));
             Parent root = loader.load();
 
             Exam_Controller examController = loader.getController();
             if (examController != null) {
-                examController.setQuestions(question);
-                examController.setTime(time);
-                examController.setTitle(title);
-
+                examController.setUserName(username);
                 // Gọi sau khi set dữ liệu
-                examController.initializeExam();
+                examController.initializeExam(testCode);
+                System.out.println(examController.getUserName());
             } else {
                 System.out.println("Lỗi: Không thể lấy Exam_Controller");
             }
@@ -129,5 +172,9 @@ public class Test_Guest_Controller implements Initializable{
             e.printStackTrace();
         }
     }
+
+
+
+
 
 }
