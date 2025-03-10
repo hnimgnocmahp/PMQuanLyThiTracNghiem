@@ -2,9 +2,11 @@ package org.example.phanmemthitracnghiem;
 
 import BUS.TestBUS;
 import BUS.TestCodeBUS;
+import BUS.TestStructureBUS;
 import BUS.TopicBUS;
 import DTO.TestCodeDTO;
 import DTO.TestDTO;
+import DTO.TestStructureDTO;
 import DTO.TopicDTO;
 import Interface.UserAwareController;
 import javafx.fxml.FXML;
@@ -55,14 +57,27 @@ public class Test_Guest_Controller implements Initializable, UserAwareController
     public void initialize(URL url, ResourceBundle resourceBundle) {
         int columns = 3; // Số cột mong muốn
         int row = 0, col = 0;
+        int num_easy;
+        int num_medium;
+        int num_hard;
+        String topicListTitle;
         List<TestDTO> testList = TestBUS.getInstance().getTests();
         for (TestDTO test : testList) {
-            List<TopicDTO> topicListWithChildren = TopicBUS.getInstance().getTopicsChildByID(test.getTpID());
-            String topicListTitle = "";
-            for (TopicDTO topicChild : topicListWithChildren) {
-                topicListTitle += topicChild.getTopicTitle() + "  ";
+            List<TestStructureDTO> structures = TestStructureBUS.getInstance().getStructureByTestCode(test.getTestCode());
+            num_easy = 0;
+            num_medium = 0;
+            num_hard = 0;
+            topicListTitle = "";
+            for (TestStructureDTO structure : structures) {
+                num_easy += structure.getNum_easy();
+                num_medium += structure.getNum_medium();
+                num_hard += structure.getNum_diff();
+                topicListTitle += " " + TopicBUS.getInstance().searchTopicByID(structure.getTpID()).getTopicTitle();
             }
-            VBox testItem = createTestCodeItem(test.getTestCode(), test.getTestTitle(), topicListTitle, test.getNum_ease()+ test.getNum_medium()+ test.getNum_diff(), test.getTestLimit(), test.getTestTime(), test.getTestDate());
+
+
+
+            VBox testItem = createTestCodeItem(test.getTestCode(), test.getTestTitle(), topicListTitle, num_easy+num_hard+num_medium, test.getTestLimit(), test.getTestTime(), test.getTestDate());
             testItem.setMaxWidth(255);
             testItem.setMaxHeight(255);
 

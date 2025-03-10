@@ -61,6 +61,26 @@
             </Label>
          </children>
       </HBox>
+      <HBox fx:id="teststructureButton" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-btn">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+         <children>
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" smooth="false" styleClass="sidebar-btn-icom">
+               <image>
+                  <Image url="@../../../Image/approval.png" />
+               </image>
+            </ImageView>
+            <Label text="STRUCTURE" textFill="#b8b1b1">
+               <font>
+                  <Font name="Consolas Bold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
       <HBox fx:id="topicButton" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-btn">
          <padding>
             <Insets left="20.0" />

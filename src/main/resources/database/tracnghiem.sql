@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Feb 13, 2025 at 11:00 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th3 07, 2025 lúc 05:13 PM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `tracnghiem`
+-- Cơ sở dữ liệu: `test`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `answers`
+-- Cấu trúc bảng cho bảng `answers`
 --
 
 CREATE TABLE `answers` (
@@ -39,7 +39,7 @@ CREATE TABLE `answers` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `exams`
+-- Cấu trúc bảng cho bảng `exams`
 --
 
 CREATE TABLE `exams` (
@@ -52,7 +52,7 @@ CREATE TABLE `exams` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `logs`
+-- Cấu trúc bảng cho bảng `logs`
 --
 
 CREATE TABLE `logs` (
@@ -66,7 +66,7 @@ CREATE TABLE `logs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `questions`
+-- Cấu trúc bảng cho bảng `questions`
 --
 
 CREATE TABLE `questions` (
@@ -81,7 +81,7 @@ CREATE TABLE `questions` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `result`
+-- Cấu trúc bảng cho bảng `result`
 --
 
 CREATE TABLE `result` (
@@ -96,18 +96,14 @@ CREATE TABLE `result` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `test`
+-- Cấu trúc bảng cho bảng `test`
 --
 
 CREATE TABLE `test` (
                         `testID` int(11) NOT NULL,
                         `testCode` varchar(20) NOT NULL COMMENT 'mã bài thi',
-                        `testTilte` text NOT NULL,
+                        `testTilte` varchar(255) NOT NULL,
                         `testTime` int(11) NOT NULL COMMENT 'thời gian làm bài (phút)',
-                        `tpID` int(11) NOT NULL COMMENT 'id của chủ đề/bài học',
-                        `num_easy` int(11) NOT NULL COMMENT 'số lượng câu dễ',
-                        `num_medium` int(11) NOT NULL COMMENT 'số lượng câu trung bình',
-                        `num_diff` int(11) NOT NULL COMMENT 'số lượng câu khó',
                         `testLimit` tinyint(4) NOT NULL COMMENT 'số lần thi',
                         `testDate` date NOT NULL,
                         `testStatus` int(11) NOT NULL
@@ -116,7 +112,21 @@ CREATE TABLE `test` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `topics`
+-- Cấu trúc bảng cho bảng `test_structure`
+--
+
+CREATE TABLE `test_structure` (
+                                  `testCode` varchar(20) NOT NULL COMMENT 'mã bài thi',
+                                  `tpID` int(11) NOT NULL COMMENT 'id của chủ đề/bài học',
+                                  `num_easy` int(11) NOT NULL COMMENT 'số lượng câu dễ',
+                                  `num_medium` int(11) NOT NULL COMMENT 'số lượng câu trung bình',
+                                  `num_diff` int(11) NOT NULL COMMENT 'số lượng câu khó'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `topics`
 --
 
 CREATE TABLE `topics` (
@@ -129,7 +139,7 @@ CREATE TABLE `topics` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Cấu trúc bảng cho bảng `users`
 --
 
 CREATE TABLE `users` (
@@ -142,18 +152,18 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `answers`
+-- Chỉ mục cho bảng `answers`
 --
 ALTER TABLE `answers`
     ADD PRIMARY KEY (`awID`),
   ADD KEY `qID` (`qID`);
 
 --
--- Indexes for table `exams`
+-- Chỉ mục cho bảng `exams`
 --
 ALTER TABLE `exams`
     ADD PRIMARY KEY (`testCode`,`exOrder`),
@@ -161,21 +171,21 @@ ALTER TABLE `exams`
   ADD KEY `exCode` (`exCode`);
 
 --
--- Indexes for table `logs`
+-- Chỉ mục cho bảng `logs`
 --
 ALTER TABLE `logs`
     ADD PRIMARY KEY (`logID`),
   ADD KEY `logUserID` (`logUserID`);
 
 --
--- Indexes for table `questions`
+-- Chỉ mục cho bảng `questions`
 --
 ALTER TABLE `questions`
     ADD PRIMARY KEY (`qID`),
   ADD KEY `qTopicID` (`qTopicID`);
 
 --
--- Indexes for table `result`
+-- Chỉ mục cho bảng `result`
 --
 ALTER TABLE `result`
     ADD PRIMARY KEY (`rs_num`,`userID`,`exCode`),
@@ -184,105 +194,113 @@ ALTER TABLE `result`
   ADD KEY `exCode` (`exCode`);
 
 --
--- Indexes for table `test`
+-- Chỉ mục cho bảng `test`
 --
 ALTER TABLE `test`
-    ADD PRIMARY KEY (`testID`,`tpID`) USING BTREE,
-  ADD KEY `tpID` (`tpID`),
+    ADD PRIMARY KEY (`testID`) USING BTREE,
+  ADD UNIQUE KEY `testTilte` (`testTilte`),
   ADD KEY `testCode` (`testCode`);
 
-ALTER TABLE `result`
-    ADD CONSTRAINT `result_ibfk_2`
-        FOREIGN KEY (`exCode`) REFERENCES `exams` (`exCode`);
+--
+-- Chỉ mục cho bảng `test_structure`
+--
+ALTER TABLE `test_structure`
+    ADD PRIMARY KEY (`testCode`,`tpID`),
+  ADD KEY `test_structure_ibfk_2` (`tpID`);
 
 --
--- Indexes for table `topics`
+-- Chỉ mục cho bảng `topics`
 --
 ALTER TABLE `topics`
     ADD PRIMARY KEY (`tpID`);
 
 --
--- Indexes for table `users`
+-- Chỉ mục cho bảng `users`
 --
 ALTER TABLE `users`
     ADD PRIMARY KEY (`userID`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `answers`
+-- AUTO_INCREMENT cho bảng `answers`
 --
 ALTER TABLE `answers`
     MODIFY `awID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `logs`
+-- AUTO_INCREMENT cho bảng `logs`
 --
 ALTER TABLE `logs`
     MODIFY `logID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `questions`
+-- AUTO_INCREMENT cho bảng `questions`
 --
 ALTER TABLE `questions`
     MODIFY `qID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `topics`
+-- AUTO_INCREMENT cho bảng `test`
+--
+ALTER TABLE `test`
+    MODIFY `testID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `topics`
 --
 ALTER TABLE `topics`
     MODIFY `tpID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
     MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `test`
-    MODIFY `testID` int(11) NOT NULL AUTO_INCREMENT;
-
 --
--- Constraints for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `answers`
+-- Các ràng buộc cho bảng `answers`
 --
 ALTER TABLE `answers`
     ADD CONSTRAINT `answers_ibfk_1` FOREIGN KEY (`qID`) REFERENCES `questions` (`qID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Constraints for table `exams`
+-- Các ràng buộc cho bảng `exams`
 --
-
+ALTER TABLE `exams`
+    ADD CONSTRAINT `exams_ibfk_2` FOREIGN KEY (`testCode`) REFERENCES `test` (`testCode`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Constraints for table `logs`
+-- Các ràng buộc cho bảng `logs`
 --
 ALTER TABLE `logs`
     ADD CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`logUserID`) REFERENCES `users` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Constraints for table `questions`
+-- Các ràng buộc cho bảng `questions`
 --
 ALTER TABLE `questions`
     ADD CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`qTopicID`) REFERENCES `topics` (`tpID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Constraints for table `result`
+-- Các ràng buộc cho bảng `result`
 --
 ALTER TABLE `result`
-    ADD CONSTRAINT `result_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+    ADD CONSTRAINT `result_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `result_ibfk_2` FOREIGN KEY (`exCode`) REFERENCES `exams` (`exCode`);
 
 --
--- Constraints for table `test`
+-- Các ràng buộc cho bảng `test_structure`
 --
-ALTER TABLE `test`
-    ADD CONSTRAINT `test_ibfk_1` FOREIGN KEY (`tpID`) REFERENCES `topics` (`tpID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `test_ibfk_2` FOREIGN KEY (`testCode`) REFERENCES `exams` (`testCode`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `test_structure`
+    ADD CONSTRAINT `test_structure_ibfk_1` FOREIGN KEY (`testCode`) REFERENCES `test` (`testCode`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `test_structure_ibfk_2` FOREIGN KEY (`tpID`) REFERENCES `topics` (`tpID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
