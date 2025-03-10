@@ -15,7 +15,7 @@ public class TestDAO {
 
     public int add(TestDTO test) {
         int ketQua = 0;
-        String sql = "INSERT INTO test (testID, testCode, testTilte, testTime, tpID, num_easy, num_medium, num_diff, testLimit, testDate, testStatus) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO test (testID, testCode, testTilte, testTime, testLimit, testDate, testStatus) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -24,13 +24,9 @@ public class TestDAO {
             preparedStatement.setString(2, test.getTestCode());
             preparedStatement.setString(3, test.getTestTitle());
             preparedStatement.setInt(4, test.getTestTime());
-            preparedStatement.setInt(5, test.getTpID());
-            preparedStatement.setInt(6, test.getNum_ease());
-            preparedStatement.setInt(7, test.getNum_medium());
-            preparedStatement.setInt(8, test.getNum_diff());
-            preparedStatement.setInt(9, test.getTestLimit());
-            preparedStatement.setDate(10, test.getTestDate());
-            preparedStatement.setInt(11, test.getTestStatus());
+            preparedStatement.setInt(5, test.getTestLimit());
+            preparedStatement.setDate(6, test.getTestDate());
+            preparedStatement.setInt(7, test.getTestStatus());
 
             ketQua = preparedStatement.executeUpdate();
             JDBCUtil.close();
@@ -90,10 +86,6 @@ public class TestDAO {
                 test.setTestCode(resultSet.getString("testCode"));
                 test.setTestTitle(resultSet.getString("testTilte"));
                 test.setTestTime(resultSet.getInt("testTime"));
-                test.setTpID(resultSet.getInt("tpID"));
-                test.setNum_ease(resultSet.getInt("num_easy"));
-                test.setNum_medium(resultSet.getInt("num_medium"));
-                test.setNum_diff(resultSet.getInt("num_diff"));
                 test.setTestLimit(resultSet.getInt("testLimit"));
                 test.setTestDate(resultSet.getDate("testDate"));
                 test.setTestStatus(resultSet.getInt("testStatus"));
@@ -107,7 +99,7 @@ public class TestDAO {
     }
 
     public TestDTO getTestByID(String testCode) {
-        String sql = "SELECT testID, testCode, testTilte, testTime, tpID, num_easy, num_medium, num_diff, testLimit, testDate, testStatus FROM test WHERE testCode = ?";
+        String sql = "SELECT testID, testCode, testTilte, testTime, testLimit, testDate, testStatus FROM test WHERE testCode = ?";
 
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -120,10 +112,6 @@ public class TestDAO {
                             resultSet.getString("testCode"),
                             resultSet.getString("testTilte"),
                             resultSet.getInt("testTime"),
-                            resultSet.getInt("tpID"),
-                            resultSet.getInt("num_easy"),
-                            resultSet.getInt("num_medium"),
-                            resultSet.getInt("num_diff"),
                             resultSet.getInt("testLimit"),
                             resultSet.getDate("testDate"),
                             resultSet.getInt("testStatus")

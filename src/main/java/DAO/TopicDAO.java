@@ -211,13 +211,14 @@ public class TopicDAO {
 
     public List<TopicDTO> getTopicsChild(int parentID){
         ArrayList<TopicDTO> topicDTOList = new ArrayList<>();
-        String sql = "SELECT * FROM topics WHERE tpParent = ? AND tpStatus = 1 ";
+        String sql = "SELECT * FROM topics WHERE (tpID = ? OR tpParent = ?) AND tpStatus = 1 ";
 
         try {
             Connection connection = JDBCUtil.getConnection();
             PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setInt(1,parentID);
+            ps.setInt(2,parentID);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
@@ -359,4 +360,6 @@ public class TopicDAO {
         }
         return topicDTOList;
     }
+
+
 }
