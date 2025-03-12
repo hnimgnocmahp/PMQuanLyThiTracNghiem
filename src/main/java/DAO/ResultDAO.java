@@ -4,10 +4,7 @@ import DTO.ResultDTO;
 import DTO.UserDTO;
 import util.JDBCUtil;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 
 public class ResultDAO {
@@ -33,5 +30,27 @@ public class ResultDAO {
         return ketQua;
     }
 
+    public int getLastrs_numByUserIdAndExcCode(int userID, String exCode){
+        int ketQua = 0;
+        String sql = "Select rs_num from result WHERE userID = ? and exCode = ?";
 
-}
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, userID);
+            preparedStatement.setString(2,exCode);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                if (ketQua < resultSet.getInt("rs_num")){
+                    ketQua = resultSet.getInt("rs_num");
+                }
+            }
+            JDBCUtil.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ketQua;
+    }
+    }
+

@@ -30,4 +30,8 @@ public class ResultBUS {
 
         return result;
     }
+
+    public int getLastrs_num (int userID, String exCode){
+        return resultDAO.getLastrs_numByUserIdAndExcCode(userID,exCode);
+    }
 }

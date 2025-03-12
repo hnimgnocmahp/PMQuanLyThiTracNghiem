@@ -5,6 +5,7 @@ import DTO.UserDTO;
 import util.JDBCUtil;
 
 import java.sql.*;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -49,6 +50,23 @@ public class TestCodeDAO {
             e.printStackTrace();
         }
         return ketQua;
+    }
+
+    public List<String> getAllExCode(){
+        List<String> list = new ArrayList<>();
+        try{
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "SELECT exCode FROM exams";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()){
+                list.add(resultSet.getString(1));
+            }
+            JDBCUtil.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
     }
 
     public int update(TestCodeDTO testCodeDTO) {

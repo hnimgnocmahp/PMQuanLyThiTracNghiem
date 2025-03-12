@@ -23,16 +23,15 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.util.Pair;
+
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Exam_Controller  implements UserAwareController {
 
@@ -85,6 +84,12 @@ public class Exam_Controller  implements UserAwareController {
     private List<AnswerDTO[]> answerChoices = new ArrayList<>(); // Danh sách đáp án tương ứng
 
     private ToggleGroup answerGroup = new ToggleGroup();
+
+    private Map<Integer, Integer> result = new HashMap<>();
+
+    private Map<Integer, Integer> log = new LinkedHashMap<>();
+
+    private List<Pair<Integer, Integer>> selections = new ArrayList<>();
 
     @FXML
     public void initialize() {
@@ -271,7 +276,11 @@ public class Exam_Controller  implements UserAwareController {
         Stage currentStage = (Stage) questionContainer.getScene().getWindow();
         currentStage.setScene(new Scene(vbox, 800, 600));
         currentStage.show();
-
+        ResultBUS resultBUS = ResultBUS.getInstance();
+        System.out.println(selections);
+        resultBUS.addResult(new ResultDTO(resultBUS.getLastrs_num(UserBUS.getInstance().findUserByUserName(Session.username).getUserID(),exCodeDTO) + 1, UserBUS.getInstance().findUserByUserName(Session.username).getUserID(),exCodeDTO,new Gson().toJson(result),mark,LocalDate.now()));
+        LogBUS logBUS = new LogBUS();
+        logBUS.addLog(selections.toString().replaceAll("=",":"),UserBUS.getInstance().findUserByUserName(Session.username).getUserID(),exCodeDTO);
 
 
         // Lưu vào bảng result
@@ -325,9 +334,11 @@ public class Exam_Controller  implements UserAwareController {
 
     private void saveCurrentAnswer() {
         Toggle selectedToggle = answerGroup.getSelectedToggle();
+        AnswerBUS answerBUS = AnswerBUS.getInstance();
         if (selectedToggle instanceof RadioButton) {
             RadioButton selectedRadio = (RadioButton) selectedToggle;
             userAnswers.put(currentQuestionIndex, selectedRadio.getText());
+            result.put(questionsContent.get(currentQuestionIndex).getQID(),Integer.parseInt(selectedRadio.getId()));
         }
     }
 
@@ -370,24 +381,22 @@ public class Exam_Controller  implements UserAwareController {
     public void loadQuestionContent() {
         if (questionsContent.isEmpty()) return;
 
-        // Xóa nội dung cũ
+        // Xóa nội dung cũ của câu hỏi và đáp án
         questionContainer.getChildren().clear();
         answerContainer.getChildren().clear();
 
         // Hiển thị nội dung câu hỏi
         QuestionDTO currentQuestion = questionsContent.get(currentQuestionIndex);
-        Label questionLabel = new Label("câu " + (currentQuestionIndex + 1)  + ": " + currentQuestion.getQContent());
+        Label questionLabel = new Label("Câu " + (currentQuestionIndex + 1) + ": " + currentQuestion.getQContent());
         questionLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: normal; -fx-font-family: 'Times New Roman'");
         questionContainer.getChildren().add(questionLabel);
 
-        // Nếu câu hỏi có ảnh, load ảnh từ classpath hoặc file system
+        // Nếu câu hỏi có ảnh, load ảnh
         if (currentQuestion.getQPictures() != null && !currentQuestion.getQPictures().isEmpty()) {
             try {
-                // Thử load từ classpath (resources)
                 InputStream inputStream = getClass().getResourceAsStream("/" + currentQuestion.getQPictures());
                 Image questionImage;
                 if (inputStream == null) {
-                    // Không tìm thấy trong classpath, chuyển sang file system
                     File file = new File(currentQuestion.getQPictures());
                     String imageUrl = file.toURI().toString();
                     questionImage = new Image(imageUrl);
@@ -403,26 +412,50 @@ public class Exam_Controller  implements UserAwareController {
             }
         }
 
-        // Hiển thị danh sách đáp án
-        answerGroup = new ToggleGroup();  // Reset ToggleGroup mỗi lần load câu hỏi
+        // Reset ToggleGroup mỗi lần load câu hỏi
+        answerGroup = new ToggleGroup();
+
+        // Thêm listener cho ToggleGroup để lưu lại lựa chọn của người dùng
+        answerGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+            if (newToggle != null) {
+                // Lấy thông tin được gán qua userData: Pair<QuestionID, AnswerID>
+                Pair<Integer, Integer> data = (Pair<Integer, Integer>) newToggle.getUserData();
+//                System.out.println("Selected: Question ID: " + data.getKey() + ", Answer ID: " + data.getValue());
+
+                // Lưu vào mảng selections
+                selections.add(data);
+
+                // Hiển thị các lựa chọn hiện tại
+//                System.out.println("Current selections:");
+//                for (Pair<Integer, Integer> selection : selections) {
+//                    System.out.println("Question ID: " + selection.getKey() + ", Answer ID: " + selection.getValue());
+//                }
+            }
+        });
+
+        // Hiển thị danh sách đáp án cho câu hỏi hiện tại
         AnswerDTO[] answers = answerChoices.get(currentQuestionIndex);
         for (AnswerDTO answer : answers) {
+            // Tạo RadioButton với nội dung đáp án
             RadioButton radioButton = new RadioButton(answer.getAwContent());
+            radioButton.setId(String.valueOf(answer.getAwID()));
+
+            // Gán thông tin (question id, answer id) cho radioButton
+            radioButton.setUserData(new Pair<>(currentQuestion.getQID(), answer.getAwID()));
             radioButton.setToggleGroup(answerGroup);
-            // Nếu người dùng đã chọn đáp án trước đó, đánh dấu nó
+
+            // Nếu người dùng đã chọn đáp án trước đó cho câu hỏi này, đánh dấu nó
             if (userAnswers.containsKey(currentQuestionIndex) &&
                     userAnswers.get(currentQuestionIndex).equals(answer.getAwContent())) {
                 radioButton.setSelected(true);
             }
 
-            // Kiểm tra nếu đáp án có ảnh
+            // Kiểm tra nếu đáp án có ảnh kèm theo
             if (answer.getAwPictures() != null && !answer.getAwPictures().isEmpty()) {
                 try {
-                    // Thử load ảnh của đáp án từ classpath
                     InputStream inputStream = getClass().getResourceAsStream("/" + answer.getAwPictures());
                     Image answerImage;
                     if (inputStream == null) {
-                        // Nếu không tìm thấy trong classpath, chuyển sang file system
                         File file = new File(answer.getAwPictures());
                         String imageUrl = file.toURI().toString();
                         answerImage = new Image(imageUrl);
@@ -433,16 +466,17 @@ public class Exam_Controller  implements UserAwareController {
                     answerImageView.setFitWidth(50);
                     answerImageView.setPreserveRatio(true);
 
-                    // Gộp RadioButton và ImageView trong HBox
+                    // Gộp RadioButton và ImageView vào HBox
                     HBox answerBox = new HBox(10, radioButton, answerImageView);
                     answerContainer.getChildren().add(answerBox);
                 } catch (Exception e) {
-                System.err.println("Không thể load ảnh của đáp án: " + e.getMessage());
-                answerContainer.getChildren().add(radioButton);
-            }
+                    System.err.println("Không thể load ảnh của đáp án: " + e.getMessage());
+                    answerContainer.getChildren().add(radioButton);
+                }
             } else {
                 answerContainer.getChildren().add(radioButton);
             }
         }
     }
 }
+
