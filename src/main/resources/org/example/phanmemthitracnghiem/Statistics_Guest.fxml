@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="580.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Statistics_Guest_Controller" />
+
+<AnchorPane prefHeight="580.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.phanmemthitracnghiem.Statistics_Guest_Controller">
+   <children>
+      <TableView prefHeight="580.0" prefWidth="744.0">
+        <columns>
+          <TableColumn prefWidth="91.99998223781586" text="Test Title" />
+          <TableColumn prefWidth="75.33338165283203" text="ExCode" />
+            <TableColumn prefWidth="259.3333282470703" text="rs_num" />
+            <TableColumn prefWidth="102.66671752929688" text="rs_answers" />
+            <TableColumn prefWidth="71.333251953125" text="rs_mark" />
+            <TableColumn prefWidth="144.66668701171875" text="rs_date" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
