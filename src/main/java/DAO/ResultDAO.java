@@ -6,6 +6,8 @@ import util.JDBCUtil;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResultDAO {
     public int add(ResultDTO result) {
@@ -52,5 +54,31 @@ public class ResultDAO {
         }
         return ketQua;
     }
+
+    public List<ResultDTO> getResultOfUser(int userID){
+        ArrayList<ResultDTO> list = new ArrayList<>();
+        String sql = "Select * from result WHERE userID = ?";
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            PreparedStatement rs = connection.prepareStatement(sql);
+            rs.setInt(1,userID);
+            ResultSet resultSet = rs.executeQuery();
+            while(resultSet.next()){
+                ResultDTO result = new ResultDTO();
+                result.setUserID(resultSet.getInt("userID"));
+                result.setExCode(resultSet.getString("exCode"));
+                result.setRs_answers(resultSet.getString("rs_anwsers"));
+                result.setRs_mark(resultSet.getBigDecimal("rs_mark"));
+                result.setRs_date(resultSet.getDate("rs_date").toLocalDate());
+                result.setRs_num(resultSet.getInt("rs_num"));
+                list.add(result);
+            }
+            JDBCUtil.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
+    }
+
     }
 

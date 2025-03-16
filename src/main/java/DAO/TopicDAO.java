@@ -59,14 +59,15 @@ public class TopicDAO {
 
     public int update(TopicDTO topicDTO){
         int result = 0;
-        String sql = "UPDATE topics SET tpTitle=?, tpParent=? WHERE tpID = ?";
+        String sql = "UPDATE topics SET tpTitle=?, tpParent=?, tpStatus = ? WHERE tpID = ?";
         try {
             Connection connection = JDBCUtil.getConnection();
             PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setString(1, topicDTO.getTopicTitle());
             ps.setInt(2, topicDTO.getTopicParent());
-            ps.setInt(3, topicDTO.getTopicID());
+            ps.setInt(3, topicDTO.getTopicStatus());
+            ps.setInt(4, topicDTO.getTopicID());
 
             result = ps.executeUpdate();
             JDBCUtil.close();

@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.apache.poi.hssf.record.FontRecord;
@@ -19,6 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Test_Admin_Controller {
+
+    @FXML
+    private TextField searchField;
+
     @FXML
     private TableColumn<TestDTO, LocalDateTime> columnDate;
 
@@ -82,6 +87,20 @@ public class Test_Admin_Controller {
         }
     }
 
+
+    @FXML
+    void searchTestbyClick(MouseEvent event) {
+        List<TestDTO> list = new ArrayList<>();
+        String key = searchField.getText();
+        for (TestDTO test : TestBUS.getInstance().getTests()) {
+            if (test.getTestTitle().toUpperCase().contains(key.toUpperCase())) {
+                list.add(test);
+            }
+        }
+        ObservableList<TestDTO> observableList = FXCollections.observableArrayList(list);
+        tableTest.setItems(observableList);
+    }
+
     @FXML
     void cancel(MouseEvent event) {
 
@@ -94,7 +113,19 @@ public class Test_Admin_Controller {
 
     @FXML
     void searchTest(KeyEvent event) {
-
+        if (event.getCode() == KeyCode.ENTER){
+            List<TestDTO> list = new ArrayList<>();
+            if (event.getCode() == KeyCode.ENTER) {
+                String key = searchField.getText();
+                for (TestDTO test : TestBUS.getInstance().getTests()){
+                    if (test.getTestTitle().toUpperCase().contains(key.toUpperCase())){
+                        list.add(test);
+                    }
+                }
+            }
+            ObservableList<TestDTO> observableList = FXCollections.observableArrayList(list);
+            tableTest.setItems(observableList);
+        }
     }
 
     @FXML

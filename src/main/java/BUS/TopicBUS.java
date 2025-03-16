@@ -37,7 +37,8 @@ public class TopicBUS {
 
     public int updateTopic(TopicDTO topicDTO) {
         for (TopicDTO topic : topicDAO.loadTopics()) {
-            if (topic.getTopicID() != topicDTO.getTopicID() && topic.getTopicStatus() == 1 && topic.getTopicTitle().equals(topicDTO.getTopicTitle())) {
+            if (topic.getTopicID() != topicDTO.getTopicID() && topic.getTopicTitle().equals(topicDTO.getTopicTitle())) {
+                System.out.println(-1);
                 return -1;
             }
         }
@@ -63,6 +64,14 @@ public class TopicBUS {
 
     public boolean Validation(int parentID, String title) {
 
+//        TopicDTO topic = topicDAO.getTopicByTitle(title);
+//        if (topic != null){
+//            for (TopicDTO topicDTO : topicDAO.getAll()){
+//                if (topic.getTopicID() != topicDTO.getTopicID() && topicDTO.getTopicTitle().equals(title)){
+//                    return false;
+//                }
+//            }
+//        }
         for (TopicDTO topic : topicDAO.searchTopicsChildByTitle(title)) {
             if (topic != null) {
                 for (TopicDTO topic1 : topicDAO.searchTopicsChild(topic.getTopicID())) {
@@ -70,12 +79,10 @@ public class TopicBUS {
                         if (topic.getTopicTitle().equals(title)) {
                             return false;
                         }
-                        ;
                     }
                 }
             }
         }
-
         return true;
     }
 
@@ -95,13 +102,26 @@ public class TopicBUS {
                 return false;
             }
         }
+        System.out.println(1);
+
         if (topicDAO.searchTopicByID(parentId).getTopicParent() != 0) {
             return false;
         }
 
-        if (!Validation(parentId, title)) {
-            return false;
+        System.out.println(2);
+        System.out.println(topicDAO.getTopicByTitle(title).getTopicParent());
+
+        if (topicDAO.searchTopicsChild(topicDAO.getTopicByTitle(title).getTopicID()) != null){
+            if (topicDAO.searchTopicByID(parentId).getTopicParent() != 0){
+                return false;
+            }
         }
+
+
+
+//        if (!Validation(parentId, title)) {
+//            return false;
+//        }
         return true;
     }
 
