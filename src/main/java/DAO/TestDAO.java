@@ -40,11 +40,10 @@ public class TestDAO {
         int ketQua = 0;
         try {
             Connection con = JDBCUtil.getConnection();
-            String sql = "UPDATE test SET testLimit=? WHERE testID=?";
+            String sql = "UPDATE test SET testStatus=0 WHERE testID=?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
 
-            preparedStatement.setInt(1, test.getTestLimit());
-            preparedStatement.setInt(2, test.getTestID());
+            preparedStatement.setInt(1, test.getTestID());
 
             ketQua = preparedStatement.executeUpdate();
 
