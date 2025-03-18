@@ -40,8 +40,29 @@ public class TestDAO {
         int ketQua = 0;
         try {
             Connection con = JDBCUtil.getConnection();
+            String sql = "UPDATE test SET testLimit=? WHERE testID=?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+
+            preparedStatement.setInt(1, test.getTestLimit());
+
+            preparedStatement.setInt(2, test.getTestID());
+
+            ketQua = preparedStatement.executeUpdate();
+
+            JDBCUtil.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return ketQua;
+    }
+
+    public int delete(TestDTO test) {
+        int ketQua = 0;
+        try {
+            Connection con = JDBCUtil.getConnection();
             String sql = "UPDATE test SET testStatus=0 WHERE testID=?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
+
 
             preparedStatement.setInt(1, test.getTestID());
 
@@ -53,24 +74,6 @@ public class TestDAO {
         }
         return ketQua;
     }
-
-//    public int delete(int testID) {
-//        int ketqua = 0;
-//        try {
-//            Connection con = JDBCUtil.getConnection();
-//            String sql = "DELETE FROM test WHERE testID=?";
-//            PreparedStatement preparedStatement = con.prepareStatement(sql);
-//
-//            preparedStatement.setInt(1, testID);
-//
-//            ketqua = preparedStatement.executeUpdate();
-//
-//            JDBCUtil.close();
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
-//        return ketqua;
-//    }
 
     public List<TestDTO> selectAll() {
         List<TestDTO> tests = new ArrayList<TestDTO>();
