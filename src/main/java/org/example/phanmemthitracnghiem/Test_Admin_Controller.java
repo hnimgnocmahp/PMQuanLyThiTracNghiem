@@ -110,7 +110,7 @@ public class Test_Admin_Controller {
     void deleteTest(MouseEvent event) {
         TestDTO testDTO = tableTest.getSelectionModel().getSelectedItem();
         if (testDTO != null) {
-            TestBUS.getInstance().updateTest(testDTO);
+            TestBUS.getInstance().deleteTest(testDTO);
             loadTestData();
         } else {
             LoginController.showAlert("Thông báo", "Chưa có mục nào được chọn!");

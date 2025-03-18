@@ -1,13 +1,7 @@
 package org.example.phanmemthitracnghiem;
 
-import BUS.TestBUS;
-import BUS.TestCodeBUS;
-import BUS.TestStructureBUS;
-import BUS.TopicBUS;
-import DTO.TestCodeDTO;
-import DTO.TestDTO;
-import DTO.TestStructureDTO;
-import DTO.TopicDTO;
+import BUS.*;
+import DTO.*;
 import Interface.UserAwareController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +14,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -149,7 +145,7 @@ public class Test_Guest_Controller implements Initializable, UserAwareController
         Label title = new Label(testTitle);
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: 'Arial'");
 
-        Label topic = new Label("Topic: ");
+        Label topic = new Label("Topic:ư ");
         topic.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: 'Times New Roman'");
         Label topiclb = new Label(topicList);
         topiclb.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: 'Arial'");
@@ -184,9 +180,27 @@ public class Test_Guest_Controller implements Initializable, UserAwareController
         HBox hb_4 = new HBox(limitTitle, limitlb);
         hb_4.setAlignment(Pos.CENTER_LEFT);
 
+        // Tạo hình ảnh từ tài nguyên
+        Image image = new Image(getClass().getResource("/image/printer.png").toExternalForm());
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(30); // Điều chỉnh kích thước nếu cần
+        imageView.setPreserveRatio(true);
+
+        // Tạo button và gán icon
+        Button printButton = new Button();
+        printButton.setGraphic(imageView); // Đặt icon vào button
+        printButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;"); // Làm button trong suốt
+
+        // Gán sự kiện khi nhấn nút
+        printButton.setOnAction(event -> {
+            Stage stage = (Stage) printButton.getScene().getWindow();
+            TestCodeBUS.getInstance().exportWord(testCode, stage);
+        });
+
+
         Button button = new Button("Exercise");
         button.setOnAction(e -> switchToExamScene(button, testCode));
-        VBox vBox = new VBox(title, hb_0, hb_1, hb_2, hb_3, hb_4, button);
+        VBox vBox = new VBox(title, hb_0, hb_1, hb_2, hb_3, hb_4, printButton, button);
         vBox.setStyle("-fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-color: #f8f8f8; -fx-border-width: 2");
         vBox.setPrefHeight(200);
 
@@ -196,6 +210,8 @@ public class Test_Guest_Controller implements Initializable, UserAwareController
         return vBox;
 
     }
+
+
 
     public void switchToExamScene(Button button, String testCode) {
         TestDTO test = TestBUS.getInstance().selectTestByTestCode(testCode);
@@ -226,7 +242,6 @@ public class Test_Guest_Controller implements Initializable, UserAwareController
                 examController.setUserName(username);
                 // Gọi sau khi set dữ liệu
                 examController.initializeExam(testCode);
-                System.out.println(examController.getUserName());
             } else {
                 System.out.println("Lỗi: Không thể lấy Exam_Controller");
             }

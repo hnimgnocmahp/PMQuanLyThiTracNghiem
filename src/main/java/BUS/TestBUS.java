@@ -37,10 +37,10 @@ public class TestBUS {
     public int updateTest(TestDTO test) {
         return testDAO.update(test);
     }
-//
-//    public int deleteUser(int id) {
-//        return userDAO.delete(id);
-//    }
+
+    public int deleteTest(TestDTO test) {
+        return testDAO.delete(test);
+    }
 
     public List<TestDTO> getTests() {
         return testDAO.selectAll();
