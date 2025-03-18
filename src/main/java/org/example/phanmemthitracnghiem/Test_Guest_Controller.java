@@ -19,6 +19,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -28,6 +31,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -52,6 +56,8 @@ public class Test_Guest_Controller implements Initializable, UserAwareController
     @FXML
     private GridPane gp;
 
+    @FXML
+    private TextField searchField;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -88,6 +94,53 @@ public class Test_Guest_Controller implements Initializable, UserAwareController
                 row++;
             }
         }
+
+    }
+
+    @FXML
+    void SearchbyClick(MouseEvent event) {
+        gp.getChildren().clear();
+        int columns = 3; // Số cột mong muốn
+        int row = 0, col = 0;
+        int num_easy;
+        int num_medium;
+        int num_hard;
+        String topicListTitle;
+        String key = searchField.getText();
+        TestBUS testBUS = TestBUS.getInstance();
+        for (TestDTO test: testBUS.getTests()){
+            if(test.getTestTitle().toUpperCase().contains(key.toUpperCase())){
+                System.out.println("1");
+                List<TestStructureDTO> structures = TestStructureBUS.getInstance().getStructureByTestCode(test.getTestCode());
+                num_easy = 0;
+                num_medium = 0;
+                num_hard = 0;
+                topicListTitle = "";
+                for (TestStructureDTO structure : structures) {
+                    num_easy += structure.getNum_easy();
+                    num_medium += structure.getNum_medium();
+                    num_hard += structure.getNum_diff();
+                    topicListTitle += " " + TopicBUS.getInstance().searchTopicByID(structure.getTpID()).getTopicTitle();
+                }
+
+
+
+                VBox testItem = createTestCodeItem(test.getTestCode(), test.getTestTitle(), topicListTitle, num_easy+num_hard+num_medium, test.getTestLimit(), test.getTestTime(), test.getTestDate());
+                testItem.setMaxWidth(255);
+                testItem.setMaxHeight(255);
+
+                gp.add(testItem, col, row);
+                col++;
+                if (col >= columns) {
+                    col = 0;
+                    row++;
+                }
+            }
+        }
+    }
+
+    @FXML
+    void SearchbyKey(KeyEvent event) {
 
     }
 

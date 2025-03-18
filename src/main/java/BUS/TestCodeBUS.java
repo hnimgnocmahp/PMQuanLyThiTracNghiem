@@ -49,4 +49,7 @@ public class TestCodeBUS {
     public TestCodeDTO getRandomTestCode(String testCode) {
         return testCodeDAO.getRandomTestCodeByTestCode(testCode);
     }
+
+    public List<String> getAllExCode(){return testCodeDAO.getAllExCode();}
+
 }

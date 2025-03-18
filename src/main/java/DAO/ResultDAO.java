@@ -4,11 +4,10 @@ import DTO.ResultDTO;
 import DTO.UserDTO;
 import util.JDBCUtil;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResultDAO {
     public int add(ResultDTO result) {
@@ -33,5 +32,53 @@ public class ResultDAO {
         return ketQua;
     }
 
+    public int getLastrs_numByUserIdAndExcCode(int userID, String exCode){
+        int ketQua = 0;
+        String sql = "Select rs_num from result WHERE userID = ? and exCode = ?";
 
-}
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, userID);
+            preparedStatement.setString(2,exCode);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                if (ketQua < resultSet.getInt("rs_num")){
+                    ketQua = resultSet.getInt("rs_num");
+                }
+            }
+            JDBCUtil.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ketQua;
+    }
+
+    public List<ResultDTO> getResultOfUser(int userID){
+        ArrayList<ResultDTO> list = new ArrayList<>();
+        String sql = "Select * from result WHERE userID = ?";
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            PreparedStatement rs = connection.prepareStatement(sql);
+            rs.setInt(1,userID);
+            ResultSet resultSet = rs.executeQuery();
+            while(resultSet.next()){
+                ResultDTO result = new ResultDTO();
+                result.setUserID(resultSet.getInt("userID"));
+                result.setExCode(resultSet.getString("exCode"));
+                result.setRs_answers(resultSet.getString("rs_anwsers"));
+                result.setRs_mark(resultSet.getBigDecimal("rs_mark"));
+                result.setRs_date(resultSet.getDate("rs_date").toLocalDate());
+                result.setRs_num(resultSet.getInt("rs_num"));
+                list.add(result);
+            }
+            JDBCUtil.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
+    }
+
+    }
+

@@ -5,6 +5,8 @@ import DAO.UserDAO;
 import DTO.ResultDTO;
 import DTO.UserDTO;
 
+import java.util.List;
+
 public class ResultBUS {
     private static ResultBUS instance;
 
@@ -29,5 +31,13 @@ public class ResultBUS {
         int result = resultDAO.add(resultDTO);
 
         return result;
+    }
+
+    public int getLastrs_num (int userID, String exCode){
+        return resultDAO.getLastrs_numByUserIdAndExcCode(userID,exCode);
+    }
+
+    public List<ResultDTO> getResultOfUser(int userID){
+        return resultDAO.getResultOfUser(userID);
     }
 }

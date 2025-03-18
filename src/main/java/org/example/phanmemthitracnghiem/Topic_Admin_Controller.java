@@ -11,7 +11,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-
+import javafx.scene.control.Button;
 import javax.xml.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +45,17 @@ public class Topic_Admin_Controller {
     @FXML
     private ComboBox<String> classifyParentField = new ComboBox<>();
 
+    @FXML
+    private Button deleteButton;
+
+    @FXML
+    private ComboBox<String> StatusField = new ComboBox<>();
+
     private ObservableList<String> ParentIDList = FXCollections.observableArrayList();
 
     private ObservableList<String> ParentClassify = FXCollections.observableArrayList();
+
+    private ObservableList<String> StatusList = FXCollections.observableArrayList("1","0");
 
 
     @FXML
@@ -57,7 +65,10 @@ public class Topic_Admin_Controller {
         parentIdLabel.setCellValueFactory(new PropertyValueFactory<>("topicParent"));
         statusLabel.setCellValueFactory(new PropertyValueFactory<>("topicStatus"));
 
+        deleteButton.setVisible(false);
+        deleteButton.setManaged(false);
         loadTopicsParent();
+        StatusField.setItems(StatusList);
         titleParentField.setItems(ParentIDList);
         loadTopics();
         loadClassifyParent();
@@ -141,6 +152,7 @@ public class Topic_Admin_Controller {
 
         topic = tableView.getItems().get(row);
         topic.setTopicTitle(titleField.getText());
+        topic.setTopicStatus(Integer.parseInt(StatusField.getSelectionModel().getSelectedItem()));
 
         String selectedValue = titleParentField.getSelectionModel().getSelectedItem();
         int titleParent;
@@ -161,6 +173,14 @@ public class Topic_Admin_Controller {
         if (topicBUS.updateTopic(topic) < 0) {
             LoginController.showAlert("Thông báo", "Sửa thất bại");
         } else {
+            if (topic.getTopicStatus() == 0){
+                if (!topicBUS.searchTopicsChildByID(topic.getTopicID()).isEmpty()){
+                    for (TopicDTO topicDTO : topicBUS.searchTopicsChildByID(topic.getTopicID())){
+                        topicDTO.setTopicParent(0);
+                        topicBUS.updateTopic(topicDTO);
+                    }
+                }
+            }
             LoginController.showAlert("Thông báo", "Sửa thành công");
             reset();
             loadTopics();
@@ -176,6 +196,7 @@ public class Topic_Admin_Controller {
         if (topicDTO != null){
             titleField.setText(topicDTO.getTopicTitle());
             titleParentField.setValue(topicDTO.getTopicParent() + " - " + topicBUS.searchTopicByID(topicDTO.getTopicParent()).getTopicTitle());
+            StatusField.setValue(String.valueOf(topicDTO.getTopicStatus()));
         }
         return topic = topicDTO;
     }
@@ -185,6 +206,7 @@ public class Topic_Admin_Controller {
         titleParentField.setValue("0 - null");
         topic = new TopicDTO();
         classifyParentField.getSelectionModel().select("Tất cả");
+        StatusField.setValue("");
     }
 
     private void loadTopics(){
