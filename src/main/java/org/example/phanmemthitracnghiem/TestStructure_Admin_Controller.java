@@ -58,7 +58,6 @@ public class TestStructure_Admin_Controller {
         String topic = txtTopic.getSelectionModel().getSelectedItem();
         int spaceIndex = topic.indexOf(" ");
         String result = (spaceIndex != -1) ? topic.substring(0, spaceIndex) : topic;
-        System.out.println(result);
         int num_easy = Integer.parseInt(txtEasy.getText());
         int num_medium = Integer.parseInt(txtMedium.getText());
         int num_hard = Integer.parseInt(txtHard.getText());
