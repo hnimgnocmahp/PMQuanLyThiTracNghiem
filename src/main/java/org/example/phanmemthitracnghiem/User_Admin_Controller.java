@@ -176,7 +176,6 @@ public class User_Admin_Controller {
         File file = fileChooser.showOpenDialog(new Stage());
 
         if (file != null) {
-            User_Admin_Controller ExcelReader;
             List<UserDTO> users = readUsersFromExcel(file);
 
             for (UserDTO user : users) {

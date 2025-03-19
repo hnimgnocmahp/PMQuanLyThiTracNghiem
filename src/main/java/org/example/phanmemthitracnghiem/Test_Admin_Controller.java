@@ -136,7 +136,14 @@ public class Test_Admin_Controller {
 
     @FXML
     void updateTest(MouseEvent event) {
-
+        TestDTO testDTO = tableTest.getSelectionModel().getSelectedItem();
+        testDTO.setTestLimit(Integer.parseInt(txtLimit.getText()));
+        if (testDTO != null) {
+            TestBUS.getInstance().updateTest(testDTO);
+            loadTestData();
+        } else {
+            LoginController.showAlert("Thông báo", "Chưa có mục nào được chọn!");
+        }
     }
 
     @FXML
